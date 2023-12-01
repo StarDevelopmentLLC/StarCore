@@ -1,0 +1,5 @@
+main: com.stardevllc.starcore.StarCore
+version: ${version}
+api-version: 1.20
+name: ${name}
+author: Firestar311
