@@ -24,7 +24,7 @@ processResources {
 
 shadowJar {
     archiveClassifier.set('')
-    destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
+    //destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
 }
 
 dependencies {
