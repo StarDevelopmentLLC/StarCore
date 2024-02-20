@@ -23,19 +23,25 @@ public class StarCore extends JavaPlugin {
         Config config = new Config(new File(getDataFolder(), "config.yml"));
         config.addDefault("console-uuid", UUID.randomUUID().toString(), "This is the unique id that is assigned to the console.", "Please do not change this manually.");
         this.consoleUnqiueId = UUID.fromString(config.getString("console-uuid"));
-        config.save();
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
         
         config.addDefault("save-colors", false, "This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (config.getBoolean("save-colors")) {
             this.colorsConfig = new Config(new File(getDataFolder(), "colors.yml"));
-            for (Object key : this.colorsConfig.getSection("colors").getKeys()) {
-                CustomColor customColor = new CustomColor(this);
-                customColor.symbolCode((String) key);
-                customColor.hexValue(config.getString("colors." + key));
-                ColorUtils.addCustomColor(customColor);
+            if (this.colorsConfig.contains("colors")) {
+                for (Object key : this.colorsConfig.getSection("colors").getKeys()) {
+                    CustomColor customColor = new CustomColor(this);
+                    customColor.symbolCode((String) key);
+                    customColor.hexValue(colorsConfig.getString("colors." + key + ".hex"));
+                    if (this.colorsConfig.contains("colors." + key + ".permission")) {
+                        customColor.permission(colorsConfig.getString("colors." + key + ".permission"));
+                    }
+                    ColorUtils.addCustomColor(customColor);
+                }
             }
         }
+        
+        config.save();
         
         getServer().getServicesManager().register(TaskFactory.class, new SpigotTaskFactory(this), this, ServicePriority.Normal);
         ClockManager clockManager = new ClockManager(getLogger(), 50L);
@@ -51,9 +57,13 @@ public class StarCore extends JavaPlugin {
             colorsConfig.set("colors", null);
             for (CustomColor color : ColorUtils.getCustomColors().values()) {
                 if (color.getOwner().getName().equalsIgnoreCase(getName())) {
-                    colorsConfig.set("colors." + color.getChatCode(), color.getHex());
+                    colorsConfig.set("colors." + color.getChatCode() + ".hex", color.getHex());
+                    if (color.getPermission() != null) {
+                        colorsConfig.set("colors." + color.getChatCode() + ".permission", color.getPermission());
+                    }
                 }
             }
+            this.colorsConfig.save();
         }
     }
 
