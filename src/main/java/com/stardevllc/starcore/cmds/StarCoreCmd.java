@@ -27,7 +27,10 @@ public class StarCoreCmd implements CommandExecutor {
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("color")) {
+        if (args[0].equalsIgnoreCase("reload")) {
+            plugin.reload(false);
+            sender.sendMessage(ColorUtils.color("&aSuccessfully reloaded configs."));
+        } else if (args[0].equalsIgnoreCase("color")) {
             if (!sender.hasPermission("starcore.admin.color")) {
                 sender.sendMessage(ColorUtils.color("&cYou do not have permission to use that command."));
                 return true;
@@ -99,10 +102,7 @@ public class StarCoreCmd implements CommandExecutor {
             } else {
                 sender.sendMessage(ColorUtils.color("&cInvalid subcommand."));
             }
-        }
-        
-        
-        else {
+        } else {
             ColorUtils.coloredMessage(sender, "&cInvalid subcommand.");
         }
 
