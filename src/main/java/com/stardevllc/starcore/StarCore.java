@@ -18,6 +18,7 @@ public class StarCore extends JavaPlugin {
     
     private UUID consoleUnqiueId;
     private Config colorsConfig;
+    private Config mainConfig;
     
     public void onEnable() {
         Config config = new Config(new File(getDataFolder(), "config.yml"));
@@ -28,18 +29,7 @@ public class StarCore extends JavaPlugin {
         
         config.addDefault("save-colors", false, "This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (config.getBoolean("save-colors")) {
-            this.colorsConfig = new Config(new File(getDataFolder(), "colors.yml"));
-            if (this.colorsConfig.contains("colors")) {
-                for (Object key : this.colorsConfig.getSection("colors").getKeys()) {
-                    CustomColor customColor = new CustomColor(this);
-                    customColor.symbolCode((String) key);
-                    customColor.hexValue(colorsConfig.getString("colors." + key + ".hex"));
-                    if (this.colorsConfig.contains("colors." + key + ".permission")) {
-                        customColor.permission(colorsConfig.getString("colors." + key + ".permission"));
-                    }
-                    ColorUtils.addCustomColor(customColor);
-                }
-            }
+            loadColors();
         }
         
         config.save();
@@ -51,9 +41,41 @@ public class StarCore extends JavaPlugin {
 
         getCommand("starcore").setExecutor(new StarCoreCmd(this));
     }
-
-    @Override
-    public void onDisable() {
+    
+    public void reload(boolean save) {
+        if (save) {
+            saveColors();
+        }
+        
+        ColorUtils.getCustomColors().forEach((code, color) -> {
+            if (color.getOwner().getName().equalsIgnoreCase(getName())) {
+                ColorUtils.removeColor(code);
+            }
+        });
+        
+        loadColors();
+        
+        this.mainConfig = new Config(new File(getDataFolder(), "config.yml"));
+        this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
+        ServerActor.serverUUID = this.consoleUnqiueId;
+    }
+    
+    public void loadColors() {
+        this.colorsConfig = new Config(new File(getDataFolder(), "colors.yml"));
+        if (this.colorsConfig.contains("colors")) {
+            for (Object key : this.colorsConfig.getSection("colors").getKeys()) {
+                CustomColor customColor = new CustomColor(this);
+                customColor.symbolCode((String) key);
+                customColor.hexValue(colorsConfig.getString("colors." + key + ".hex"));
+                if (this.colorsConfig.contains("colors." + key + ".permission")) {
+                    customColor.permission(colorsConfig.getString("colors." + key + ".permission"));
+                }
+                ColorUtils.addCustomColor(customColor);
+            }
+        }
+    }
+    
+    public void saveColors() {
         if (colorsConfig != null) {
             colorsConfig.set("colors", null);
             for (CustomColor color : ColorUtils.getCustomColors().values()) {
@@ -66,6 +88,11 @@ public class StarCore extends JavaPlugin {
             }
             this.colorsConfig.save();
         }
+    }
+
+    @Override
+    public void onDisable() {
+        saveColors();
     }
 
     public UUID getConsoleUnqiueId() {
