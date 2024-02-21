@@ -7,6 +7,7 @@ import com.stardevllc.starmclib.actor.ServerActor;
 import com.stardevllc.starmclib.color.ColorUtils;
 import com.stardevllc.starmclib.color.CustomColor;
 import com.stardevllc.starmclib.task.SpigotTaskFactory;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -63,14 +64,17 @@ public class StarCore extends JavaPlugin {
     public void loadColors() {
         this.colorsConfig = new Config(new File(getDataFolder(), "colors.yml"));
         if (this.colorsConfig.contains("colors")) {
-            for (Object key : this.colorsConfig.getSection("colors").getKeys()) {
-                CustomColor customColor = new CustomColor(this);
-                customColor.symbolCode((String) key);
-                customColor.hexValue(colorsConfig.getString("colors." + key + ".hex"));
-                if (this.colorsConfig.contains("colors." + key + ".permission")) {
-                    customColor.permission(colorsConfig.getString("colors." + key + ".permission"));
+            Section colorsSection = this.colorsConfig.getSection("colors");
+            if (colorsSection != null) {
+                for (Object key : colorsSection.getKeys()) {
+                    CustomColor customColor = new CustomColor(this);
+                    customColor.symbolCode((String) key);
+                    customColor.hexValue(colorsConfig.getString("colors." + key + ".hex"));
+                    if (this.colorsConfig.contains("colors." + key + ".permission")) {
+                        customColor.permission(colorsConfig.getString("colors." + key + ".permission"));
+                    }
+                    ColorUtils.addCustomColor(customColor);
                 }
-                ColorUtils.addCustomColor(customColor);
             }
         }
     }
