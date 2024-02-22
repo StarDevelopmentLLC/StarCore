@@ -24,13 +24,13 @@ processResources {
 
 shadowJar {
     archiveClassifier.set('')
-    //destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
+    destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
     api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.1'
-    api 'com.github.StarDevelopmentLLC:StarMCLib:1.0.0-alpha.7'
+    api 'com.github.StarDevelopmentLLC:StarMCLib:d2a237e317'
     api 'com.github.StarDevelopmentLLC:StarClock:1.0.0-alpha.1'
     api 'com.github.cryptomorin:XSeries:9.7.0'
     api 'dev.dejvokep:boosted-yaml:1.3'
