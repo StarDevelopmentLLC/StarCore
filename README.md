@@ -22,6 +22,5 @@ StarCore version: `1.0.0-alpha.1`
 | Library | Version |
 | ------- | ------- | 
 | StarLib | 1.0.0-alpha.1 |
-| StarMCLib | 1.0.0-alpha.3 |
+| StarMCLib | 1.0.0-alpha.8 |
 | StarClock | 1.0.0-alpha.1 |
-| XSeries | 9.7.0 |
