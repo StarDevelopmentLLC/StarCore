@@ -8,6 +8,8 @@ import com.stardevllc.starmclib.actor.ServerActor;
 import com.stardevllc.starmclib.color.ColorUtils;
 import com.stardevllc.starmclib.color.CustomColor;
 import com.stardevllc.starmclib.task.SpigotTaskFactory;
+import com.stardevllc.starsql.api.model.DatabaseRegistry;
+import com.stardevllc.starsql.common.StarSQL;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
@@ -40,6 +42,9 @@ public class StarCore extends JavaPlugin {
         ClockManager clockManager = new ClockManager(getLogger(), 50L);
         getServer().getServicesManager().register(ClockManager.class, clockManager, this, ServicePriority.Normal);
         getServer().getScheduler().runTaskTimer(this, clockManager.getRunnable(), 1L, 1L);
+
+        StarSQL.setLogger(getLogger());
+        getServer().getServicesManager().register(DatabaseRegistry.class, StarSQL.createDatabaseRegistry(), this, ServicePriority.Highest);
 
         getCommand("starcore").setExecutor(new StarCoreCmd(this));
     }
