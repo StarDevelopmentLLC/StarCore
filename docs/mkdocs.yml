@@ -1,0 +1,27 @@
+site_name: StarCore Wiki
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.path
+    - content.code.copy
+    - content.code.annotate
+nav:
+  - Home: 'index.md'
+  - Command: 'command.md'
+  - Installation: 'installation.md'
+  - 'Usage with Provided Plugins':
+      - StarLib: 'starlib.md'
+      - StarMCLib: 'starmclib.md'
+      - StarClock: 'starclock.md'
+      - StarSQL: 'starsql.md'
+repo_url: 'https://github.com/StarDevelopmentLLC/StarCore'
+repo_name: 'StarCore'
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
