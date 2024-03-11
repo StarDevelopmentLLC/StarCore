@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.stardevllc'
-version '1.0.0-alpha.10'
+version '1.0.0-alpha.11'
 
 repositories {
     mavenCentral()
@@ -33,7 +33,7 @@ processResources {
 
 shadowJar {
     archiveClassifier.set('')
-    //destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
+    destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
 }
 
 dependencies {

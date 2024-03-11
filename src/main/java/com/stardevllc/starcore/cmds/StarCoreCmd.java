@@ -18,7 +18,7 @@ public class StarCoreCmd implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("starcore.admin")) {
-            sender.sendMessage(ColorUtils.color("&cYou do not have permission to use that command."));
+            sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.nopermission")));
             return true;
         }
 
@@ -32,22 +32,25 @@ public class StarCoreCmd implements CommandExecutor {
             sender.sendMessage(ColorUtils.color("&aSuccessfully reloaded configs."));
         } else if (args[0].equalsIgnoreCase("color")) {
             if (!sender.hasPermission("starcore.admin.color")) {
-                sender.sendMessage(ColorUtils.color("&cYou do not have permission to use that command."));
+                sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.nopermission")));
                 return true;
             }
 
             if (!(args.length > 1)) {
-                sender.sendMessage(ColorUtils.color("&cUsage: /" + label + " " + args[0] + " <listsymbols|listcolors|addcolor|removecolor>"));
+                sender.sendMessage(ColorUtils.color("&cUsage: /" + label + " " + args[0] + " listsymbols"));
+                sender.sendMessage(ColorUtils.color("&cUsage: /" + label + " " + args[0] + " listcolors"));
+                sender.sendMessage(ColorUtils.color("&cUsage: /" + label + " " + args[0] + " add <code> <hex> [permission]"));
+                sender.sendMessage(ColorUtils.color("&cUsage: /" + label + " " + args[0] + " remove <code>"));
                 return true;
             }
 
             if (args[1].equalsIgnoreCase("listsymbols")) {
-                sender.sendMessage(ColorUtils.color("&eList of valid color prefix characters: "));
+                sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.color.listsymbols.header")));
                 for (Character c : ColorUtils.getPrefixSymbols()) {
                     sender.sendMessage(ColorUtils.color("  &8- &b") + c);
                 }
             } else if (args[1].equalsIgnoreCase("listcolors")) {
-                sender.sendMessage(ColorUtils.color("&eList of non-default registered colors: "));
+                sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.color.listcolors.header")));
                 ColorUtils.getCustomColors().forEach((code, color) -> sender.sendMessage(ColorUtils.color("  &8- &b") + code + "§8: §b" + color.getHex() + ColorUtils.color(" &8[&e" + color.getOwner().getName() + "&8]" + (!color.getPermission().isEmpty() ? " &8<&d" + color.getPermission() + "&8>" : ""))));
             } else if (args[1].equalsIgnoreCase("add")) {
                 if (!(args.length > 3)) {
@@ -58,12 +61,12 @@ public class StarCoreCmd implements CommandExecutor {
                 String code = args[2];
 
                 if (ColorUtils.isSpigotColor(code)) {
-                    sender.sendMessage(ColorUtils.color("&cYou cannot override default spigot colors. Please choose a different code."));
+                    sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.color.add.cannot-override-spigot")));
                     return true;
                 }
 
                 if (!ColorUtils.isValidCode(code)) {
-                    sender.sendMessage(ColorUtils.color("&cThe code you provided is not valid. Codes must be 2 characters and start with a valid symbol. &eUse the /" + label + " " + args[0] + " listsymbols &ccommand."));
+                    sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.color.add.invalid-code")));
                     return true;
                 }
 
@@ -93,17 +96,17 @@ public class StarCoreCmd implements CommandExecutor {
 
                 String code = args[2];
                 if (ColorUtils.getCustomColor(code) == null) {
-                    sender.sendMessage(ColorUtils.color("&cThe code you specified is not a registered color."));
+                    sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.color.remove.not-registered")));
                     return true;
                 }
 
                 ColorUtils.removeColor(code);
-                sender.sendMessage(ColorUtils.color("&eYou removed &b" + code + " &eas a custom color."));
+                sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.color.remove.success").replace("{OLDCODE}", code)));
             } else {
-                sender.sendMessage(ColorUtils.color("&cInvalid subcommand."));
+                sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.invalidsubcommand")));
             }
         } else {
-            ColorUtils.coloredMessage(sender, "&cInvalid subcommand.");
+            sender.sendMessage(ColorUtils.color(plugin.getMainConfig().getString("messages.command.invalidsubcommand")));
         }
 
         return true;
