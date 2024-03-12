@@ -18,9 +18,11 @@ dependencies {
 }
 ```  
 This plugin shades in StarLib, StarMCLib, StarClock and XSeries without any relocations. If you depend on this plugin, you will have access to all of those libraries. Please see below to view the versions that is provided by this plugin.  
-StarCore version: `1.0.0-alpha.1`
+StarCore version: `1.0.0-alpha.3`  
+
 | Library | Version |
 | ------- | ------- | 
-| StarLib | 1.0.0-alpha.1 |
-| StarMCLib | 1.0.0-alpha.8 |
-| StarClock | 1.0.0-alpha.1 |
+| StarLib | 1.0.0-alpha.2 |
+| StarMCLib | 1.0.0-alpha.9 |
+| StarClock | 1.0.0-alpha.2 |
+| StarSQL-ALL | 1.0.0-alpha.3 |
