@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.stardevllc'
-version '1.0.0-alpha.12'
+version '1.0.0-alpha.13'
 
 repositories {
     mavenCentral()
