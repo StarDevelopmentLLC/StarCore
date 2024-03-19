@@ -43,7 +43,7 @@ dependencies {
     api 'com.github.StarDevelopmentLLC.StarSQL:postgres:1.0.0-alpha.3'
     api 'com.github.StarDevelopmentLLC.StarSQL:sqlite:1.0.0-alpha.3'
     api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.2'
-    api 'com.github.StarDevelopmentLLC:StarMCLib:1.0.0-alpha.9'
+    api 'com.github.StarDevelopmentLLC:StarMCLib:1.0.0-alpha.10'
     api 'com.github.StarDevelopmentLLC:StarClock:1.0.0-alpha.2'
 }
 
