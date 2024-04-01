@@ -22,7 +22,7 @@ StarCore version: `1.0.0-alpha.3`
 
 | Library | Version        |
 | ------- |----------------| 
-| StarLib | 1.0.0-alpha.2  |
-| StarMCLib | 1.0.0-alpha.10 |
-| StarClock | 1.0.0-alpha.2  |
-| StarSQL-ALL | 1.0.0-alpha.3  |
+| StarLib | 1.0.0-alpha.3  |
+| StarMCLib | 1.0.0-alpha.11 |
+| StarClock | 1.0.0-alpha.3  |
+| StarSQL-ALL | 1.0.0-alpha.4  |

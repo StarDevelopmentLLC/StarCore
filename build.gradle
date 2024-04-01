@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
-//    id 'maven-publish'
+    id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group 'com.stardevllc'
-version '1.0.0-alpha.13'
+version '1.0.0-alpha.14'
 
 repositories {
     mavenCentral()
@@ -17,13 +17,13 @@ repositories {
     }
 }
 
-//publishing {
-//    publications {
-//        shadow(MavenPublication) { publication ->
-//            project.shadow.component(publication)
-//        }
-//    }
-//}
+publishing {
+    publications {
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+        }
+    }
+}
 
 processResources {
     filesMatching("*.yml") {
@@ -38,13 +38,10 @@ shadowJar {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
-    api 'com.github.StarDevelopmentLLC.StarSQL:h2:1.0.0-alpha.3'
     api 'com.github.StarDevelopmentLLC.StarSQL:mysql:1.0.0-alpha.3'
-    api 'com.github.StarDevelopmentLLC.StarSQL:postgres:1.0.0-alpha.3'
-    api 'com.github.StarDevelopmentLLC.StarSQL:sqlite:1.0.0-alpha.3'
-    api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.2'
-    api 'com.github.StarDevelopmentLLC:StarMCLib:1.0.0-alpha.10'
-    api 'com.github.StarDevelopmentLLC:StarClock:1.0.0-alpha.2'
+    api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.3'
+    api 'com.github.StarDevelopmentLLC:StarMCLib:1.0.0-alpha.11'
+    api 'com.github.StarDevelopmentLLC:StarClock:1.0.0-alpha.3'
 }
 
 java {
@@ -53,5 +50,6 @@ java {
     }
 }
 
-tasks.jar.finalizedBy(shadowJar)
 tasks.compileJava.dependsOn(clean)
+tasks.jar.finalizedBy(shadowJar)
+tasks.publishToMavenLocal.dependsOn(shadowJar)
