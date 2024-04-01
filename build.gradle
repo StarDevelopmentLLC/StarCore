@@ -42,6 +42,7 @@ dependencies {
     api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.4'
     api 'com.github.StarDevelopmentLLC:StarMCLib:1.0.0-alpha.12'
     api 'com.github.StarDevelopmentLLC:StarClock:1.0.0-alpha.4'
+    api 'com.github.StarDevelopmentLLC:StarBeans:1.0.0-alpha.1'
 }
 
 java {

@@ -26,3 +26,4 @@ StarCore version: `1.0.0-alpha.15`
 | StarMCLib | 1.0.0-alpha.12 |
 | StarClock | 1.0.0-alpha.4  |
 | StarSQL | 1.0.0-alpha.5  |
+| StarBeans | 1.0.0-alpha.1 | 
