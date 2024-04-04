@@ -2,6 +2,7 @@ package com.stardevllc.starcore;
 
 import com.stardevllc.starclock.ClockManager;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
+import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starlib.task.TaskFactory;
 import com.stardevllc.starmclib.Config;
 import com.stardevllc.starmclib.actor.ServerActor;
@@ -23,6 +24,7 @@ public class StarCore extends JavaPlugin {
     private UUID consoleUnqiueId;
     private Config colorsConfig;
     private Config mainConfig;
+    private GuiManager guiManager;
     
     public void onEnable() {
         Config config = new Config(new File(getDataFolder(), "config.yml"));
@@ -51,6 +53,10 @@ public class StarCore extends JavaPlugin {
         ClockManager clockManager = new ClockManager(getLogger(), 50L);
         getServer().getServicesManager().register(ClockManager.class, clockManager, this, ServicePriority.Normal);
         getServer().getScheduler().runTaskTimer(this, clockManager.getRunnable(), 1L, 1L);
+
+        guiManager = new GuiManager(this);
+        guiManager.setup();
+        getServer().getServicesManager().register(GuiManager.class, guiManager, this, ServicePriority.Normal);
 
         StarSQL.setLogger(getLogger());
         getServer().getServicesManager().register(DatabaseRegistry.class, StarSQL.createDatabaseRegistry(), this, ServicePriority.Highest);
@@ -120,5 +126,9 @@ public class StarCore extends JavaPlugin {
 
     public Config getMainConfig() {
         return mainConfig;
+    }
+
+    public GuiManager getGuiManager() {
+        return guiManager;
     }
 }
