@@ -38,7 +38,7 @@ shadowJar {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
-    api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.7'
+    api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.8'
     api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.10'
     api 'com.github.StarDevelopmentLLC:StarClock:1.0.0-alpha.8'    
     api 'dev.dejvokep:boosted-yaml:1.3'
