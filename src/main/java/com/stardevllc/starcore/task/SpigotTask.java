@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.utils.task;
+package com.stardevllc.starcore.task;
 
 import com.stardevllc.starlib.task.Task;
 import org.bukkit.scheduler.BukkitTask;
