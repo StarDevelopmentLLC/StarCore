@@ -18,10 +18,18 @@ import java.util.List;
 
 public class GoatHornBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(MusicInstrumentMeta.class, GoatHornBuilder.class); //Will probably have to change this at some point
+    }
+    
     private MusicInstrument instrument;
     
     public GoatHornBuilder() {
         super(XMaterial.GOAT_HORN);
+    }
+
+    public GoatHornBuilder(MusicInstrument instrument) {
+        instrument(instrument);
     }
     
     protected static GoatHornBuilder createFromItemStack(ItemStack itemStack) {

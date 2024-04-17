@@ -3,22 +3,19 @@ package com.stardevllc.starcore.utils.item;
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.Multimap;
 import com.stardevllc.starcore.utils.color.ColorUtils;
-import com.stardevllc.starcore.utils.item.enums.*;
-import com.stardevllc.starcore.utils.item.material.*;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Axolotl;
-import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.map.MapView;
-import org.bukkit.profile.PlayerProfile;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,23 +32,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("deprecation")
 public class ItemBuilder implements Cloneable {
     
-    private static final Map<Class<? extends ItemMeta>, Class<? extends ItemBuilder>> META_TO_BUILDERS = new HashMap<>();
-    
-    static {
-        META_TO_BUILDERS.put(ArmorMeta.class, ArmorItemBuilder.class);
-        META_TO_BUILDERS.put(AxolotlBucketMeta.class, AxolotlItemBuilder.class);
-        META_TO_BUILDERS.put(BannerMeta.class, BannerItemBuilder.class);
-        META_TO_BUILDERS.put(BookMeta.class, BookItemBuilder.class);
-        META_TO_BUILDERS.put(CrossbowMeta.class, CrossbowItemBuilder.class);
-        META_TO_BUILDERS.put(EnchantmentStorageMeta.class, EnchantedBookBuilder.class);
-        META_TO_BUILDERS.put(FireworkMeta.class, FireworkItemBuilder.class);
-        META_TO_BUILDERS.put(FireworkEffectMeta.class, FireworkStarBuilder.class);
-        META_TO_BUILDERS.put(TropicalFishBucketMeta.class, FishBucketBuilder.class);
-        META_TO_BUILDERS.put(MusicInstrumentMeta.class, GoatHornBuilder.class);
-        META_TO_BUILDERS.put(MapMeta.class, MapItemBuilder.class);
-        META_TO_BUILDERS.put(SkullMeta.class, SkullItemBuilder.class);
-        META_TO_BUILDERS.put(SuspiciousStewMeta.class, StewItemBuilder.class);
-    }
+    protected static final Map<Class<? extends ItemMeta>, Class<? extends ItemBuilder>> META_TO_BUILDERS = new HashMap<>();
     
     protected XMaterial material;
     protected int amount;
@@ -317,124 +298,6 @@ public class ItemBuilder implements Cloneable {
         clone.repairCost = this.repairCost;
         clone.damage = this.damage;
         return clone;
-    }
-    
-    public static class Armor extends ArmorItemBuilder {
-        public Armor(ArmorMaterial material, ArmorSlot slot) {
-            super(XMaterial.valueOf(material.name() + "_" + slot.name()));
-        }
-    }
-    
-    public static class AxolotlBucket extends AxolotlItemBuilder {
-        public AxolotlBucket(Axolotl.Variant variant) {
-            variant(variant);
-        }
-    }
-    
-    public static class Banner extends BannerItemBuilder {
-        public Banner(DyeColor dyeColor) {
-            super(switch (dyeColor) {
-                case WHITE -> XMaterial.WHITE_BANNER;
-                case ORANGE -> XMaterial.ORANGE_BANNER;
-                case MAGENTA -> XMaterial.MAGENTA_BANNER;
-                case LIGHT_BLUE -> XMaterial.LIGHT_BLUE_BANNER;
-                case YELLOW -> XMaterial.YELLOW_BANNER;
-                case LIME -> XMaterial.LIME_BANNER;
-                case PINK -> XMaterial.PINK_BANNER;
-                case GRAY -> XMaterial.GRAY_BANNER;
-                case LIGHT_GRAY -> XMaterial.LIGHT_GRAY_BANNER;
-                case CYAN -> XMaterial.CYAN_BANNER;
-                case PURPLE -> XMaterial.PURPLE_BANNER;
-                case BLUE -> XMaterial.BLUE_BANNER;
-                case BROWN -> XMaterial.BROWN_BANNER;
-                case GREEN -> XMaterial.GREEN_BANNER;
-                case RED -> XMaterial.RED_BANNER;
-                case BLACK -> XMaterial.BLACK_BANNER;
-            });
-        }
-    }
-    
-    public static class Book extends BookItemBuilder {
-        public Book(BookType bookType, String title, String author) {
-            super(XMaterial.valueOf(bookType.name() + "_BOOK"));
-            title(title).author(author);
-        }
-    }
-
-    public static class Compass extends CompassItemBuilder {
-        public Compass() {}
-        
-        public Compass(Location lodestone) {
-            super.lodestone(lodestone);
-        }
-        
-        public Compass(Location lodestone, boolean tracked) {
-            super.lodestone(lodestone).tracked(tracked);
-        }
-    }
-
-    public static class Crossbow extends CrossbowItemBuilder {
-        public Crossbow(ItemStack projectile) {
-            addProjectile(projectile);
-        }
-    }
-
-    public static class EnchantedBook extends EnchantedBookBuilder {
-        public EnchantedBook(Enchantment enchantment, int level) {
-            addEnchant(enchantment, level);
-        }
-    }
-
-    public static class Firework extends FireworkItemBuilder {
-        public Firework(FireworkEffect effect, int power) {
-            super.addEffect(effect).power(power);
-        }
-    }
-
-    public static class FireworkStar extends FireworkStarBuilder {
-        public FireworkStar(FireworkEffect effect) {
-            super.effect(effect);
-        }
-    }
-
-    public static class FishBucket extends FishBucketBuilder {
-        public FishBucket(DyeColor bodyColor, TropicalFish.Pattern pattern, DyeColor patternColor) {
-            super.bodyColor(bodyColor).pattern(pattern).patternColor(patternColor);
-        }
-    }
-
-    public static class GoatHorn extends GoatHornBuilder {
-        public GoatHorn(MusicInstrument instrument) {
-            super.instrument(instrument);
-        }
-    }
-
-    public static class MapItem extends MapItemBuilder {
-        public MapItem(MapView mapView) {
-            super.mapView(mapView);
-        }
-    }
-
-    public static class Skull extends SkullItemBuilder {
-        public Skull(UUID owner) {
-            super.owner(owner);
-        }
-        
-        public Skull(PlayerProfile profile) {
-            super.profile(profile);
-            
-        }
-    }
-
-    public static class Stew extends StewItemBuilder {
-        
-    }
-    
-    public static class Tool extends ItemBuilder {
-        public Tool(ToolMaterial material, ToolType type) {
-            Optional<XMaterial> xMaterial = XMaterial.matchXMaterial(material.name() + "_" + type.name());
-            xMaterial.ifPresent(value -> this.material = value);
-        }
     }
     
     private static ItemBuilder getSubClassFromMeta(ItemMeta itemMeta, String methodName, Class<?> paramClass, Object param) {

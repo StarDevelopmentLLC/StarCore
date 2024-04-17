@@ -18,11 +18,25 @@ import java.util.List;
 
 public class CompassItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(CompassMeta.class, CompassItemBuilder.class);
+    }
+    
     private Location lodestone;
     private boolean tracked;
     
     public CompassItemBuilder() {
         super(XMaterial.COMPASS);
+    }
+
+    public CompassItemBuilder(Location lodestone) {
+        this();
+        lodestone(lodestone);
+    }
+
+    public CompassItemBuilder(Location lodestone, boolean tracked) {
+        this();
+        lodestone(lodestone).tracked(tracked);
     }
     
     protected static CompassItemBuilder createFromItemStack(ItemStack itemStack) {

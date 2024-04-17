@@ -2,6 +2,8 @@ package com.stardevllc.starcore.utils.item.material;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.utils.item.ItemBuilder;
+import com.stardevllc.starcore.utils.item.enums.ArmorMaterial;
+import com.stardevllc.starcore.utils.item.enums.ArmorSlot;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
@@ -21,6 +23,10 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 import java.util.List;
 
 public class ArmorItemBuilder extends ItemBuilder {
+    
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(ArmorMeta.class, ArmorItemBuilder.class);
+    }
 
     protected static ArmorItemBuilder createFromItemStack(ItemStack itemStack) {
         ArmorItemBuilder itemBuilder = new ArmorItemBuilder(XMaterial.matchXMaterial(itemStack));
@@ -45,6 +51,10 @@ public class ArmorItemBuilder extends ItemBuilder {
     
     public ArmorItemBuilder(XMaterial material) {
         super(material);
+    }
+
+    public ArmorItemBuilder(ArmorMaterial material, ArmorSlot slot) {
+        super(XMaterial.valueOf(material.name() + "_" + slot.name()));
     }
     
     protected ArmorItemBuilder() {}

@@ -16,10 +16,18 @@ import java.util.List;
 
 public class FireworkStarBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(FireworkEffectMeta.class, FireworkStarBuilder.class);
+    }
+    
     private FireworkEffect effect;
     
     public FireworkStarBuilder() {
         super(XMaterial.FIREWORK_STAR);
+    }
+
+    public FireworkStarBuilder(FireworkEffect effect) {
+        effect(effect);
     }
 
     protected static FireworkStarBuilder createFromItemStack(ItemStack itemStack) {

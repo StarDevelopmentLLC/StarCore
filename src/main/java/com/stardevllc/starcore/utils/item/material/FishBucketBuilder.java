@@ -17,12 +17,20 @@ import java.util.List;
 
 public class FishBucketBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(TropicalFishBucketMeta.class, FishBucketBuilder.class);
+    }
+    
     private DyeColor bodyColor = DyeColor.BLACK;
     private TropicalFish.Pattern pattern = TropicalFish.Pattern.BLOCKFISH;
     private DyeColor patternColor = DyeColor.WHITE;
     
     public FishBucketBuilder() {
         super(XMaterial.TROPICAL_FISH_BUCKET);
+    }
+
+    public FishBucketBuilder(DyeColor bodyColor, TropicalFish.Pattern pattern, DyeColor patternColor) {
+        bodyColor(bodyColor).pattern(pattern).patternColor(patternColor);
     }
     
     protected static FishBucketBuilder createFromItemStack(ItemStack itemStack) {

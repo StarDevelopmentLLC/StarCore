@@ -3,6 +3,7 @@ package com.stardevllc.starcore.utils.item.material;
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.utils.color.ColorUtils;
 import com.stardevllc.starcore.utils.item.ItemBuilder;
+import com.stardevllc.starcore.utils.item.enums.BookType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -20,6 +21,10 @@ import java.util.List;
 
 public class BookItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(BookMeta.class, BookItemBuilder.class);
+    }
+    
     private String author;
     private List<BaseComponent[]> pages = new LinkedList<>();
     private BookMeta.Generation generation = BookMeta.Generation.ORIGINAL;
@@ -31,6 +36,11 @@ public class BookItemBuilder extends ItemBuilder {
     
     protected BookItemBuilder() {
         
+    }
+
+    public BookItemBuilder(BookType bookType, String title, String author) {
+        super(XMaterial.valueOf(bookType.name() + "_BOOK"));
+        title(title).author(author);
     }
 
     protected static BookItemBuilder createFromItemStack(ItemStack itemStack) {

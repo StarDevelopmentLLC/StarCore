@@ -19,6 +19,10 @@ import java.util.List;
 
 public class BannerItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(BannerMeta.class, BannerItemBuilder.class);
+    }
+    
     private List<Pattern> patterns = new LinkedList<>();
     
     public BannerItemBuilder(XMaterial material) {
@@ -27,6 +31,27 @@ public class BannerItemBuilder extends ItemBuilder {
     
     protected BannerItemBuilder() {
         
+    }
+
+    public BannerItemBuilder(DyeColor dyeColor) {
+        super(switch (dyeColor) {
+            case WHITE -> XMaterial.WHITE_BANNER;
+            case ORANGE -> XMaterial.ORANGE_BANNER;
+            case MAGENTA -> XMaterial.MAGENTA_BANNER;
+            case LIGHT_BLUE -> XMaterial.LIGHT_BLUE_BANNER;
+            case YELLOW -> XMaterial.YELLOW_BANNER;
+            case LIME -> XMaterial.LIME_BANNER;
+            case PINK -> XMaterial.PINK_BANNER;
+            case GRAY -> XMaterial.GRAY_BANNER;
+            case LIGHT_GRAY -> XMaterial.LIGHT_GRAY_BANNER;
+            case CYAN -> XMaterial.CYAN_BANNER;
+            case PURPLE -> XMaterial.PURPLE_BANNER;
+            case BLUE -> XMaterial.BLUE_BANNER;
+            case BROWN -> XMaterial.BROWN_BANNER;
+            case GREEN -> XMaterial.GREEN_BANNER;
+            case RED -> XMaterial.RED_BANNER;
+            case BLACK -> XMaterial.BLACK_BANNER;
+        });
     }
 
     protected static BannerItemBuilder createFromItemStack(ItemStack itemStack) {

@@ -16,10 +16,19 @@ import java.util.List;
 
 public class AxolotlItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(AxolotlBucketMeta.class, AxolotlItemBuilder.class);
+    }
+    
     private Axolotl.Variant variant;
     
     public AxolotlItemBuilder() {
         super(XMaterial.AXOLOTL_BUCKET);
+    }
+
+    public AxolotlItemBuilder(Axolotl.Variant variant) {
+        this();
+        variant(variant);
     }
     
     protected static AxolotlItemBuilder createFromItemStack(ItemStack itemStack) {

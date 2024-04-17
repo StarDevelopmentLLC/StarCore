@@ -16,10 +16,18 @@ import java.util.List;
 
 public class CrossbowItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(CrossbowMeta.class, CrossbowItemBuilder.class);
+    }
+    
     private List<ItemStack> projectiles = new LinkedList<>();
     
     public CrossbowItemBuilder() {
         super(XMaterial.CROSSBOW);
+    }
+
+    public CrossbowItemBuilder(ItemStack projectile) {
+        addProjectile(projectile);
     }
     
     protected static CrossbowItemBuilder createFromItemStack(ItemStack itemStack) {

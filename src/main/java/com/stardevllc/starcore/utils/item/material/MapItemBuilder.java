@@ -17,12 +17,20 @@ import java.util.List;
 
 public class MapItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(MapMeta.class, MapItemBuilder.class);
+    }
+    
     private Color color;
     private MapView mapView;
     private boolean scaling;
     
     public MapItemBuilder() {
         super(XMaterial.MAP);
+    }
+
+    public MapItemBuilder(MapView mapView) {
+        mapView(mapView);
     }
     
     protected static MapItemBuilder createFromItemStack(ItemStack itemStack) {

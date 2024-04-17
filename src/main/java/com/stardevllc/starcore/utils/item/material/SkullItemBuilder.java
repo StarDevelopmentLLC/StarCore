@@ -19,12 +19,24 @@ import java.util.UUID;
 
 public class SkullItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(SkullMeta.class, SkullItemBuilder.class);
+    }
+    
     private UUID owner;
     private PlayerProfile profile;
     private NamespacedKey noteblockSound;
     
     public SkullItemBuilder() {
         super(XMaterial.PLAYER_HEAD);
+    }
+
+    public SkullItemBuilder(UUID owner) {
+        owner(owner);
+    }
+
+    public SkullItemBuilder(PlayerProfile profile) {
+        profile(profile);
     }
     
     protected static SkullItemBuilder createFromItemStack(ItemStack itemStack) {

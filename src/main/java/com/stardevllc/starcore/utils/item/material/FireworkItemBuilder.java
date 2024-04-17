@@ -18,11 +18,19 @@ import java.util.List;
 
 public class FireworkItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(FireworkMeta.class, FireworkItemBuilder.class);
+    }
+    
     private List<FireworkEffect> effects = new LinkedList<>();
     private int power;
     
     public FireworkItemBuilder() {
         super(XMaterial.FIREWORK_ROCKET);
+    }
+
+    public FireworkItemBuilder(FireworkEffect effect, int power) {
+        addEffect(effect).power(power);
     }
     
     protected static FireworkItemBuilder createFromItemStack(ItemStack itemStack) {

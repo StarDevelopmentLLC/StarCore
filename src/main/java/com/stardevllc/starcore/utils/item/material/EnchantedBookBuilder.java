@@ -17,11 +17,19 @@ import java.util.List;
 import java.util.Map;
 
 public class EnchantedBookBuilder extends ItemBuilder {
+    
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(EnchantmentStorageMeta.class, EnchantedBookBuilder.class);
+    }
 
     protected Map<Enchantment, Integer> storedEnchants = new HashMap<>();
     
     public EnchantedBookBuilder() {
         super(XMaterial.ENCHANTED_BOOK);
+    }
+
+    public EnchantedBookBuilder(Enchantment enchantment, int level) {
+        addStoredEnchant(enchantment, level);
     }
     
     protected static EnchantedBookBuilder createFromItemStack(ItemStack itemStack) {

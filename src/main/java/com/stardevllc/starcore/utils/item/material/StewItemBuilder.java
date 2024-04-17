@@ -17,6 +17,10 @@ import java.util.List;
 
 public class StewItemBuilder extends ItemBuilder {
     
+    static {
+        ItemBuilder.META_TO_BUILDERS.put(SuspiciousStewMeta.class, StewItemBuilder.class);
+    }
+    
     private List<PotionEffect> effects = new ArrayList<>();
     
     public StewItemBuilder() {
