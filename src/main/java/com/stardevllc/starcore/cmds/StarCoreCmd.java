@@ -2,8 +2,8 @@ package com.stardevllc.starcore.cmds;
 
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.gui.handler.InventoryHandler;
-import com.stardevllc.starcore.utils.color.ColorUtils;
-import com.stardevllc.starcore.utils.color.CustomColor;
+import com.stardevllc.starcore.color.ColorUtils;
+import com.stardevllc.starcore.color.CustomColor;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

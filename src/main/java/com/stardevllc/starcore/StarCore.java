@@ -4,10 +4,13 @@ import com.stardevllc.starclock.ClockManager;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starcore.utils.Config;
-import com.stardevllc.starcore.utils.actor.ServerActor;
-import com.stardevllc.starcore.utils.color.ColorUtils;
-import com.stardevllc.starcore.utils.color.CustomColor;
-import com.stardevllc.starcore.utils.task.SpigotTaskFactory;
+import com.stardevllc.starcore.utils.NMSVersion;
+import com.stardevllc.starcore.actor.ServerActor;
+import com.stardevllc.starcore.color.ColorUtils;
+import com.stardevllc.starcore.color.CustomColor;
+import com.stardevllc.starcore.task.SpigotTaskFactory;
+import com.stardevllc.starcore.wrapper.EnchantWrapper;
+import com.stardevllc.starcore.wrapper.ItemWrapper;
 import com.stardevllc.starlib.task.TaskFactory;
 import com.stardevllc.starsql.api.model.DatabaseRegistry;
 import com.stardevllc.starsql.common.StarSQL;
@@ -20,35 +23,49 @@ import java.io.File;
 import java.util.UUID;
 
 public class StarCore extends JavaPlugin {
-    
+
     private UUID consoleUnqiueId;
     private Config colorsConfig;
     private Config mainConfig;
     private GuiManager guiManager;
-    
+
+    private ItemWrapper itemWrapper;
+    private EnchantWrapper enchantWrapper;
+
     public void onEnable() {
-        Config config = new Config(new File(getDataFolder(), "config.yml"));
-        config.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
-        this.consoleUnqiueId = UUID.fromString(config.getString("console-uuid"));
+        mainConfig = new Config(new File(getDataFolder(), "config.yml"));
+        mainConfig.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
+        this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
-        
-        config.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
-        if (config.getBoolean("save-colors")) {
+
+        NMSVersion version = NMSVersion.CURRENT_VERSION;
+        try {
+            itemWrapper = version.getItemWrapper().getDeclaredConstructor().newInstance();
+            enchantWrapper = version.getEnchantWrapper().getDeclaredConstructor().newInstance();
+
+            Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Highest);
+            Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Highest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
+        if (mainConfig.getBoolean("save-colors")) {
             loadColors();
         }
-        
-        config.addDefault("messages.command.reload", "&aSuccessfully reloaded configs.", " The message sent when /starcore reload is a success");
-        config.addDefault("messages.command.invalidsubcommand", "&cInvalid subcommand.", " The message sent when an invalid sub-command is provided to /starcore");
-        config.addDefault("messages.command.nopermission", "&cYou do not have permission to use that command.", " The message displayed when no permission is detected for the /starcore command.");
-        config.addDefault("messages.command.color.listsymbols.header", "&eList of valid color prefix characters: ", " The header text for the /starcore color listsymbols command");
-        config.addDefault("messages.command.color.listcolors.header", "&eList of non-default registered colors: ", " The header text for the /starcore color listcolors command");
-        config.addDefault("messages.command.color.add.cannot-override-spigot", "&cYou cannot override default spigot colors. Please choose a different code.", " The error message for when someone tries to override a spigot color in /starcore color add command");
-        config.addDefault("messages.command.color.add.invalid-code", "&cThe code you provided is not valid. Codes must be 2 characters and start with a valid symbol. &eUse the /starcore color listsymbols &ccommand.", " The error message for when someone tries to use an invalid 2 character code in the /starcore color add command.");
-        config.addDefault("messages.command.color.remove.not-registered", "&cThe code you specified is not a registered color.", " The message sent when the code is not registered in the /starcore color remove command.");
-        config.addDefault("messages.command.color.remove.success", "&eYou removed &b{OLDCODE} &eas a custom color.", " The message sent when the code is removed successfully in /starcore color remove command");
-        config.save();
-        
+
+        mainConfig.addDefault("messages.command.reload", "&aSuccessfully reloaded configs.", " The message sent when /starcore reload is a success");
+        mainConfig.addDefault("messages.command.invalidsubcommand", "&cInvalid subcommand.", " The message sent when an invalid sub-command is provided to /starcore");
+        mainConfig.addDefault("messages.command.nopermission", "&cYou do not have permission to use that command.", " The message displayed when no permission is detected for the /starcore command.");
+        mainConfig.addDefault("messages.command.color.listsymbols.header", "&eList of valid color prefix characters: ", " The header text for the /starcore color listsymbols command");
+        mainConfig.addDefault("messages.command.color.listcolors.header", "&eList of non-default registered colors: ", " The header text for the /starcore color listcolors command");
+        mainConfig.addDefault("messages.command.color.add.cannot-override-spigot", "&cYou cannot override default spigot colors. Please choose a different code.", " The error message for when someone tries to override a spigot color in /starcore color add command");
+        mainConfig.addDefault("messages.command.color.add.invalid-code", "&cThe code you provided is not valid. Codes must be 2 characters and start with a valid symbol. &eUse the /starcore color listsymbols &ccommand.", " The error message for when someone tries to use an invalid 2 character code in the /starcore color add command.");
+        mainConfig.addDefault("messages.command.color.remove.not-registered", "&cThe code you specified is not a registered color.", " The message sent when the code is not registered in the /starcore color remove command.");
+        mainConfig.addDefault("messages.command.color.remove.success", "&eYou removed &b{OLDCODE} &eas a custom color.", " The message sent when the code is removed successfully in /starcore color remove command");
+        mainConfig.save();
+
         getServer().getServicesManager().register(TaskFactory.class, new SpigotTaskFactory(this), this, ServicePriority.Normal);
         ClockManager clockManager = new ClockManager(getLogger(), 50L);
         getServer().getServicesManager().register(ClockManager.class, clockManager, this, ServicePriority.Normal);
@@ -63,25 +80,25 @@ public class StarCore extends JavaPlugin {
 
         getCommand("starcore").setExecutor(new StarCoreCmd(this));
     }
-    
+
     public void reload(boolean save) {
         if (save) {
             saveColors();
         }
-        
+
         ColorUtils.getCustomColors().forEach((code, color) -> {
             if (color.getOwner().getName().equalsIgnoreCase(getName())) {
                 ColorUtils.removeColor(code);
             }
         });
-        
+
         loadColors();
-        
+
         this.mainConfig = new Config(new File(getDataFolder(), "config.yml"));
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
     }
-    
+
     public void loadColors() {
         this.colorsConfig = new Config(new File(getDataFolder(), "colors.yml"));
         if (this.colorsConfig.contains("colors")) {
@@ -99,7 +116,11 @@ public class StarCore extends JavaPlugin {
             }
         }
     }
-    
+
+    public ItemWrapper getItemWrapper() {
+        return itemWrapper;
+    }
+
     public void saveColors() {
         if (colorsConfig != null) {
             colorsConfig.set("colors", null);
