@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.utils.actor;
+package com.stardevllc.starcore.actor;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
