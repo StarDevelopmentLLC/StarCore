@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.utils.objecttester.test;
+package com.stardevllc.starcore.objecttester.test;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.utils.objecttester;
+package com.stardevllc.starcore.objecttester;
 
 import org.bukkit.command.CommandSender;
 

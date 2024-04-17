@@ -1,6 +1,6 @@
-package com.stardevllc.starcore.utils.objecttester.codex;
+package com.stardevllc.starcore.objecttester.codex;
 
-import com.stardevllc.starcore.utils.objecttester.TypeCodex;
+import com.stardevllc.starcore.objecttester.TypeCodex;
 
 public class StringCodex extends TypeCodex {
     public StringCodex() {
