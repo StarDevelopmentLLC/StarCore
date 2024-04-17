@@ -1,11 +1,10 @@
-package com.stardevllc.starcore.utils.color;
+package com.stardevllc.starcore.color;
 
 import com.stardevllc.starcore.utils.NMSVersion;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -20,12 +19,11 @@ public final class ColorUtils {
     public static final Pattern HEX_VALUE_PATTERN = Pattern.compile("^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$", Pattern.CASE_INSENSITIVE);
 
     private static Map<String, CustomColor> customColors = new HashMap<>();
-    private static Map<String, SpigotColor> spigotColors = new HashMap<>();
-
+    public static Map<String, SpigotColor> spigotColors = new HashMap<>();
+    
     static {
-        for (org.bukkit.ChatColor chatColor : org.bukkit.ChatColor.values()) {
-            SpigotColor spigotColor = new SpigotColor(null, chatColor);
-            spigotColors.put(spigotColor.getChatCode(), spigotColor);
+        if (isHexSupported()) { //If Hex codes are supported, then register the material colors
+            MaterialColor.MATERIAL_COLORS.forEach(color -> customColors.put(color.getChatCode(), color));
         }
     }
     
@@ -226,28 +224,6 @@ public final class ColorUtils {
         }
 
         return sender.hasPermission(permission);
-    }
-
-    /**
-     * @param color The color
-     * @return The hex code
-     */
-    public static String getHexCode(ChatColor color) {
-        Color awtColor = color.getColor();
-        if (awtColor != null) {
-            return "#" + Integer.toHexString(awtColor.getRGB()).substring(2);
-        }
-        return "";
-    }
-
-    /**
-     * Utility method to check to see if an RGB component is valid
-     *
-     * @param component The r g b value
-     * @return If it is between 0 and 255
-     */
-    public static boolean isRGBComponentInRange(int component) {
-        return component > -1 && component < 256;
     }
 
     /**

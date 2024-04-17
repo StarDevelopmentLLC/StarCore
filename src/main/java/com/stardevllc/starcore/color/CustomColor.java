@@ -1,25 +1,19 @@
-package com.stardevllc.starcore.utils.color;
+package com.stardevllc.starcore.color;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.awt.*;
-import java.util.stream.IntStream;
-
 /**
  * This class represents a custom color value <br>
  * This is created using builder-style methods <br>
- * You only need to call one of the following {@link #awtColor(Color)}, {@link #hexValue(String)}, {@link #rgbValue(int, int, int)} or {@link #spigotColor(ChatColor)}. The other values will be populated automatically. <br>
  */
 public class CustomColor {
     protected final JavaPlugin owner;
     protected char symbol, code;
-    protected int red = -1, green = -1, blue = -1;
     protected String hex, permission = "";
 
     protected ChatColor spigotColor;
-    protected Color awtColor;
 
     /**
      * Constructs a new color
@@ -56,24 +50,6 @@ public class CustomColor {
     }
 
     /**
-     * Sets the color value using RGB values
-     * @param red The red value between 0 and 255
-     * @param green The green value between 0 and 255
-     * @param blue The blue value between 0 and 255
-     * @return Builder style instance
-     */
-    public CustomColor rgbValue(int red, int green, int blue) {
-        if (IntStream.of(red, green, blue).allMatch(ColorUtils::isRGBComponentInRange)) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            calculateFields();
-        }
-
-        return this;
-    }
-
-    /**
      * @return The user-friendly chat code of this color
      */
     public String getChatCode() {
@@ -87,17 +63,6 @@ public class CustomColor {
      */
     public CustomColor spigotColor(ChatColor color) {
         this.spigotColor = color;
-        calculateFields();
-        return this;
-    }
-
-    /**
-     * Sets the color value based on the Java AWT color
-     * @param color The awt color
-     * @return Builder style instance
-     */
-    public CustomColor awtColor(Color color) {
-        this.awtColor = color;
         calculateFields();
         return this;
     }
@@ -120,27 +85,6 @@ public class CustomColor {
     }
 
     /**
-     * @return The RED value
-     */
-    public int getRed() {
-        return red;
-    }
-
-    /**
-     * @return The GREEN value
-     */
-    public int getGreen() {
-        return green;
-    }
-
-    /**
-     * @return The BLUE value
-     */
-    public int getBlue() {
-        return blue;
-    }
-
-    /**
      * @return The HEX value
      */
     public String getHex() {
@@ -154,35 +98,15 @@ public class CustomColor {
         return spigotColor;
     }
 
-    /**
-     * @return The Java AWT color value
-     */
-    public Color getAwtColor() {
-        return awtColor;
-    }
-
     protected void calculateFields() {
-        if (ColorUtils.isValidHex(this.hex) && ColorUtils.isHexSupported()) {
-            this.awtColor = Color.decode(hex);
-            assignRGB();
-            try {
-                this.spigotColor = ChatColor.of(awtColor);
-            } catch (Throwable e) {}
-        } else if (red != -1 && blue != -1 && green != -1) {
-            this.awtColor = new Color(this.red, this.green, this.blue);
-            this.spigotColor = ChatColor.of(awtColor);
-        } else if (spigotColor != null) {
-            try {
-                this.awtColor = spigotColor.getColor();
-                this.hex = ColorUtils.getHexCode(spigotColor);
-            } catch (Throwable e) {}
-            assignRGB();
-        } else if (awtColor != null) {
-            assignRGB();
-            try {
-                this.spigotColor = ChatColor.of(awtColor);
-                this.hex = ColorUtils.getHexCode(spigotColor);
-            } catch (Throwable e) {}
+        if (ColorUtils.isHexSupported()) {
+            if (this.hex != null && !this.hex.isEmpty()) {
+                this.spigotColor = ChatColor.of(this.hex);
+            }
+
+            if (this.spigotColor != null) {
+                this.hex = Integer.toHexString(this.spigotColor.getColor().getRGB()).substring(2);
+            }
         }
     }
 
@@ -207,11 +131,8 @@ public class CustomColor {
         return permission;
     }
 
-    private void assignRGB() {
-        if (this.awtColor != null) {
-            this.red = awtColor.getRed();
-            this.green = awtColor.getGreen();
-            this.blue = awtColor.getBlue();
-        }
+    @Override
+    public String toString() {
+        return getChatCode();
     }
 }
