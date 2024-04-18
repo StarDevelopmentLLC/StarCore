@@ -1,19 +1,19 @@
 package com.stardevllc.starcore;
 
 import com.stardevllc.starclock.ClockManager;
-import com.stardevllc.starcore.cmds.StarCoreCmd;
-import com.stardevllc.starcore.gui.GuiManager;
-import com.stardevllc.starcore.utils.Config;
-import com.stardevllc.starcore.utils.NMSVersion;
 import com.stardevllc.starcore.actor.ServerActor;
+import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorUtils;
 import com.stardevllc.starcore.color.CustomColor;
+import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starcore.task.SpigotTaskFactory;
+import com.stardevllc.starcore.utils.Config;
+import com.stardevllc.starcore.utils.NMSVersion;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
 import com.stardevllc.starlib.task.TaskFactory;
-import com.stardevllc.starsql.api.model.DatabaseRegistry;
-import com.stardevllc.starsql.common.StarSQL;
+import com.stardevllc.starsql.StarSQL;
+import com.stardevllc.starsql.model.DatabaseRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
@@ -38,7 +38,6 @@ public class StarCore extends JavaPlugin {
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
-
         NMSVersion version = NMSVersion.CURRENT_VERSION;
         try {
             itemWrapper = version.getItemWrapper().getDeclaredConstructor().newInstance();
