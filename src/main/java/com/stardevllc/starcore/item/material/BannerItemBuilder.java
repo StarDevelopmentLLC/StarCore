@@ -2,10 +2,10 @@ package com.stardevllc.starcore.item.material;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
@@ -35,11 +35,11 @@ public class BannerItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static BannerItemBuilder createFromConfig(ConfigurationSection section) {
+    protected static BannerItemBuilder createFromConfig(Section section) {
         BannerItemBuilder builder = new BannerItemBuilder();
-        ConfigurationSection patternsSection = section.getConfigurationSection("patterns");
+        Section patternsSection = section.getSection("patterns");
         if (patternsSection != null) {
-            for (String key : patternsSection.getKeys(false)) {
+            for (Object key : patternsSection.getKeys()) {
                 PatternType type = PatternType.valueOf(patternsSection.getString(key + ".type"));
                 DyeColor color = DyeColor.valueOf(patternsSection.getString(key + ".color"));
                 builder.addPattern(new Pattern(color, type));
@@ -49,7 +49,7 @@ public class BannerItemBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
         for (int i = 0; i < patterns.size(); i++) {
             section.set("patterns." + i + ".type", patterns.get(i).getPattern().name());

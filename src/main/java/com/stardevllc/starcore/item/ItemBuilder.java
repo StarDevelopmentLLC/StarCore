@@ -5,6 +5,7 @@ import com.stardevllc.starcore.color.ColorUtils;
 import com.stardevllc.starcore.wrapper.AttributeModifierWrapper;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -50,7 +51,7 @@ public class ItemBuilder implements Cloneable {
     protected int damage;
     
     @SuppressWarnings("SuspiciousMethodCalls")
-    public static ItemBuilder fromConfig(ConfigurationSection section) {
+    public static ItemBuilder fromConfig(Section section) {
         XMaterial material = XMaterial.valueOf(section.getString("material"));
         ItemMeta itemMeta = Bukkit.getItemFactory().getItemMeta(material.parseMaterial());
         ItemBuilder itemBuilder;
@@ -73,19 +74,19 @@ public class ItemBuilder implements Cloneable {
             }
         }
         
-        ConfigurationSection enchantsSection = section.getConfigurationSection("enchantments");
+        Section enchantsSection = section.getSection("enchantments");
         if (enchantsSection != null) {
-            for (String enchantName : enchantsSection.getKeys(false)) {
-                Enchantment enchantment = ENCHANT_WRAPPER.getEnchantmentByKey(enchantName.replace("_", ":"));
-                int level = enchantsSection.getInt(enchantName);
+            for (Object enchantName : enchantsSection.getKeys()) {
+                Enchantment enchantment = ENCHANT_WRAPPER.getEnchantmentByKey(enchantName.toString().replace("_", ":"));
+                int level = enchantsSection.getInt(enchantName.toString());
                 itemBuilder.addEnchant(enchantment, level);
             }
         }
-        
-        ConfigurationSection attributesSection = section.getConfigurationSection("attributes");
+
+        Section attributesSection = section.getSection("attributes");
         if (attributesSection != null) {
-            for (String key : attributesSection.getKeys(false)) {
-                String attribute = key.toUpperCase();
+            for (Object key : attributesSection.getKeys()) {
+                String attribute = key.toString().toUpperCase();
                 String name = attributesSection.getString(key + ".name");
                 double amount = attributesSection.getDouble(key + ".amount");
                 String operation = attributesSection.getString(key + ".operation");
@@ -101,7 +102,7 @@ public class ItemBuilder implements Cloneable {
         return itemBuilder;
     }
     
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         section.set("material", material.name());
         section.set("amount", amount);
         section.set("displayname", displayName);

@@ -2,7 +2,7 @@ package com.stardevllc.starcore.item.versions.v1_14_4;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
-import org.bukkit.configuration.ConfigurationSection;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.potion.PotionEffect;
@@ -28,19 +28,19 @@ public class StewItemBuilder extends ItemBuilder {
         return builder.setEffects(meta.getCustomEffects());
     }
 
-    protected static StewItemBuilder createFromConfig(ConfigurationSection section) {
+    protected static StewItemBuilder createFromConfig(Section section) {
         StewItemBuilder builder = new StewItemBuilder();
-        ConfigurationSection effectsSection = section.getConfigurationSection("effects");
+        Section effectsSection = section.getSection("effects");
         if (effectsSection != null) {
-            for (String key : effectsSection.getKeys(false)) {
-                builder.addEffect(effectsSection.getObject(key, PotionEffect.class));
+            for (Object key : effectsSection.getKeys()) {
+                builder.addEffect(effectsSection.getAs(key.toString(), PotionEffect.class));
             }
         }
         return builder;
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
         for (int i = 0; i < effects.size(); i++) {
             section.set("effects." + i, effects.get(i));

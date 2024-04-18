@@ -2,7 +2,7 @@ package com.stardevllc.starcore.item.versions.v1_17;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
-import org.bukkit.configuration.ConfigurationSection;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
@@ -31,14 +31,14 @@ public class AxolotlItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
     
-    protected static AxolotlItemBuilder createFromConfig(ConfigurationSection section) {
+    protected static AxolotlItemBuilder createFromConfig(Section section) {
         AxolotlItemBuilder builder = new AxolotlItemBuilder();
         builder.variant(Axolotl.Variant.valueOf(section.getString("variant")));
         return builder;
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
         section.set("variant", variant.name());
     }

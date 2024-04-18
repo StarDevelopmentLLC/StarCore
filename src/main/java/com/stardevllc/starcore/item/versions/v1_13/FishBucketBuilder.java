@@ -2,8 +2,8 @@ package com.stardevllc.starcore.item.versions.v1_13;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.DyeColor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
@@ -33,7 +33,7 @@ public class FishBucketBuilder extends ItemBuilder {
         return builder;
     }
 
-    protected static FishBucketBuilder createFromConfig(ConfigurationSection section) {
+    protected static FishBucketBuilder createFromConfig(Section section) {
         FishBucketBuilder builder = new FishBucketBuilder();
         builder.bodyColor(DyeColor.valueOf(section.getString("bodycolor")));
         builder.pattern(TropicalFish.Pattern.valueOf("pattern"));
@@ -42,7 +42,7 @@ public class FishBucketBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
         section.set("bodycolor", this.bodyColor.name());
         section.set("pattern", this.pattern.name());

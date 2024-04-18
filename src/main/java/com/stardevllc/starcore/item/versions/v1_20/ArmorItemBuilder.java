@@ -2,12 +2,12 @@ package com.stardevllc.starcore.item.versions.v1_20;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
-import com.stardevllc.starcore.item.enums.ArmorSlot;
 import com.stardevllc.starcore.item.enums.ArmorMaterial;
+import com.stardevllc.starcore.item.enums.ArmorSlot;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -31,7 +31,7 @@ public class ArmorItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
     
-    protected static ArmorItemBuilder createFromConfig(ConfigurationSection section) {
+    protected static ArmorItemBuilder createFromConfig(Section section) {
         ArmorItemBuilder builder = new ArmorItemBuilder();
         TrimMaterial tm = Bukkit.getRegistry(TrimMaterial.class).get(NamespacedKey.fromString(section.getString("trim.material")));
         TrimPattern tp = Bukkit.getRegistry(TrimPattern.class).get(NamespacedKey.fromString(section.getString("trim.pattern")));
@@ -53,7 +53,7 @@ public class ArmorItemBuilder extends ItemBuilder {
     protected ArmorItemBuilder() {}
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
         section.set("trim.material", trim.getMaterial().getKey().toString());
         section.set("trim.pattern", trim.getPattern().getKey().toString());

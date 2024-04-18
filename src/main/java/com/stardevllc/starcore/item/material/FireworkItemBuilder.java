@@ -2,8 +2,8 @@ package com.stardevllc.starcore.item.material;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.FireworkEffect;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -35,13 +35,13 @@ public class FireworkItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static FireworkItemBuilder createFromConfig(ConfigurationSection section) {
+    protected static FireworkItemBuilder createFromConfig(Section section) {
         FireworkItemBuilder builder = new FireworkItemBuilder();
         builder.power(section.getInt("power"));
-        ConfigurationSection effectsSection = section.getConfigurationSection("effects");
+        Section effectsSection = section.getSection("effects");
         if (effectsSection != null) {
-            for (String key : effectsSection.getKeys(false)) {
-                FireworkEffect object = (FireworkEffect) effectsSection.get(key, FireworkEffect.class);
+            for (Object key : effectsSection.getKeys()) {
+                FireworkEffect object = (FireworkEffect) effectsSection.get(key.toString(), FireworkEffect.class);
                 builder.addEffect(object);
             }
         }
@@ -49,7 +49,7 @@ public class FireworkItemBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
         section.set("power", this.power);
         for (int i = 0; i < effects.size(); i++) {

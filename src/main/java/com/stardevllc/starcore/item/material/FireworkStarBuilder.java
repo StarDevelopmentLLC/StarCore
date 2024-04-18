@@ -2,8 +2,8 @@ package com.stardevllc.starcore.item.material;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.FireworkEffect;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 
@@ -30,14 +30,14 @@ public class FireworkStarBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static FireworkStarBuilder createFromConfig(ConfigurationSection section) {
+    protected static FireworkStarBuilder createFromConfig(Section section) {
         FireworkStarBuilder builder = new FireworkStarBuilder();
         builder.effect((FireworkEffect) section.get("effect", FireworkEffect.class));
         return builder;
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
         section.set("effect", this.effect);
     }

@@ -4,10 +4,10 @@ import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.color.ColorUtils;
 import com.stardevllc.starcore.item.ItemBuilder;
 import com.stardevllc.starcore.item.enums.BookType;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -45,22 +45,22 @@ public class BookItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static BookItemBuilder createFromConfig(ConfigurationSection section) {
+    protected static BookItemBuilder createFromConfig(Section section) {
         BookItemBuilder builder = new BookItemBuilder();
         builder.title(section.getString("title"));
         builder.author(section.getString("author"));
         builder.generation(BookMeta.Generation.valueOf(section.getString("generation")));
-        ConfigurationSection pagesSection = section.getConfigurationSection("pages");
+        Section pagesSection = section.getSection("pages");
         if (pagesSection != null) {
-            for (String key : pagesSection.getKeys(false)) {
-                builder.addPage(ComponentSerializer.parse(pagesSection.getString(key)));
+            for (Object key : pagesSection.getKeys()) {
+                builder.addPage(ComponentSerializer.parse(pagesSection.getString(key.toString())));
             }
         }
         return builder;
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
         section.set("author", this.author);
         section.set("title", this.title);

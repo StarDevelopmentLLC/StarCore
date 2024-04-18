@@ -2,8 +2,8 @@ package com.stardevllc.starcore.item.versions.v1_13_2;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Color;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
@@ -33,12 +33,12 @@ public class MapItemBuilder extends ItemBuilder {
         return builder;
     }
 
-    protected static MapItemBuilder createFromConfig(ConfigurationSection section) {
+    protected static MapItemBuilder createFromConfig(Section section) {
         return new MapItemBuilder();
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
+    public void saveToConfig(Section section) {
         super.saveToConfig(section);
     }
     
