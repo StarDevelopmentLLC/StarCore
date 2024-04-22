@@ -3,9 +3,14 @@ package com.stardevllc.starcore.utils;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This is a class to allow tracking performance of a task. <br>
  * This essentially is a Wrapper for BukkitRunnable to add some extra stuff to track things.
+ *
  * @param <T> The JavaPlugin owner of the thread
  */
 public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
@@ -56,7 +61,7 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
         }
 
         this.maxTime = Math.max(this.maxTime, msRuntime);
-        
+
         if (mostRecentCounter < 99) {
             mostRecentCounter++;
             msMostRecent[mostRecentCounter] = msRuntime;
@@ -167,6 +172,53 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
 
     public long getFailedRuns() {
         return failedRuns;
+    }
+
+    //Millisecond Mean Time
+    public long getMeanTime() {
+        int counter = 0;
+        long total = 0L;
+        for (long l : this.msMostRecent) {
+            if (l > 0) {
+                total += l;
+                counter++;
+            }
+        }
+
+        return total / counter;
+    }
+
+    //Millisecond Median time
+    public long getMedianTime() {
+        long[] times = new long[this.msMostRecent.length];
+        System.arraycopy(this.msMostRecent, 0, times, 0, times.length);
+        Arrays.sort(times);
+        return times[times.length / 2];
+    }
+    
+    //Millisecond Mode time
+    public long getModeTime() {
+        Map<Long, Integer> counts = new HashMap<>();
+        for (long time : this.msMostRecent) {
+            if (time > 0) {
+                if (counts.containsKey(time)) {
+                    counts.put(time, counts.get(time) + 1);
+                } else {
+                    counts.put(time, 1);
+                }
+            }
+        }
+        
+        long mostAmount = 0L;
+        for (Map.Entry<Long, Integer> entry : counts.entrySet()) {
+            Long time = entry.getKey();
+            Integer count = entry.getValue();
+            if (count > mostAmount) {
+                mostAmount = time;
+            }
+        }
+
+        return mostAmount;
     }
 
     public static class ThreadOptions {
