@@ -7,14 +7,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * This is a class to allow tracking performance of a task. <br>
- * This essentially is a Wrapper for BukkitRunnable to add some extra stuff to track things.
- *
- * @param <T> The JavaPlugin owner of the thread
- */
 public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
     protected T plugin;
+    protected String name;
     protected ThreadOptions threadOptions;
 
     //This is the performance metrics
@@ -23,18 +18,19 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
     private long[] msMostRecent = new long[100];
     private long[] nsMostRecent = new long[100];
     private int mostRecentCounter;
-
+    
     public StarThread(T plugin, long period, long delay, boolean async) {
-        this(plugin, new ThreadOptions().period(period).delay(delay).async(async).repeating(true));
+        this(plugin, "", new ThreadOptions().period(period).delay(delay).async(async).repeating(true));
     }
 
     public StarThread(T plugin, long period, boolean async) {
         this(plugin, period, 0L, async);
     }
 
-    public StarThread(T plugin, ThreadOptions threadOptions) {
+    public StarThread(T plugin, String name, ThreadOptions threadOptions) {
         this.plugin = plugin;
         this.threadOptions = threadOptions;
+        this.name = name;
     }
 
     public final void run() {
