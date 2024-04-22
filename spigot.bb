@@ -28,11 +28,22 @@ This should be compileOnly for Gradle and provided scope for Maven, its a plugin
 [B]Command[/B]
 Base permission: starcore.admin
 The plugin provides a basic command to manage things
-/starcore color <add|remove|list>
-- starcore.admin.color
+
+/starcore color
+- Permission: starcore.admin.color
+/starcore color list symbols
+- Permission: starcore.admin.color.list
+/starcore color list codes
+- Permission: starcore.admin.color.list
+/starcore color add <code> <hex> [permission]
+[I]Only supported on 1.16 and above[/I]
+- Permission: starcore.admin.color.add
+/starcore color remove <code> 
+- Permission: starcore.admin.color.remove
 /starcore reload
-/starcore gui listguis
-- starcore.admin.gui.listguis
+- Permission: starcore.admin.reload
+/starcore gui list
+- Permission: starcore.admin.gui.lsit
 
 [B]Single Class Utilities[/B]
 [URL='https://github.com/StarDevelopmentLLC/StarCore/blob/main/src/main/java/com/stardevllc/starcore/utils/StarThread.java']StarThread [/URL]- This is a wrapper for BukkitRunnable that has timing support that can go down to the nano-second precision. It keeps track of the last 100 runs and has averages, mins and maxes for the timing as well.
