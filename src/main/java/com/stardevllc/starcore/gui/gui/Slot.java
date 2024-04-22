@@ -2,10 +2,6 @@ package com.stardevllc.starcore.gui.gui;
 
 import com.stardevllc.starcore.gui.element.Element;
 
-/**
- * Utility class, not super useful now, but will be later <br>
- * Used to represent a slot
- */
 public class Slot {
     
     protected final int index;
