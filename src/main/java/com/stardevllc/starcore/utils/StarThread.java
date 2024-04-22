@@ -14,7 +14,7 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
 
     //This is the performance metrics
     private long minTime, maxTime;
-    private long totalRuns;
+    private long totalRuns, successfulRuns, failedRuns;
     private long[] msMostRecent = new long[100];
     private long[] nsMostRecent = new long[100];
     private int mostRecentCounter;
@@ -37,7 +37,9 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
         long nsStart = System.nanoTime();
         try {
             this.onRun();
+            this.successfulRuns++;
         } catch (Throwable throwable) {
+            this.failedRuns++;
             plugin.getLogger().severe("Thread " + getClass().getName() + " had an error while running.");
             throwable.printStackTrace();
         }
@@ -157,6 +159,14 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
 
     public long getPeriod() {
         return this.threadOptions.getPeriod();
+    }
+
+    public long getSuccessfulRuns() {
+        return successfulRuns;
+    }
+
+    public long getFailedRuns() {
+        return failedRuns;
     }
 
     public static class ThreadOptions {
