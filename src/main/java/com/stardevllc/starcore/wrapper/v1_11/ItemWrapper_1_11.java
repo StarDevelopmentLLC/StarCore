@@ -14,27 +14,7 @@ public class ItemWrapper_1_11 implements ItemWrapper {
     }
 
     @Override
-    public boolean isUnbreakable(ItemStack itemStack) {
-        return itemStack.getItemMeta().isUnbreakable();
-    }
-
-    @Override
-    public void setUnbreakable(ItemMeta itemMeta, boolean unbreakable) {
-        itemMeta.setUnbreakable(unbreakable);
-    }
-
-    @Override
     public Map<String, AttributeModifierWrapper> getAttributeModifiers(ItemStack itemStack) {
         return Map.of();
-    }
-
-    @Override
-    public void setDamage(ItemStack itemStack, int damage) {
-        itemStack.setDurability((short) damage);
-    }
-
-    @Override
-    public int getDamage(ItemStack itemStack) {
-        return itemStack.getDurability();
     }
 }

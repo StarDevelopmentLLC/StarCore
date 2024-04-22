@@ -7,9 +7,5 @@ import java.util.Map;
 
 public interface ItemWrapper {
     void addAttributeModifier(ItemMeta itemMeta, String attribute, AttributeModifierWrapper wrapper);
-    boolean isUnbreakable(ItemStack itemStack);
-    void setUnbreakable(ItemMeta itemMeta, boolean unbreakable);
     Map<String, AttributeModifierWrapper> getAttributeModifiers(ItemStack itemStack);
-    void setDamage(ItemStack itemMeta, int damage);
-    int getDamage(ItemStack itemStack);
 }

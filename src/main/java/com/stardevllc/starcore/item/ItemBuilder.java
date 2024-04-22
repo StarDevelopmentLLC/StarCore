@@ -5,6 +5,10 @@ import com.stardevllc.starcore.color.ColorUtils;
 import com.stardevllc.starcore.wrapper.AttributeModifierWrapper;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadableNBT;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -22,23 +26,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-/**
- * A builder for Items <br> 
- * You can use the child classes to customize every type that has an ItemMeta <br>
- * Note: This uses the XMaterial library to allow multi-version support
- */
 public class ItemBuilder implements Cloneable {
-    
+
     protected static final Map<Class<? extends ItemMeta>, Class<? extends ItemBuilder>> META_TO_BUILDERS = new HashMap<>();
-    
+
     protected static final ItemWrapper ITEM_WRAPPER;
     protected static final EnchantWrapper ENCHANT_WRAPPER;
-    
+
     static {
         ITEM_WRAPPER = Bukkit.getServicesManager().getRegistration(ItemWrapper.class).getProvider();
         ENCHANT_WRAPPER = Bukkit.getServicesManager().getRegistration(EnchantWrapper.class).getProvider();
     }
-    
+
     protected XMaterial material;
     protected int amount;
     protected Map<String, AttributeModifierWrapper> attributes = new HashMap<>();
@@ -49,7 +48,9 @@ public class ItemBuilder implements Cloneable {
     protected boolean unbreakable;
     protected int repairCost;
     protected int damage;
-    
+
+    protected Map<String, Object> customNBT = new HashMap<>();
+
     @SuppressWarnings("SuspiciousMethodCalls")
     public static ItemBuilder fromConfig(Section section) {
         XMaterial material = XMaterial.valueOf(section.getString("material"));
@@ -60,7 +61,7 @@ public class ItemBuilder implements Cloneable {
         } else {
             itemBuilder = new ItemBuilder();
         }
-       
+
         itemBuilder.material(material);
         itemBuilder.amount(section.getInt("amount"));
         itemBuilder.displayName(section.getString("displayname"));
@@ -73,7 +74,7 @@ public class ItemBuilder implements Cloneable {
                 itemBuilder.addItemFlags(ItemFlag.valueOf(flagName));
             }
         }
-        
+
         Section enchantsSection = section.getSection("enchantments");
         if (enchantsSection != null) {
             for (Object enchantName : enchantsSection.getKeys()) {
@@ -101,7 +102,7 @@ public class ItemBuilder implements Cloneable {
 
         return itemBuilder;
     }
-    
+
     public void saveToConfig(Section section) {
         section.set("material", material.name());
         section.set("amount", amount);
@@ -116,7 +117,7 @@ public class ItemBuilder implements Cloneable {
             }
         }
         section.set("flags", flags);
-        
+
         enchantments.forEach((enchant, level) -> section.set("enchantments." + ENCHANT_WRAPPER.getEnchantmentKey(enchant), level));
         attributes.forEach((attribute, modifier) -> {
             String attributeName = attribute.toLowerCase();
@@ -132,34 +133,57 @@ public class ItemBuilder implements Cloneable {
     public static ItemBuilder of(XMaterial material) {
         return new ItemBuilder(material);
     }
-    
+
     public static ItemBuilder fromItemStack(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         ItemBuilder itemBuilder = getSubClassFromMeta(itemMeta, "createFromItemStack", ItemStack.class, itemStack);
-        
+        NBTItem nbtItem = new NBTItem(itemStack);
+
         itemBuilder.displayName(itemMeta.getDisplayName()).amount(itemStack.getAmount()).addItemFlags(itemMeta.getItemFlags().toArray(new ItemFlag[0]))
-                .unbreakable(ITEM_WRAPPER.isUnbreakable(itemStack)).setLore(itemMeta.getLore()).setEnchants(itemMeta.getEnchants());
+                .unbreakable(nbtItem.getBoolean("Unbreakable")).setLore(itemMeta.getLore()).setEnchants(itemMeta.getEnchants()).damage(nbtItem.getInteger("Damage"));
         Map<String, AttributeModifierWrapper> attributeModifiers = ITEM_WRAPPER.getAttributeModifiers(itemStack);
         if (attributeModifiers != null) {
             itemBuilder.attributes.putAll(attributeModifiers);
         }
-        
+
         if (itemMeta instanceof Repairable repairable) {
             itemBuilder.repairCost(repairable.getRepairCost());
         }
-        
-        itemBuilder.damage(ITEM_WRAPPER.getDamage(itemStack));
+
+        ReadableNBT compund = NBT.get(itemStack, nbt -> {
+            return nbt.getCompound("custom");
+        });
+
+        if (compund != null) {
+            Set<String> keys = compund.getKeys();
+            if (keys != null && !keys.isEmpty()) {
+                for (String key : keys) {
+                    switch (compund.getType(key)) {
+                        case NBTTagByte -> itemBuilder.addNBT(key, compund.getByte(key));
+                        case NBTTagShort -> itemBuilder.addNBT(key, compund.getShort(key));
+                        case NBTTagInt -> itemBuilder.addNBT(key, compund.getInteger(key));
+                        case NBTTagLong -> itemBuilder.addNBT(key, compund.getLong(key));
+                        case NBTTagFloat -> itemBuilder.addNBT(key, compund.getFloat(key));
+                        case NBTTagDouble -> itemBuilder.addNBT(key, compund.getDouble(key));
+                        case NBTTagString -> itemBuilder.addNBT(key, compund.getString(key));
+                        default -> {
+                        }
+                    }
+                }
+            }
+        }
+
         return itemBuilder;
     }
-    
+
     protected ItemBuilder() {
-        
+
     }
-    
+
     protected ItemBuilder(XMaterial material) {
         this.material = material;
     }
-    
+
     public <T extends ItemBuilder> T addAttributeModifier(String attribute, String name, double amount, String operation, EquipmentSlot slot) {
         this.attributes.put(attribute, new AttributeModifierWrapper(UUID.randomUUID(), name, amount, operation, slot));
         return (T) this;
@@ -169,34 +193,34 @@ public class ItemBuilder implements Cloneable {
         this.attributes.put(attribute, new AttributeModifierWrapper(UUID.randomUUID(), name, amount, operation, null));
         return (T) this;
     }
-    
+
     public <T extends ItemBuilder> T addEnchant(Enchantment enchantment, int level) {
         this.enchantments.put(enchantment, level);
         return (T) this;
     }
-    
+
     public <T extends ItemBuilder> T setEnchants(Map<Enchantment, Integer> enchants) {
         this.enchantments.clear();
         this.enchantments.putAll(enchants);
         return (T) this;
     }
-    
+
     public <T extends ItemBuilder> T addItemFlags(ItemFlag... itemFlags) {
         this.itemFlags = itemFlags;
         return (T) this;
     }
-    
+
     public <T extends ItemBuilder> T setLore(List<String> lore) {
         this.lore.clear();
         this.lore.addAll(lore);
         return (T) this;
     }
-    
+
     public <T extends ItemBuilder> T addLoreLine(String line) {
         this.lore.add(line);
         return (T) this;
     }
-    
+
     public <T extends ItemBuilder> T setLoreLine(int index, String line) {
         this.lore.set(index, line);
         return (T) this;
@@ -221,14 +245,19 @@ public class ItemBuilder implements Cloneable {
         this.unbreakable = unbreakable;
         return (T) this;
     }
-    
+
     public <T extends ItemBuilder> T repairCost(int repairCost) {
         this.repairCost = repairCost;
         return (T) this;
     }
-    
+
     public <T extends ItemBuilder> T damage(int damage) {
         this.damage = damage;
+        return (T) this;
+    }
+
+    public <T extends ItemBuilder> T addNBT(String key, Object value) {
+        this.customNBT.put(key, value);
         return (T) this;
     }
 
@@ -254,29 +283,57 @@ public class ItemBuilder implements Cloneable {
             List<String> coloredLore = this.lore.stream().map(ColorUtils::color).collect(Collectors.toCollection(LinkedList::new));
             itemMeta.setLore(coloredLore);
         }
-        
+
         if (itemMeta instanceof Repairable repairable) {
             repairable.setRepairCost(this.repairCost);
         }
-        
-        ITEM_WRAPPER.setUnbreakable(itemMeta, this.unbreakable);
         return itemMeta;
     }
-    
+
     public ItemStack build() {
         if (amount < 1) {
             amount = 1;
         }
-        
+
         if (material.parseMaterial() == null) {
             return null;
         }
-        
+
         ItemStack itemStack = material.parseItem();
         itemStack.setAmount(amount);
         ItemMeta itemMeta = createItemMeta();
         itemStack.setItemMeta(itemMeta);
-        ITEM_WRAPPER.setDamage(itemStack, this.damage);
+        
+        NBTItem nbtItem = new NBTItem(itemStack);
+
+        if (!this.customNBT.isEmpty()) {
+            ReadWriteNBT customCompound = nbtItem.getOrCreateCompound("custom");
+            this.customNBT.forEach((key, value) -> {
+                if (value instanceof String str) {
+                    customCompound.setString(key, str);
+                } else if (value instanceof Integer i) {
+                    customCompound.setInteger(key, i);
+                } else if (value instanceof Double d) {
+                    customCompound.setDouble(key, d);
+                } else if (value instanceof Byte b) {
+                    customCompound.setByte(key, b);
+                } else if (value instanceof Short s) {
+                    customCompound.setShort(key, s);
+                } else if (value instanceof Long l) {
+                    customCompound.setLong(key, l);
+                } else if (value instanceof Float f) {
+                    customCompound.setFloat(key, f);
+                } else if (value instanceof Boolean b) {
+                    customCompound.setBoolean(key, b);
+                } else if (value instanceof UUID uuid) {
+                    customCompound.setUUID(key, uuid);
+                }
+            });
+        }
+
+        nbtItem.setBoolean("Unbreakable", unbreakable);
+        nbtItem.setInteger("Damage", this.damage);
+
         return itemStack;
     }
 
@@ -298,7 +355,7 @@ public class ItemBuilder implements Cloneable {
         clone.damage = this.damage;
         return clone;
     }
-    
+
     private static ItemBuilder getSubClassFromMeta(ItemMeta itemMeta, String methodName, Class<?> paramClass, Object param) {
         Class<? extends ItemBuilder> itemBuilderClass = null;
         for (Map.Entry<Class<? extends ItemMeta>, Class<? extends ItemBuilder>> entry : META_TO_BUILDERS.entrySet()) {
