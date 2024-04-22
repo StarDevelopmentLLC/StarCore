@@ -159,13 +159,13 @@ public class ItemBuilder implements Cloneable {
             if (keys != null && !keys.isEmpty()) {
                 for (String key : keys) {
                     switch (compund.getType(key)) {
-                        case NBTTagByte -> itemBuilder.addNBT(key, compund.getByte(key));
-                        case NBTTagShort -> itemBuilder.addNBT(key, compund.getShort(key));
-                        case NBTTagInt -> itemBuilder.addNBT(key, compund.getInteger(key));
-                        case NBTTagLong -> itemBuilder.addNBT(key, compund.getLong(key));
-                        case NBTTagFloat -> itemBuilder.addNBT(key, compund.getFloat(key));
-                        case NBTTagDouble -> itemBuilder.addNBT(key, compund.getDouble(key));
-                        case NBTTagString -> itemBuilder.addNBT(key, compund.getString(key));
+                        case NBTTagByte -> itemBuilder.addCustomNBT(key, compund.getByte(key));
+                        case NBTTagShort -> itemBuilder.addCustomNBT(key, compund.getShort(key));
+                        case NBTTagInt -> itemBuilder.addCustomNBT(key, compund.getInteger(key));
+                        case NBTTagLong -> itemBuilder.addCustomNBT(key, compund.getLong(key));
+                        case NBTTagFloat -> itemBuilder.addCustomNBT(key, compund.getFloat(key));
+                        case NBTTagDouble -> itemBuilder.addCustomNBT(key, compund.getDouble(key));
+                        case NBTTagString -> itemBuilder.addCustomNBT(key, compund.getString(key));
                         default -> {
                         }
                     }
@@ -256,7 +256,7 @@ public class ItemBuilder implements Cloneable {
         return (T) this;
     }
 
-    public <T extends ItemBuilder> T addNBT(String key, Object value) {
+    public <T extends ItemBuilder> T addCustomNBT(String key, Object value) {
         this.customNBT.put(key, value);
         return (T) this;
     }
