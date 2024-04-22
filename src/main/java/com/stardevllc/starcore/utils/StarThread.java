@@ -3,11 +3,11 @@ package com.stardevllc.starcore.utils;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
+    public static final Set<StarThread<?>> THREADS = Collections.synchronizedSet(new HashSet<>());
+    
     protected T plugin;
     protected String name;
     protected ThreadOptions threadOptions;
@@ -31,6 +31,7 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
         this.plugin = plugin;
         this.threadOptions = threadOptions;
         this.name = name;
+        THREADS.add(this);
     }
 
     public final void run() {
@@ -79,6 +80,10 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
             } else {
                 this.nsMostRecent[99] = nsRuntime;
             }
+        }
+        
+        if (isCancelled()) {
+            THREADS.remove(this);
         }
     }
 
@@ -215,6 +220,12 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
         }
 
         return mostAmount;
+    }
+
+    @Override
+    public synchronized void cancel() throws IllegalStateException {
+        THREADS.remove(this);
+        super.cancel();
     }
 
     public static class ThreadOptions {
