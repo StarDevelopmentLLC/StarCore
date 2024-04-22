@@ -6,6 +6,7 @@ import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorUtils;
 import com.stardevllc.starcore.color.CustomColor;
 import com.stardevllc.starcore.gui.GuiManager;
+import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.task.SpigotTaskFactory;
 import com.stardevllc.starcore.utils.Config;
 import com.stardevllc.starcore.utils.NMSVersion;
@@ -28,6 +29,7 @@ public class StarCore extends JavaPlugin {
     private Config colorsConfig;
     private Config mainConfig;
     private GuiManager guiManager;
+    private SkinManager skinManager;
 
     private ItemWrapper itemWrapper;
     private EnchantWrapper enchantWrapper;
@@ -78,6 +80,9 @@ public class StarCore extends JavaPlugin {
         ClockManager clockManager = new ClockManager(getLogger(), 50L);
         getServer().getServicesManager().register(ClockManager.class, clockManager, this, ServicePriority.Normal);
         getServer().getScheduler().runTaskTimer(this, clockManager.getRunnable(), 1L, 1L);
+        
+        this.skinManager = new SkinManager();
+        getServer().getServicesManager().register(SkinManager.class, this.skinManager, this, ServicePriority.Normal);
 
         guiManager = new GuiManager(this);
         guiManager.setup();
@@ -159,5 +164,9 @@ public class StarCore extends JavaPlugin {
 
     public GuiManager getGuiManager() {
         return guiManager;
+    }
+
+    public SkinManager getSkinManager() {
+        return skinManager;
     }
 }
