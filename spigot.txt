@@ -22,7 +22,7 @@ I strongly encourage the use of a build tool like Gradle or Maven. You can find 
 [B]Repository[/B]: [URL='https://www.jitpack.io/']https://www.jitpack.io[/URL]
 [B]Group[/B]: com.github.StarDevelopmentLLC
 [B]Artifact[/B]: StarCore
-[B]Version[/B]: 1.0.0-alpha.26
+[B]Version[/B]: 1.0.0-alpha.27
 This should be compileOnly for Gradle and provided scope for Maven, its a plugin.
 
 [B]Command[/B]
