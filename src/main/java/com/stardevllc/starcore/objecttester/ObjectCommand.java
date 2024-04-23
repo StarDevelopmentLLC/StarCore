@@ -14,10 +14,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
-/**
- * This is a dev based utility that allows seeing and modifying objects directly using reflection. <br>
- * To use this, instantiate this class and then register the command yourself. 
- */
 public class ObjectCommand<T> implements TabExecutor {
 
     protected static final Set<TypeCodex> DEFAULT_CODECS = new HashSet<>();

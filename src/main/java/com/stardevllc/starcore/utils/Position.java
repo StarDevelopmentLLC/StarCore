@@ -5,10 +5,6 @@ import org.bukkit.World;
 
 import java.util.Objects;
 
-/**
- * Represents a position without the World aspect, which allows for syncing across servers without requiring worlds <br>
- * Methods and constructors should be obvious, eventually proper documentation for them will exist
- */
 public class Position {
     protected double x, y, z;
     protected float yaw, pitch;
