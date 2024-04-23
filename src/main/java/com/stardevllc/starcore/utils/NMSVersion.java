@@ -9,9 +9,6 @@ import com.stardevllc.starcore.wrapper.v1_8.EnchantWrapper_1_8;
 import com.stardevllc.starcore.wrapper.v1_8.ItemWrapper_1_8;
 import org.bukkit.Bukkit;
 
-/**
- * Represents the NMSVersion of the server. Only 1.8 to 1.20.4 are supported
- */
 public enum NMSVersion {
     UNDEFINED,
     v1_8_R1(ItemWrapper_1_8.class, EnchantWrapper_1_8.class),
@@ -58,9 +55,6 @@ public enum NMSVersion {
         return enchantWrapper;
     }
 
-    /**
-     * The current version of the server
-     */
     public static final NMSVersion CURRENT_VERSION = getCurrentVersion();
     
     private static NMSVersion getCurrentVersion() {

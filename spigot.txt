@@ -5,9 +5,9 @@ Java 17
 [URL='https://www.spigotmc.org/resources/nbt-api.7939/']NBT API 2.12.3[/URL]
 
 [B]Provides the following[/B]
-[URL='https://www.spigotmc.org/resources/starlib.106562/']StarLib 1.0.0-alpha.11[/URL]
-[URL='https://www.spigotmc.org/resources/starclock.110553/']StarClock 1.0.0-alpha.10[/URL]
-[URL='https://www.spigotmc.org/resources/starsql.110548/']StarSQL 1.0.0-alpha.9[/URL]
+[URL='https://www.spigotmc.org/resources/starlib.106562/']StarLib 1.0.0-alpha.14[/URL]
+[URL='https://www.spigotmc.org/resources/starclock.110553/']StarClock 1.0.0-alpha.11[/URL]
+[URL='https://www.spigotmc.org/resources/starsql.110548/']StarSQL 1.0.0-alpha.10[/URL]
 [URL='https://www.spigotmc.org/threads/%E2%9A%A1boostedyaml-feature-rich-library-write-once-run-everywhere-updater-comments-and-more-%E2%9A%A1.545585/']BoostedYAML 1.3[/URL]
 [URL='https://www.spigotmc.org/threads/xseries-xmaterial-xparticle-xsound-xpotion-titles-actionbar-etc.378136/']XSeries 9.7.0[/URL]
 
@@ -28,11 +28,22 @@ This should be compileOnly for Gradle and provided scope for Maven, its a plugin
 [B]Command[/B]
 Base permission: starcore.admin
 The plugin provides a basic command to manage things
-/starcore color <add|remove|list>
-- starcore.admin.color
+
+/starcore color
+- Permission: starcore.admin.color
+/starcore color list symbols
+- Permission: starcore.admin.color.list
+/starcore color list codes
+- Permission: starcore.admin.color.list
+/starcore color add <code> <hex> [permission]
+[I]Only supported on 1.16 and above[/I]
+- Permission: starcore.admin.color.add
+/starcore color remove <code> 
+- Permission: starcore.admin.color.remove
 /starcore reload
-/starcore gui listguis
-- starcore.admin.gui.listguis
+- Permission: starcore.admin.reload
+/starcore gui list
+- Permission: starcore.admin.gui.lsit
 
 [B]Single Class Utilities[/B]
 [URL='https://github.com/StarDevelopmentLLC/StarCore/blob/main/src/main/java/com/stardevllc/starcore/utils/StarThread.java']StarThread [/URL]- This is a wrapper for BukkitRunnable that has timing support that can go down to the nano-second precision. It keeps track of the last 100 runs and has averages, mins and maxes for the timing as well.
@@ -51,6 +62,12 @@ The plugin provides a basic command to manage things
    - This only controls the overall ability to use hex colors, if you want individual control over hex codes, use a CustomColor (Command or plugin)
 - On 1.16+, there is a material color set based on the colors that are Bedrock Only on the Minecraft Wiki.
 There are two methods of support for this, plugins can choose to use permission checks, or to not to use permission checks. Please double check plugin documentation.
+[URL='https://github.com/StarDevelopmentLLC/StarCore/blob/main/src/main/java/com/stardevllc/starcore/utils/ArmorSet.java']ArmorSet [/URL]- An enum to represent a set of armor of a material. This uses XMaterial to provide cross-version support
+[URL='https://github.com/StarDevelopmentLLC/StarCore/blob/main/src/main/java/com/stardevllc/starcore/utils/ToolSet.java']ToolSet [/URL]- An enum to represent a set of tools for a given material. This uses XMaterial to provide cross-version support
+[URL='https://github.com/StarDevelopmentLLC/StarCore/blob/main/src/main/java/com/stardevllc/starcore/utils/EntityNames.java']EntityNames [/URL]- A singleton class that takes in all entity types and generates a user-friendly name. New instances can be created to set custom names.
+[URL='https://github.com/StarDevelopmentLLC/StarCore/blob/main/src/main/java/com/stardevllc/starcore/utils/MaterialNames.java']MaterialNames [/URL]- A singleton class that takes in all materials and generates a user-friendly name. New instances can be created to set custom names.
+[URL='https://github.com/StarDevelopmentLLC/StarCore/blob/main/src/main/java/com/stardevllc/starcore/utils/PotionNames.java']PotionNames [/URL]- A singleton class that takes in all potion types and generates a user-friendly name. New instances can be created to set custom names.
+[URL='https://github.com/StarDevelopmentLLC/StarCore/blob/main/src/main/java/com/stardevllc/starcore/utils/ProgressBar.java']ProgressBar [/URL]- Class that allows you to create a progress bar out of charaters, has a completed and not completed color
 
 [B]Utility Implementation[/B]
 StarCore implements the TaskFactory utility from StarLib and registers it to the ServicesManager and the Scheduler. This can be obtained using

@@ -5,9 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-/**
- * Future use
- */
 public class FillerElement extends Element {
     public FillerElement(Material material) {
         iconCreator(player -> {

@@ -6,6 +6,7 @@ import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorUtils;
 import com.stardevllc.starcore.color.CustomColor;
 import com.stardevllc.starcore.gui.GuiManager;
+import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.task.SpigotTaskFactory;
 import com.stardevllc.starcore.utils.Config;
 import com.stardevllc.starcore.utils.NMSVersion;
@@ -28,6 +29,7 @@ public class StarCore extends JavaPlugin {
     private Config colorsConfig;
     private Config mainConfig;
     private GuiManager guiManager;
+    private SkinManager skinManager;
 
     private ItemWrapper itemWrapper;
     private EnchantWrapper enchantWrapper;
@@ -57,8 +59,17 @@ public class StarCore extends JavaPlugin {
         mainConfig.addDefault("messages.command.reload", "&aSuccessfully reloaded configs.", " The message sent when /starcore reload is a success");
         mainConfig.addDefault("messages.command.invalidsubcommand", "&cInvalid subcommand.", " The message sent when an invalid sub-command is provided to /starcore");
         mainConfig.addDefault("messages.command.nopermission", "&cYou do not have permission to use that command.", " The message displayed when no permission is detected for the /starcore command.");
-        mainConfig.addDefault("messages.command.color.listsymbols.header", "&eList of valid color prefix characters: ", " The header text for the /starcore color listsymbols command");
-        mainConfig.addDefault("messages.command.color.listcolors.header", "&eList of non-default registered colors: ", " The header text for the /starcore color listcolors command");
+        
+        if (mainConfig.contains("messages.command.color.listsymbols.header")) {
+            mainConfig.set("messages.command.color.listsymbols", null);
+        }
+
+        if (mainConfig.contains("messages.command.color.listcolors")) {
+            mainConfig.set("messages.command.color.listcolors", null);
+        }
+
+        mainConfig.addDefault("messages.command.color.list.symbols", "&eList of valid color prefix characters: &r{symbols}", " The format to use for the list of color symbols.");
+        mainConfig.addDefault("messages.command.color.list.colors", "&eList of registered colors: ", " The header text for the /starcore colors list codes command");
         mainConfig.addDefault("messages.command.color.add.cannot-override-spigot", "&cYou cannot override default spigot colors. Please choose a different code.", " The error message for when someone tries to override a spigot color in /starcore color add command");
         mainConfig.addDefault("messages.command.color.add.invalid-code", "&cThe code you provided is not valid. Codes must be 2 characters and start with a valid symbol. &eUse the /starcore color listsymbols &ccommand.", " The error message for when someone tries to use an invalid 2 character code in the /starcore color add command.");
         mainConfig.addDefault("messages.command.color.remove.not-registered", "&cThe code you specified is not a registered color.", " The message sent when the code is not registered in the /starcore color remove command.");
@@ -69,6 +80,9 @@ public class StarCore extends JavaPlugin {
         ClockManager clockManager = new ClockManager(getLogger(), 50L);
         getServer().getServicesManager().register(ClockManager.class, clockManager, this, ServicePriority.Normal);
         getServer().getScheduler().runTaskTimer(this, clockManager.getRunnable(), 1L, 1L);
+        
+        this.skinManager = new SkinManager();
+        getServer().getServicesManager().register(SkinManager.class, this.skinManager, this, ServicePriority.Normal);
 
         guiManager = new GuiManager(this);
         guiManager.setup();
@@ -150,5 +164,9 @@ public class StarCore extends JavaPlugin {
 
     public GuiManager getGuiManager() {
         return guiManager;
+    }
+
+    public SkinManager getSkinManager() {
+        return skinManager;
     }
 }

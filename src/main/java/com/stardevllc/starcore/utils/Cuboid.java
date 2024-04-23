@@ -9,10 +9,6 @@ import org.bukkit.entity.Entity;
 
 import java.util.*;
 
-/**
- * This represents a cuboid with a min corner and a max corner in a world<br>
- * Most of the calculations in this class operate on integers and doubles directly and do not cache any Location objects long term.<br>
- */
 public class Cuboid {
     protected String worldName;
     protected transient World world;

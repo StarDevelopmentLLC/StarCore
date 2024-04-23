@@ -1,0 +1,123 @@
+1.0.0-alpha.27
+- Cleaned up the admin command for sub commands and added permissions
+- Changed how the InventoryGUI stores the slots, it now uses an array instead of a List
+- Added fields for tracking successful and failed runs in StarThread
+  - Failed runs are those that throw an exception
+  - Successul runs are those that do not throw exceptions
+- Added mean, median and mode methods to calculate those things for statistics
+- Added a name field to StarThread (Optional)
+- Added a static collection for StarThreads to track them, this allows other plugins to get the thread information to get stats out of them
+- Added the ProgressBar utility
+- Added a Skin and SkinManager utility to get skins from different sources. This is registered to the Bukkit ServicesManager
+- Added a ToolSet and ArmorSet enums for getting sets of a material for armors and tools
+- Added EntityNames, MaterialNames and PotionNames utility to get user-friendly names based on the enum constant name - Can be overridden
+- Added a TickHelper utility
+- Updated StarLib to 1.0.0-alpha.14
+- Updated StarSQL to 1.0.0-alpha.10
+- Updated StarClock to 1.0.0-alpha.11
+
+1.0.0-alpha.26
+- Added a dependency for NBT API
+- Added the ability to add custom NBT to items in the ItemBuilder class
+- Changed how the library handles unbreakable and durability for items - Changed to use NBT API modifications as these are the same from 1.8 to 1.20.4, removed wrapper implementations
+
+1.0.0-alpha.25
+- Decoupled ItemBuilders from the main ItemBuilder class
+- Moved the sub-packages systems out of the utils package into their own top-level packages under the starcore package
+- Made ItemBuilder more version robust - Note: This does not mean that you can be careless
+- Made the ColorUtils utility more version robust
+- Added some more default custom colors based on the material colors from the Minecraft Wiki that exist on Bedrock but not Java (1.16 or higher), /starcore color listcolors are what you want to see these.
+- Moved the ItemBuilder serialization from the Bukkit Config stuff to using the BoostedYAML library
+- Updated StarSQL to 1.0.0-alpha.9 - WARNING: This version has breaking package and class name changes
+
+1.0.0-alpha.24
+- Updated StarClock to 1.0.0-alpha.10
+
+1.0.0-alpha.23
+- Updated StarClock to 1.0.0-alpha.9
+
+1.0.0-alpha.22
+- Updated StarLib to 1.0.0-alpha.10
+- Updated StarClock to 1.0.0-alpha.8
+- Updated StarSQL to 1.0.0-alpha.8
+
+1.0.0-alpha.21
+- Downgraded to Java 17
+
+1.0.0-alpha.20
+- Updated to Java 21
+- Updated StarLib to 1.0.0-alpha.8
+- Updated StarClock to 1.0.0-alpha.6
+- Updated StarSQL to 1.0.0-alpha.6
+
+1.0.0-alpha.19
+- Updated StarLib to 1.0.0-alpha.7
+- Fixed a bug around case sensitivity for the getProperty method
+- Added a method to the ReflectionHelper class to get all properties of an object matching the class type (Just provide ReadOnlyProperty.class to get all of them in a class)
+
+1.0.0-alpha.18
+- Updated StarLib to 1.0.0-alpha.6
+- Added a utility method in ReflectionHelper to get a property within a class (recursively)
+
+1.0.0-alpha.17
+- Updated StarLib to 1.0.0-alpha.5
+- Updated StarClock to 1.0.0-alpha.5
+- Moved StarUI to StarCore
+- Moved StarMCLib to StarCore
+
+1.0.0-alpha.16
+- Updated StarBeans to 1.0.0-alpha.2 (Fixes an issue with the StringProperty)
+
+1.0.0-alpha.15
+- Updated StarLib 1.0.0-alpha.4
+- Added StarBeans 1.0.0-alpha.1
+
+1.0.0-alpha.14
+- Updated StarLib
+- Updated StarSQL
+
+1.0.0-alpha.13
+- Updated StarMCLib to 1.0.0-alpha.10 (Critical Bug Fix)
+
+1.0.0-alpha.12
+- Updated StarSQL to 1.0.0-alpha.3
+
+1.0.0-alpha.11
+- Added configuration of messages in /starcore
+
+1.0.0-alpha.10
+- Added StarSQL
+
+1.0.0-alpha.9
+- Updated StarClock to 1.0.0-alpha.2 (Fixes a critical bug)
+
+1.0.0-alpha.8
+- Updated StarLib to 1.0.0-alpha.2
+- Updated StarMCLib to 1.0.0-alpha.9
+
+1.0.0-alpha.7
+- Added a config utility using BoostedYAML and added saving and loading of colors based on a config option
+- Added reload functionality
+- Removed Config from this plugin and replaced usages with the copied one from StarMCLib
+
+1.0.0-alpha.6
+- Updated StarMCLib to 1.0.0-alpha.7
+
+1.0.0-alpha.5
+- Added a Config utility using BoostedYAML 
+- Added a default config for StarCore
+- Added saving and loading of colors owned by StarCore
+
+1.0.0-alpha.4
+- Updated StarMCLib to 1.0.0-alpha.6
+
+1.0.0-alpha.3
+- Updated StarMCLib to 1.0.0-alpha.5
+- Added BoostedYAML as a dependency
+- Made all dependencies except for Spigot be the gradle api scope
+
+1.0.0-alpha.2
+- Updated StarMCLib to 1.0.0-alpha.2
+
+1.0.0-alpha.1
+- Initial Release

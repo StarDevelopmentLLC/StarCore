@@ -7,9 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-/**
- * A utility class to get the values of the server.properties file
- */
 public final class ServerProperties {
     private static final File SERVER_PROPERTIES_FILE = new File(".", "server.properties");
     private static final Properties SERVER_PROPERTIES;
