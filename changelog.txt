@@ -1,3 +1,6 @@
+1.0.0-alpha.28
+- Bug fix for some versions of Spigot not having an isCancelled() method in BukkitRunnable
+
 1.0.0-alpha.27
 - Cleaned up the admin command for sub commands and added permissions
 - Changed how the InventoryGUI stores the slots, it now uses an array instead of a List
