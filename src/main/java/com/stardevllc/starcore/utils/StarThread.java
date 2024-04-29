@@ -7,7 +7,7 @@ import java.util.*;
 
 public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
     public static final Set<StarThread<?>> THREADS = Collections.synchronizedSet(new HashSet<>());
-    
+
     protected T plugin;
     protected String name;
     protected ThreadOptions threadOptions;
@@ -18,7 +18,9 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
     private long[] msMostRecent = new long[100];
     private long[] nsMostRecent = new long[100];
     private int mostRecentCounter;
-    
+
+    private boolean cancelled;
+
     public StarThread(T plugin, long period, long delay, boolean async) {
         this(plugin, "", new ThreadOptions().period(period).delay(delay).async(async).repeating(true));
     }
@@ -82,6 +84,10 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
             }
         }
         
+        if (this.threadOptions.getPeriod() == 0L) {
+            cancelled = true;
+        }
+
         if (isCancelled()) {
             THREADS.remove(this);
         }
@@ -196,7 +202,7 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
         Arrays.sort(times);
         return times[times.length / 2];
     }
-    
+
     //Millisecond Mode time
     public long getModeTime() {
         Map<Long, Integer> counts = new HashMap<>();
@@ -209,7 +215,7 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
                 }
             }
         }
-        
+
         long mostAmount = 0L;
         for (Map.Entry<Long, Integer> entry : counts.entrySet()) {
             Long time = entry.getKey();
@@ -222,8 +228,17 @@ public abstract class StarThread<T extends JavaPlugin> extends BukkitRunnable {
         return mostAmount;
     }
 
+    public synchronized boolean isCancelled() {
+        try {
+            return super.isCancelled();
+        } catch (Throwable throwable) {
+            return this.cancelled;
+        }
+    }
+
     @Override
     public synchronized void cancel() throws IllegalStateException {
+        cancelled = true;
         THREADS.remove(this);
         super.cancel();
     }
