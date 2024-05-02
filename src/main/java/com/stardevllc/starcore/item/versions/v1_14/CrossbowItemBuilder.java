@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.item.versions.v1_14;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
+import com.stardevllc.starcore.xseries.XMaterial;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;

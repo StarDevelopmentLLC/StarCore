@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.item.versions.v1_19_3;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
+import com.stardevllc.starcore.xseries.XMaterial;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.MusicInstrument;
@@ -9,7 +9,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
 
-//1.19.4
 public class GoatHornBuilder extends ItemBuilder {
     
     static {

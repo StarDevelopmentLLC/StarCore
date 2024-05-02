@@ -1,10 +1,10 @@
 package com.stardevllc.starcore.item;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.color.ColorUtils;
 import com.stardevllc.starcore.wrapper.AttributeModifierWrapper;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
+import com.stardevllc.starcore.xseries.XMaterial;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;

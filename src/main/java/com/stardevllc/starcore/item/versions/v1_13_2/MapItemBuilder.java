@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.item.versions.v1_13_2;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.stardevllc.starcore.item.ItemBuilder;
+import com.stardevllc.starcore.xseries.XMaterial;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;

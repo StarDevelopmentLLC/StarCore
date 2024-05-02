@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.utils;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.stardevllc.starcore.xseries.XMaterial;
 
 public enum ToolSet {
     
