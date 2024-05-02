@@ -30,10 +30,10 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SpawnEggMeta;
-import org.bukkit.potion.Potion;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -1911,7 +1911,17 @@ public enum XMaterial /* implements com.cryptomorin.xseries.abstractions.Materia
         // information about the type of potion in 1.8
         if (!supports(9) && material.endsWith("ION")) {
             // There's also 16000+ data value technique, but this is more reliable.
-            return Potion.fromItemStack(item).isSplash() ? SPLASH_POTION : POTION;
+
+            try {
+                Class<?> potionClass = Class.forName("org.bukkit.potion.Potion");
+                Method fromItemStackMethod = potionClass.getDeclaredMethod("fromItemStack", ItemStack.class);
+                Object potion = fromItemStackMethod.invoke(null, item);
+                Method isSplashMethod = potionClass.getDeclaredMethod("isSplash");
+                boolean isSplash = (boolean) isSplashMethod.invoke(potion);
+                return isSplash ? SPLASH_POTION : POTION;
+            } catch (Exception e) {
+                return POTION;
+            }
         }
 
         // Refer to the enum for info.

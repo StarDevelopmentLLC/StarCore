@@ -6,8 +6,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.bukkit.potion.PotionEffectType.*;
-
 public class PotionNames {
     public final Map<PotionEffectType, String> effectNames = new HashMap<>();
     private static final PotionNames instance = new PotionNames() {
@@ -25,24 +23,32 @@ public class PotionNames {
         return instance;
     }
 
+    @SuppressWarnings("JavaReflectionMemberAccess")
     private PotionNames() {
         //noinspection deprecation
-        for (PotionEffectType effectType : values()) {
+        for (PotionEffectType effectType : PotionEffectType.values()) {
             if (effectType != null) {
                 //noinspection deprecation
                 effectNames.put(effectType, StringHelper.titlize(effectType.getName()));
             } 
         }
         
-        effectNames.put(SLOW, "Slowness");
-        effectNames.put(FAST_DIGGING, "Haste");
-        effectNames.put(SLOW_DIGGING, "Miner's Fatigue");
-        effectNames.put(INCREASE_DAMAGE, "Strength");
-        effectNames.put(HEAL, "Instant Health");
-        effectNames.put(HARM, "Instant Damage");
-        effectNames.put(JUMP, "Jump Boost");
-        effectNames.put(CONFUSION, "Nausia");
-        effectNames.put(DAMAGE_RESISTANCE, "Resistance");
+        if (NMSVersion.CURRENT_VERSION != NMSVersion.v1_20_R4) {
+            Class<PotionEffectType> effectClass = PotionEffectType.class;
+
+            try {
+                effectNames.put((PotionEffectType) effectClass.getField("SLOW").get(null), "Slowness");
+                effectNames.put((PotionEffectType) effectClass.getField("FAST_DIGGING").get(null), "Haste");
+                effectNames.put((PotionEffectType) effectClass.getField("SLOW_DIGGING").get(null), "Miner's Fatigue");
+                effectNames.put((PotionEffectType) effectClass.getField("INCREASE_DAMAGE").get(null), "Strength");
+                effectNames.put((PotionEffectType) effectClass.getField("HEAL").get(null), "Instant Health");
+                effectNames.put((PotionEffectType) effectClass.getField("HARM").get(null), "Instant Damage");
+                effectNames.put((PotionEffectType) effectClass.getField("JUMP").get(null), "Jump Boost");
+                effectNames.put((PotionEffectType) effectClass.getField("CONFUSION").get(null), "Nausia");
+                effectNames.put((PotionEffectType) effectClass.getField("DAMAGE_RESISTANCE").get(null), "Resistance");
+            } catch (Exception e) {
+            }
+        }
     }
     
     /**

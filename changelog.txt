@@ -1,3 +1,9 @@
+1.0.0-alpha.29
+- Updated StarLib to 1.0.0-alpha.15
+- Updated StarClock to 1.0.0-alpha.12
+- Updated StarSQL to 1.0.0-alpah.11
+- Updated to 1.20.6
+
 1.0.0-alpha.28
 - Bug fix for some versions of Spigot not having an isCancelled() method in BukkitRunnable
 

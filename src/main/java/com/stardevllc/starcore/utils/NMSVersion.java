@@ -34,7 +34,8 @@ public enum NMSVersion {
     v1_19_R3(ItemWrapper_1_13_R2.class, EnchantWrapper_1_13_R2.class), 
     v1_20_R1(ItemWrapper_1_13_R2.class, EnchantWrapper_1_13_R2.class),
     v1_20_R2(ItemWrapper_1_13_R2.class, EnchantWrapper_1_13_R2.class), 
-    v1_20_R3(ItemWrapper_1_13_R2.class, EnchantWrapper_1_13_R2.class);
+    v1_20_R3(ItemWrapper_1_13_R2.class, EnchantWrapper_1_13_R2.class),
+    v1_20_R4(ItemWrapper_1_13_R2.class, EnchantWrapper_1_13_R2.class);
     
     private Class<? extends ItemWrapper> itemWrapper;
     private Class<? extends EnchantWrapper> enchantWrapper;
