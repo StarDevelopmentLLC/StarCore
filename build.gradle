@@ -48,8 +48,8 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT'
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.12.4'
     api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.11'
-    api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.15'
-    api 'com.github.StarDevelopmentLLC:StarClock:1.0.0-alpha.12'
+    api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.16'
+    api 'com.github.StarDevelopmentLLC:StarClock:1.0.0-alpha.13'
     api 'dev.dejvokep:boosted-yaml-spigot:1.4'
 }
 
