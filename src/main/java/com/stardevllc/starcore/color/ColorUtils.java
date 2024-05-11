@@ -105,7 +105,7 @@ public final class ColorUtils {
     public static String translateHex(CommandSender sender, String uncolored) {
         StringBuilder colored = new StringBuilder();
         if (!isHexSupported()) {
-            Bukkit.getLogger().warning("[StarMCLib] Hex Colors are not supported by this Minecraft Version, ignoring them.");
+            Bukkit.getLogger().warning("Hex Colors are not supported by this Minecraft Version, ignoring them.");
             return uncolored;
         }
         for (int i = 0; i < uncolored.length(); i++) {
