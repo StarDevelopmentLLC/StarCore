@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+    maven {
+        url = 'https://repo.codemc.org/repository/maven-public/'
+    }
+    maven {
+        url = 'https://www.jitpack.io'
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT'
+    api 'de.tr7zw:item-nbt-api-plugin:2.12.4'
+    api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.13'
+    api 'com.github.StarDevelopmentLLC.StarLib:all:1.0.0-alpha.20'
+    api 'dev.dejvokep:boosted-yaml-spigot:1.4'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}

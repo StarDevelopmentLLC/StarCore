@@ -8,7 +8,11 @@ import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.task.SpigotTaskFactory;
 import com.stardevllc.starcore.utils.Config;
-import com.stardevllc.starcore.utils.NMSVersion;
+import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
+import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
+import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;
+import com.stardevllc.starcore.v1_8.EnchantWrapper_1_8;
+import com.stardevllc.starcore.v1_8.ItemWrapper_1_8;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
 import com.stardevllc.starlib.clock.ClockManager;
@@ -41,14 +45,20 @@ public class StarCore extends JavaPlugin {
         ServerActor.serverUUID = this.consoleUnqiueId;
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
         NMSVersion version = NMSVersion.CURRENT_VERSION;
-        try {
-            itemWrapper = version.getItemWrapper().getDeclaredConstructor().newInstance();
-            enchantWrapper = version.getEnchantWrapper().getDeclaredConstructor().newInstance();
-
-            Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Highest);
-            Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Highest);
-        } catch (Exception e) {
-            e.printStackTrace();
+        
+        switch (version) {
+            case v1_8_R1, v1_8_R2, v1_8_R3, v1_9_R1, v1_9_R2, v1_10_R1 -> {
+                itemWrapper = new ItemWrapper_1_8();
+                enchantWrapper = new EnchantWrapper_1_8();
+            }
+            case v1_11_R1, v1_12_R1, v1_13_R1 -> {
+                itemWrapper = new ItemWrapper_1_11();
+                enchantWrapper = new EnchantWrapper_1_8();
+            }
+            default -> {
+                itemWrapper = new ItemWrapper_1_13_R2();
+                enchantWrapper = new EnchantWrapper_1_13_R2();
+            }
         }
 
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
@@ -132,6 +142,10 @@ public class StarCore extends JavaPlugin {
 
     public ItemWrapper getItemWrapper() {
         return itemWrapper;
+    }
+
+    public EnchantWrapper getEnchantWrapper() {
+        return enchantWrapper;
     }
 
     public void saveColors() {
