@@ -75,6 +75,8 @@ public class StarCore extends JavaPlugin {
         ColorHandler.setInstance(colorHandler);
         
         Bukkit.getServer().getServicesManager().register(ColorHandler.class, colorHandler, this, ServicePriority.Highest);
+        Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Highest);
+        Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Highest);
 
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (mainConfig.getBoolean("save-colors")) {
