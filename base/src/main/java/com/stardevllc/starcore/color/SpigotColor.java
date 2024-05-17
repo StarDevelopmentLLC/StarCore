@@ -4,9 +4,14 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //Default chat colors from spigot, using this wrapper class to provide hex values by default on lower versions
 public class SpigotColor extends CustomColor {
-
+    
+    public static final List<SpigotColor> SPIGOT_COLORS = new ArrayList<>();
+    
     public static final SpigotColor BLACK = new SpigotColor(ChatColor.BLACK, '0', "#000000");
     public static final SpigotColor DARK_BLUE = new SpigotColor(ChatColor.DARK_BLUE, '1', "#0000AA");
     public static final SpigotColor DARK_GREEN = new SpigotColor(ChatColor.DARK_GREEN, '2', "#00AA00");
@@ -37,7 +42,7 @@ public class SpigotColor extends CustomColor {
         this.permission = "starcore.color.spigot." + chatColor.name().toLowerCase();
         this.spigotColor = chatColor;
         this.hex = hexCode;
-        ColorUtils.spigotColors.put(getChatCode(), this);
+        SPIGOT_COLORS.add(this);
     }
 
     @Override

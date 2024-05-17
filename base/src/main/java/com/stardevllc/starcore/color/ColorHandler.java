@@ -2,50 +2,55 @@ package com.stardevllc.starcore.color;
 
 import com.stardevllc.starcore.NMSVersion;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("JavaReflectionMemberAccess")
-public final class ColorUtils {
-    private static final char[] COLOR_SYMBOLS = {'&', '~', '`', '!', '@', '$', '%', '^', '*', '?'};
+public abstract class ColorHandler {
+    public static final char[] COLOR_SYMBOLS = {'&', '~', '`', '!', '@', '$', '%', '^', '*', '?'};
     public static final Pattern COLOR_CODE_PATTERN = Pattern.compile("[&~`!@$%^*?][0-9A-Z]", Pattern.CASE_INSENSITIVE);
     public static final Pattern HEX_VALUE_PATTERN = Pattern.compile("^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$", Pattern.CASE_INSENSITIVE);
-
-    private static Map<String, CustomColor> customColors = new HashMap<>();
-    public static Map<String, SpigotColor> spigotColors = new HashMap<>();
+    public static final Map<String, SpigotColor> spigotColors = new HashMap<>();
     
-    static {
-        if (isHexSupported()) { //If Hex codes are supported, then register the material colors
-            MaterialColor.MATERIAL_COLORS.forEach(color -> customColors.put(color.getChatCode(), color));
-        }
+    private static ColorHandler instance;
+    
+    public static ColorHandler getInstance() {
+        return instance;
     }
     
-    public static void coloredMessage(CommandSender sender, String message) {
+    public static void setInstance(ColorHandler instance) {
+        ColorHandler.instance = instance;
+    }
+    
+    static {
+        SpigotColor.SPIGOT_COLORS.forEach(color -> spigotColors.put(color.getChatCode(), color));
+    }
+
+    protected Map<String, CustomColor> customColors = new HashMap<>();
+    
+    public void coloredMessage(CommandSender sender, String message) {
         sender.sendMessage(color(message));
     }
 
-    public static String color(String uncolored) {
+    public String color(String uncolored) {
         return color(null, uncolored);
     }
 
-    public static String color(CommandSender sender, String uncolored) {
+    public String color(CommandSender sender, String uncolored) {
         return color(sender, uncolored, true, true, isHexSupported());
     }
 
-    public static String color(String uncolored, boolean translateBukkit, boolean translateCustom, boolean translateHex) {
+    public String color(String uncolored, boolean translateBukkit, boolean translateCustom, boolean translateHex) {
         return color(null, uncolored, translateBukkit, translateCustom, isHexSupported() && translateHex);
     }
 
-    public static String translateBukkit(String uncolored) {
+    public String translateBukkit(String uncolored) {
         return translateBukkit(null, uncolored);
     }
 
-    public static String translateBukkit(CommandSender sender, String uncolored) {
+    public String translateBukkit(CommandSender sender, String uncolored) {
         if (sender == null || sender.isOp()) {
             return ChatColor.translateAlternateColorCodes('&', uncolored);
         }
@@ -71,18 +76,18 @@ public final class ColorUtils {
         return colored.toString();
     }
 
-    public static String translateCustom(String uncolored) {
+    public String translateCustom(String uncolored) {
         return translateCustom(null, uncolored);
     }
 
-    public static String translateCustom(CommandSender sender, String uncolored) {
+    public String translateCustom(CommandSender sender, String uncolored) {
         StringBuilder colored = new StringBuilder();
         for (int i = 0; i < uncolored.length(); i++) {
             char c = uncolored.charAt(i);
-            if (ColorUtils.isValidSymbol(c)) {
+            if (isValidSymbol(c)) {
                 if (uncolored.length() > i + 1) {
                     String code = String.valueOf(c) + uncolored.charAt(i + 1);
-                    CustomColor color = ColorUtils.getCustomColor(code);
+                    CustomColor color = getCustomColor(code);
                     if (color != null && hasPermission(sender, color.getPermission())) {
                         colored.append(color.getSpigotColor());
                         i++;
@@ -96,7 +101,7 @@ public final class ColorUtils {
         return colored.toString();
     }
 
-    public static String translateHex(String uncolored) {
+    public String translateHex(String uncolored) {
         return translateHex(null, uncolored);
     }
     
@@ -104,34 +109,9 @@ public final class ColorUtils {
         return NMSVersion.CURRENT_VERSION.ordinal() >= NMSVersion.v1_16_R1.ordinal();
     }
     
-    public static String translateHex(CommandSender sender, String uncolored) {
-        StringBuilder colored = new StringBuilder();
-        if (!isHexSupported()) {
-            Bukkit.getLogger().warning("Hex Colors are not supported by this Minecraft Version, ignoring them.");
-            return uncolored;
-        }
-        for (int i = 0; i < uncolored.length(); i++) {
-            char c = uncolored.charAt(i);
-            if (c == '#') {
-                if (hasPermission(sender, "starcore.color.hex")) {
-                    if (uncolored.length() > i + 6) {
-                        String colorCode = '#' + uncolored.substring(i + 1, i + 7);
-                        try {
-                            Method ofMethod = ChatColor.class.getDeclaredMethod("of", String.class);
-                            ChatColor color = (ChatColor) ofMethod.invoke(null, colorCode);
-                            colored.append(color);
-                        } catch (Exception e) {}
-                        i += 6;
-                        continue;
-                    }
-                }
-            }
-            colored.append(c);
-        }
-        return colored.toString();
-    }
+    public abstract String translateHex(CommandSender sender, String uncolored);
 
-    public static String color(CommandSender sender, String uncolored, boolean translateBukkit, boolean translateCustom, boolean translateHex) {
+    public String color(CommandSender sender, String uncolored, boolean translateBukkit, boolean translateCustom, boolean translateHex) {
         String text = uncolored;
         if (translateBukkit) {
             text = translateBukkit(sender, text);
@@ -148,7 +128,7 @@ public final class ColorUtils {
         return text;
     }
 
-    private static boolean hasPermission(CommandSender sender, String permission) {
+    public boolean hasPermission(CommandSender sender, String permission) {
         if (sender == null || permission == null || permission.isEmpty()) {
             return true;
         }
@@ -170,19 +150,19 @@ public final class ColorUtils {
         return HEX_VALUE_PATTERN.matcher(str).matches();
     }
 
-    public static void addCustomColor(CustomColor customColor) {
+    public void addCustomColor(CustomColor customColor) {
         customColors.put(customColor.getChatCode(), customColor);
     }
 
-    public static CustomColor getCustomColor(String code) {
+    public CustomColor getCustomColor(String code) {
         return customColors.get(code);
     }
 
-    public static void removeColor(String code) {
+    public void removeColor(String code) {
         customColors.remove(code);
     }
 
-    public static boolean isValidSymbol(char c) {
+    public boolean isValidSymbol(char c) {
         for (char colorChar : COLOR_SYMBOLS) {
             if (colorChar == c) {
                 return true;
@@ -191,11 +171,11 @@ public final class ColorUtils {
         return false;
     }
 
-    public static char[] getPrefixSymbols() {
+    public char[] getPrefixSymbols() {
         return COLOR_SYMBOLS;
     }
 
-    public static Map<String, CustomColor> getCustomColors() {
+    public Map<String, CustomColor> getCustomColors() {
         return new HashMap<>(customColors);
     }
 

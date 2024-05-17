@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.objecttester;
 
 import com.stardevllc.starcore.objecttester.codex.*;
-import com.stardevllc.starcore.color.ColorUtils;
+import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starlib.reflection.ReflectionHelper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -88,18 +88,18 @@ public class ObjectCommand<T> implements TabExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission(permission)) {
-            sender.sendMessage(ColorUtils.color("You do not have permission to use that command."));
+            sender.sendMessage(ColorHandler.getInstance().color("You do not have permission to use that command."));
             return true;
         }
 
         if (!(args.length > 0)) {
-            sender.sendMessage(ColorUtils.color("&cYou do not have enough arguments."));
+            sender.sendMessage(ColorHandler.getInstance().color("&cYou do not have enough arguments."));
             return true;
         }
 
         if (args[0].equalsIgnoreCase("list")) {
             if (!(args.length > 1)) {
-                ColorUtils.coloredMessage(sender, "&cYou must specify what to list.");
+                ColorHandler.getInstance().coloredMessage(sender, "&cYou must specify what to list.");
                 return true;
             }
 
@@ -166,7 +166,7 @@ public class ObjectCommand<T> implements TabExecutor {
                     lines.add(format);
                 }
             } else if (args[1].equalsIgnoreCase("methods")) {
-                sender.sendMessage(ColorUtils.color("&7Key: &aName &8- &3Static? &8- &cReturn Type &8- &dParameter Count"));
+                sender.sendMessage(ColorHandler.getInstance().color("&7Key: &aName &8- &3Static? &8- &cReturn Type &8- &dParameter Count"));
                 for (Method method : methods) {
                     int modifiers = method.getModifiers();
                     boolean isStatic = Modifier.isStatic(modifiers);
@@ -184,12 +184,12 @@ public class ObjectCommand<T> implements TabExecutor {
             }
 
             String type = typeOverride.isEmpty() ? args[1].toLowerCase() : typeOverride;
-            ColorUtils.coloredMessage(sender, "&6List of &a" + type + " &6in class &e" + baseClass.getSimpleName());
-            ColorUtils.coloredMessage(sender, key);
-            lines.forEach(line -> ColorUtils.coloredMessage(sender, line));
+            ColorHandler.getInstance().coloredMessage(sender, "&6List of &a" + type + " &6in class &e" + baseClass.getSimpleName());
+            ColorHandler.getInstance().coloredMessage(sender, key);
+            lines.forEach(line -> ColorHandler.getInstance().coloredMessage(sender, line));
         } else if (args[0].equalsIgnoreCase("get")) {
             if (!(args.length > 1)) {
-                sender.sendMessage(ColorUtils.color("/<cmd> get <fieldName> [object]"));
+                sender.sendMessage(ColorHandler.getInstance().color("/<cmd> get <fieldName> [object]"));
                 return true;
             }
             
@@ -201,12 +201,12 @@ public class ObjectCommand<T> implements TabExecutor {
             for (Field field : this.fields) {
                 if (field.getName().equalsIgnoreCase(args[1])) {
                     if (selectedObject == null && !Modifier.isStatic(field.getModifiers())) {
-                        sender.sendMessage(ColorUtils.color("&cYou must select an object before you can get the field value."));
+                        sender.sendMessage(ColorHandler.getInstance().color("&cYou must select an object before you can get the field value."));
                         return true;
                     }
 
                     try {
-                        sender.sendMessage(ColorUtils.color("&eValue for field &b" + field.getName() + " &eis &a" + field.get(selectedObject)));
+                        sender.sendMessage(ColorHandler.getInstance().color("&eValue for field &b" + field.getName() + " &eis &a" + field.get(selectedObject)));
                     } catch (IllegalAccessException e) {
                         return handleException(sender, "Error while getting field value", e);
                     }
@@ -214,13 +214,13 @@ public class ObjectCommand<T> implements TabExecutor {
             }
         } else if (args[0].equalsIgnoreCase("select")) {
             if (!(args.length > 1)) {
-                sender.sendMessage(ColorUtils.color("&cYou must use a sub command"));
+                sender.sendMessage(ColorHandler.getInstance().color("&cYou must use a sub command"));
                 return true;
             }
 
             if (args[1].equalsIgnoreCase("new")) {
                 if (!(args.length > 2)) {
-                    ColorUtils.coloredMessage(sender, "&cYou must provide a name for this new selection.");
+                    ColorHandler.getInstance().coloredMessage(sender, "&cYou must provide a name for this new selection.");
                     return true;
                 }
 
@@ -245,8 +245,8 @@ public class ObjectCommand<T> implements TabExecutor {
                     }
 
                     if (argCountFiltered.isEmpty()) {
-                        ColorUtils.coloredMessage(sender, "&cThere was no constructors found with " + argCount + " arguments.");
-                        ColorUtils.coloredMessage(sender, "&cVarargs are not supported at this time.");
+                        ColorHandler.getInstance().coloredMessage(sender, "&cThere was no constructors found with " + argCount + " arguments.");
+                        ColorHandler.getInstance().coloredMessage(sender, "&cVarargs are not supported at this time.");
                         return true;
                     }
 
@@ -299,24 +299,24 @@ public class ObjectCommand<T> implements TabExecutor {
                 try {
                     T selectedObject = constructor.newInstance(constructorArguments);
                     this.selectedObjects.put(variableName, selectedObject);
-                    ColorUtils.coloredMessage(sender, "&aCreated a new object of type &e" + baseClass.getSimpleName() + "&a with the name &b" + variableName);
+                    ColorHandler.getInstance().coloredMessage(sender, "&aCreated a new object of type &e" + baseClass.getSimpleName() + "&a with the name &b" + variableName);
                 } catch (Exception e) {
                     return handleException(sender, "There was an error while creating the instance", e);
                 }
             } else if (args[1].equalsIgnoreCase("reset")) {
                 if (!(args.length > 2)) {
-                    ColorUtils.coloredMessage(sender, "&cYou must provide a variable name.");
+                    ColorHandler.getInstance().coloredMessage(sender, "&cYou must provide a variable name.");
                     return true;
                 }
                 T removed = this.selectedObjects.remove(args[2]);
                 if (removed != null) {
-                    sender.sendMessage(ColorUtils.color("&eThe object &b" + args[2] + " &ehas been removed."));
+                    sender.sendMessage(ColorHandler.getInstance().color("&eThe object &b" + args[2] + " &ehas been removed."));
                 } else {
-                    ColorUtils.coloredMessage(sender, "&cThere was no object associated with that name.");
+                    ColorHandler.getInstance().coloredMessage(sender, "&cThere was no object associated with that name.");
                 }
             } else {
                 if (!(args.length > 2)) {
-                    ColorUtils.coloredMessage(sender, "&cYou must provide a name for that object.");
+                    ColorHandler.getInstance().coloredMessage(sender, "&cYou must provide a name for that object.");
                     return true;
                 }
                 
@@ -331,7 +331,7 @@ public class ObjectCommand<T> implements TabExecutor {
                     if (args[1].equalsIgnoreCase(entry.getKey())) {
                         T selectedObject = entry.getValue().select(sender, selectorArgs);
                         if (selectedObject == null) {
-                            sender.sendMessage(ColorUtils.color("&cThe selector &e" + entry.getValue() + " &creturned a null value."));
+                            sender.sendMessage(ColorHandler.getInstance().color("&cThe selector &e" + entry.getValue() + " &creturned a null value."));
                         } else {
                             this.selectedObjects.put(variableName, selectedObject);
                         }
@@ -341,7 +341,7 @@ public class ObjectCommand<T> implements TabExecutor {
             }
         } else if (args[0].equalsIgnoreCase("set")) {
             if (!(args.length > 2)) {
-                sender.sendMessage(ColorUtils.color("&cYou must provide a field and a new value."));
+                sender.sendMessage(ColorHandler.getInstance().color("&cYou must provide a field and a new value."));
                 return true;
             }
             
@@ -357,7 +357,7 @@ public class ObjectCommand<T> implements TabExecutor {
             }
 
             if (!Modifier.isStatic(field.getModifiers()) && selectedObject == null) {
-                sender.sendMessage(ColorUtils.color("&cYou must have an instance selected to modify that field."));
+                sender.sendMessage(ColorHandler.getInstance().color("&cYou must have an instance selected to modify that field."));
                 return true;
             }
             
@@ -379,7 +379,7 @@ public class ObjectCommand<T> implements TabExecutor {
             }
 
             if (codex == null) {
-                sender.sendMessage(ColorUtils.color("&cThat field has a type that is not supported for setting values."));
+                sender.sendMessage(ColorHandler.getInstance().color("&cThat field has a type that is not supported for setting values."));
                 return true;
             }
 
@@ -388,15 +388,15 @@ public class ObjectCommand<T> implements TabExecutor {
             try {
                 newValue = codex.deserialize(combinedArgs);
             } catch (Exception e) {
-                sender.sendMessage(ColorUtils.color("&cThere was an error while parsing the value: " + e.getClass().getSimpleName()));
-                sender.sendMessage(ColorUtils.color("&cPlease see console for more details."));
+                sender.sendMessage(ColorHandler.getInstance().color("&cThere was an error while parsing the value: " + e.getClass().getSimpleName()));
+                sender.sendMessage(ColorHandler.getInstance().color("&cPlease see console for more details."));
                 return true;
             }
 
             if (newValue == null) {
-                sender.sendMessage(ColorUtils.color("&cThe codex returned a null value."));
-                sender.sendMessage(ColorUtils.color("&cThe default codexes return null if an invalid value is passed in."));
-                sender.sendMessage(ColorUtils.color("&cSee the documentation of addons to see what they do for the deserialize method."));
+                sender.sendMessage(ColorHandler.getInstance().color("&cThe codex returned a null value."));
+                sender.sendMessage(ColorHandler.getInstance().color("&cThe default codexes return null if an invalid value is passed in."));
+                sender.sendMessage(ColorHandler.getInstance().color("&cSee the documentation of addons to see what they do for the deserialize method."));
                 return true;
             }
 
@@ -406,16 +406,16 @@ public class ObjectCommand<T> implements TabExecutor {
                 } else {
                     field.set(selectedObject, newValue);
                 }
-                sender.sendMessage(ColorUtils.color("&aYou set the field &e" + field.getName() + " &ain the class &e" + baseClass.getSimpleName() + " &ato &b" + newValue));
+                sender.sendMessage(ColorHandler.getInstance().color("&aYou set the field &e" + field.getName() + " &ain the class &e" + baseClass.getSimpleName() + " &ato &b" + newValue));
             } catch (Exception e) {
-                sender.sendMessage(ColorUtils.color("&cThere was an error setting the value to the field: " + e.getClass().getSimpleName()));
-                sender.sendMessage(ColorUtils.color("&cSee console for more details."));
+                sender.sendMessage(ColorHandler.getInstance().color("&cThere was an error setting the value to the field: " + e.getClass().getSimpleName()));
+                sender.sendMessage(ColorHandler.getInstance().color("&cSee console for more details."));
                 plugin.getLogger().log(Level.SEVERE, "", e);
                 return true;
             }
         } else if (args[0].equalsIgnoreCase("call")) {
             if (!(args.length > 1)) {
-                ColorUtils.coloredMessage(sender, "&cYou must provide a method name to call.");
+                ColorHandler.getInstance().coloredMessage(sender, "&cYou must provide a method name to call.");
                 return true;
             }
             
@@ -433,7 +433,7 @@ public class ObjectCommand<T> implements TabExecutor {
             }
 
             if (filteredMethods.isEmpty()) {
-                ColorUtils.coloredMessage(sender, "Could not find any methods with the name &e" + methodName + " &cand a parameter count of &e" + argCount);
+                ColorHandler.getInstance().coloredMessage(sender, "Could not find any methods with the name &e" + methodName + " &cand a parameter count of &e" + argCount);
                 return true;
             }
 
@@ -444,7 +444,7 @@ public class ObjectCommand<T> implements TabExecutor {
                     Parameter parameter = method.getParameters()[i];
                     TypeCodex codex = getCodex(parameter.getType());
                     if (codex == null) {
-                        ColorUtils.coloredMessage(sender, "&cInvalid type for a parameter on that method.");
+                        ColorHandler.getInstance().coloredMessage(sender, "&cInvalid type for a parameter on that method.");
                         return true;
                     }
 
@@ -452,7 +452,7 @@ public class ObjectCommand<T> implements TabExecutor {
                         Object deserialized = codex.deserialize(args[i + (selectedObject != null ? 3 : 2)]);
                         params[i] = deserialized;
                     } catch (Exception e) {
-                        ColorUtils.coloredMessage(sender, "&cCould not parse the argument at " + i + (selectedObject != null ? 3 : 2) + ": " + e.getClass().getSimpleName());
+                        ColorHandler.getInstance().coloredMessage(sender, "&cCould not parse the argument at " + i + (selectedObject != null ? 3 : 2) + ": " + e.getClass().getSimpleName());
                         e.printStackTrace();
                         return true;
                     }
@@ -491,12 +491,12 @@ public class ObjectCommand<T> implements TabExecutor {
             }
 
             if (filteredMethods.isEmpty()) {
-                ColorUtils.coloredMessage(sender, "&cNo valid methods exist for the arguments provided.");
+                ColorHandler.getInstance().coloredMessage(sender, "&cNo valid methods exist for the arguments provided.");
                 return true;
             }
 
             if (filteredMethods.size() > 1) {
-                ColorUtils.coloredMessage(sender, "&cThere are " + filteredMethods.size() + " possible methods, this really shouldn't be the case.");
+                ColorHandler.getInstance().coloredMessage(sender, "&cThere are " + filteredMethods.size() + " possible methods, this really shouldn't be the case.");
                 return true;
             }
 
@@ -514,14 +514,14 @@ public class ObjectCommand<T> implements TabExecutor {
                 returnObject = method.invoke(null, params);
             } else {
                 if (selectedObject == null) {
-                    ColorUtils.coloredMessage(sender, "&cYou must select an object in order to call that method.");
+                    ColorHandler.getInstance().coloredMessage(sender, "&cYou must select an object in order to call that method.");
                     return;
                 }
 
                 returnObject = method.invoke(selectedObject, params);
             }
         } catch (Exception e) {
-            ColorUtils.coloredMessage(sender, "&cError while calling that method: " + e.getClass().getSimpleName());
+            ColorHandler.getInstance().coloredMessage(sender, "&cError while calling that method: " + e.getClass().getSimpleName());
             e.printStackTrace();
             return;
         }
@@ -530,13 +530,13 @@ public class ObjectCommand<T> implements TabExecutor {
         if (returnType != void.class) {
             TypeCodex returnCodex = getCodex(returnType);
             if (returnCodex == null) {
-                ColorUtils.coloredMessage(sender, "&cNo TypeCodex was found for the return type: " + returnType.getSimpleName());
+                ColorHandler.getInstance().coloredMessage(sender, "&cNo TypeCodex was found for the return type: " + returnType.getSimpleName());
                 return;
             }
 
-            ColorUtils.coloredMessage(sender, "&aReturned Value from method call: &e" + returnCodex.serialize(returnObject));
+            ColorHandler.getInstance().coloredMessage(sender, "&aReturned Value from method call: &e" + returnCodex.serialize(returnObject));
         } else {
-            ColorUtils.coloredMessage(sender, "&aCalled method &e" + method.getName() + " &asuccessfully. This method has no return value.");
+            ColorHandler.getInstance().coloredMessage(sender, "&aCalled method &e" + method.getName() + " &asuccessfully. This method has no return value.");
         }
     }
 
@@ -645,8 +645,8 @@ public class ObjectCommand<T> implements TabExecutor {
     }
 
     private boolean handleException(CommandSender sender, String message, Exception e) {
-        ColorUtils.coloredMessage(sender, "&c" + message + ": " + e.getClass().getSimpleName());
-        ColorUtils.coloredMessage(sender, "&cSee console for more details.");
+        ColorHandler.getInstance().coloredMessage(sender, "&c" + message + ": " + e.getClass().getSimpleName());
+        ColorHandler.getInstance().coloredMessage(sender, "&cSee console for more details.");
         plugin.getLogger().log(Level.SEVERE, "", e);
         return true;
     }

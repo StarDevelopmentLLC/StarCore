@@ -2,7 +2,7 @@ package com.stardevllc.starcore;
 
 import com.stardevllc.starcore.actor.ServerActor;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
-import com.stardevllc.starcore.color.ColorUtils;
+import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
 import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starcore.skins.SkinManager;
@@ -11,6 +11,8 @@ import com.stardevllc.starcore.utils.Config;
 import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
 import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;
+import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
+import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
 import com.stardevllc.starcore.v1_8.EnchantWrapper_1_8;
 import com.stardevllc.starcore.v1_8.ItemWrapper_1_8;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
@@ -37,6 +39,7 @@ public class StarCore extends JavaPlugin {
 
     private ItemWrapper itemWrapper;
     private EnchantWrapper enchantWrapper;
+    private ColorHandler colorHandler;
 
     public void onEnable() {
         mainConfig = new Config(new File(getDataFolder(), "config.yml"));
@@ -50,16 +53,28 @@ public class StarCore extends JavaPlugin {
             case v1_8_R1, v1_8_R2, v1_8_R3, v1_9_R1, v1_9_R2, v1_10_R1 -> {
                 itemWrapper = new ItemWrapper_1_8();
                 enchantWrapper = new EnchantWrapper_1_8();
+                colorHandler = new ColorHandler_1_8();
             }
             case v1_11_R1, v1_12_R1, v1_13_R1 -> {
                 itemWrapper = new ItemWrapper_1_11();
                 enchantWrapper = new EnchantWrapper_1_8();
+                colorHandler = new ColorHandler_1_8();
+            }
+            case v1_13_R2, v1_14_R1, v1_15_R1 -> {
+                itemWrapper = new ItemWrapper_1_13_R2();
+                enchantWrapper = new EnchantWrapper_1_13_R2();
+                colorHandler = new ColorHandler_1_8();
             }
             default -> {
                 itemWrapper = new ItemWrapper_1_13_R2();
                 enchantWrapper = new EnchantWrapper_1_13_R2();
+                colorHandler = new ColorHandler_1_16();
             }
         }
+        
+        ColorHandler.setInstance(colorHandler);
+        
+        Bukkit.getServer().getServicesManager().register(ColorHandler.class, colorHandler, this, ServicePriority.Highest);
 
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (mainConfig.getBoolean("save-colors")) {
@@ -109,9 +124,9 @@ public class StarCore extends JavaPlugin {
             saveColors();
         }
 
-        ColorUtils.getCustomColors().forEach((code, color) -> {
+        colorHandler.getCustomColors().forEach((code, color) -> {
             if (color.getOwner().getName().equalsIgnoreCase(getName())) {
-                ColorUtils.removeColor(code);
+                colorHandler.removeColor(code);
             }
         });
 
@@ -134,7 +149,7 @@ public class StarCore extends JavaPlugin {
                     if (this.colorsConfig.contains("colors." + key + ".permission")) {
                         customColor.permission(colorsConfig.getString("colors." + key + ".permission"));
                     }
-                    ColorUtils.addCustomColor(customColor);
+                    colorHandler.addCustomColor(customColor);
                 }
             }
         }
@@ -151,7 +166,7 @@ public class StarCore extends JavaPlugin {
     public void saveColors() {
         if (colorsConfig != null) {
             colorsConfig.set("colors", null);
-            for (CustomColor color : ColorUtils.getCustomColors().values()) {
+            for (CustomColor color : colorHandler.getCustomColors().values()) {
                 if (color.getOwner().getName().equalsIgnoreCase(getName())) {
                     colorsConfig.set("colors." + color.getChatCode() + ".hex", color.getHex());
                     if (color.getPermission() != null) {

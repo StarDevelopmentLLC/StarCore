@@ -1,5 +1,6 @@
 package com.stardevllc.starcore.actor;
 
+import com.stardevllc.starcore.color.ColorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -66,6 +67,11 @@ public class PlayerActor extends Actor {
         if (player != null) {
             player.sendMessage(message);
         }
+    }
+
+    @Override
+    public void sendColoredMessage(String message) {
+        sendMessage(ColorHandler.getInstance().color(message));
     }
 
     @Override

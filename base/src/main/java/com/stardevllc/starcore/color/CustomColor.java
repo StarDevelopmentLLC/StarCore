@@ -18,7 +18,7 @@ public class CustomColor {
     }
 
     public CustomColor symbolCode(String symbolCode) {
-        if (ColorUtils.isValidCode(symbolCode)) {
+        if (ColorHandler.isValidCode(symbolCode)) {
             this.symbol = symbolCode.charAt(0);
             this.code = symbolCode.charAt(1);
         }
@@ -26,7 +26,7 @@ public class CustomColor {
     }
 
     public CustomColor hexValue(String hex) {
-        if (ColorUtils.isValidHex(hex)) {
+        if (ColorHandler.isValidHex(hex)) {
             this.hex = hex;
             calculateFields();
         }
@@ -61,7 +61,7 @@ public class CustomColor {
     }
 
     protected void calculateFields() {
-        if (ColorUtils.isHexSupported()) {
+        if (ColorHandler.isHexSupported()) {
             if (this.hex != null && !this.hex.isEmpty()) {
                 try {
                     Method ofMethod = ChatColor.class.getDeclaredMethod("of", String.class);

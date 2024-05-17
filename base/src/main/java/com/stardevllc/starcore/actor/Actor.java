@@ -16,6 +16,7 @@ public abstract class Actor {
     public abstract boolean equals(Object object);
     public abstract int hashcode();
     public abstract void sendMessage(String message);
+    public abstract void sendColoredMessage(String message);
     public abstract String getName();
 
     public boolean isPlayer() {
@@ -54,7 +55,7 @@ public abstract class Actor {
             }
 
             try {
-                actor = of(UUID.fromString(str));
+                return of(UUID.fromString(str));
             } catch (Exception e) {
             }
 
@@ -65,7 +66,7 @@ public abstract class Actor {
 
             Plugin plugin = Bukkit.getPluginManager().getPlugin(str);
             if (plugin != null) {
-                actor = of((JavaPlugin) plugin);
+                return of((JavaPlugin) plugin);
             }
         }
         

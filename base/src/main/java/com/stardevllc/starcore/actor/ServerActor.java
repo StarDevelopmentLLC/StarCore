@@ -1,5 +1,6 @@
 package com.stardevllc.starcore.actor;
 
+import com.stardevllc.starcore.color.ColorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 
@@ -45,6 +46,11 @@ public class ServerActor extends Actor {
     @Override
     public void sendMessage(String message) {
         Bukkit.getConsoleSender().sendMessage(message);
+    }
+
+    @Override
+    public void sendColoredMessage(String message) {
+        sendMessage(ColorHandler.getInstance().color(message));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.stardevllc.starcore.actor;
 
+import com.stardevllc.starcore.color.ColorHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PluginActor extends Actor {
@@ -44,7 +45,12 @@ public class PluginActor extends Actor {
 
     @Override
     public void sendMessage(String message) {
-        plugin.getLogger().info("[StarChat Error]" + message);
+        plugin.getLogger().info(message);
+    }
+
+    @Override
+    public void sendColoredMessage(String message) {
+        sendMessage(ColorHandler.stripColor(message));
     }
 
     @Override

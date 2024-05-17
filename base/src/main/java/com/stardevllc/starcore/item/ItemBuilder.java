@@ -3,7 +3,7 @@ package com.stardevllc.starcore.item;
 import com.stardevllc.starcore.wrapper.AttributeModifierWrapper;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
-import com.stardevllc.starcore.color.ColorUtils;
+import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.xseries.XMaterial;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTItem;
@@ -276,11 +276,11 @@ public class ItemBuilder implements Cloneable {
         }
 
         if (this.displayName != null) {
-            itemMeta.setDisplayName(ColorUtils.color(this.displayName));
+            itemMeta.setDisplayName(ColorHandler.getInstance().color(this.displayName));
         }
 
         if (!this.lore.isEmpty()) {
-            List<String> coloredLore = this.lore.stream().map(ColorUtils::color).collect(Collectors.toCollection(LinkedList::new));
+            List<String> coloredLore = this.lore.stream().map(line -> ColorHandler.getInstance().color(line)).collect(Collectors.toCollection(LinkedList::new));
             itemMeta.setLore(coloredLore);
         }
 
