@@ -42,6 +42,9 @@ processResources {
 shadowJar {
     archiveClassifier.set('')
     //destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
+    dependencies {
+        exclude(dependency('de.tr7zw:item-nbt-api-plugin:2.12.4'))
+    }
 }
 
 dependencies {
