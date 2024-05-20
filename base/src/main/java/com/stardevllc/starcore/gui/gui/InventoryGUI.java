@@ -91,6 +91,11 @@ public class InventoryGUI implements InventoryHandler {
     @Override
     public void onClick(InventoryClickEvent e) {
         e.setCancelled(true); //TODO This will have to be changed when the InsertElement is implemented
+        
+        if (e.getSlot() != e.getRawSlot()) {
+            return;
+        }
+        
         Slot slot = this.slots[e.getRawSlot()];
         if (slot == null) {
             return;
