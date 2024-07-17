@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.github.StarDevelopmentLLC'
-version '1.0.0-alpha.36'
+version '1.0.0-alpha.37'
 
 repositories {
     mavenLocal()
@@ -49,9 +49,9 @@ shadowJar {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT'
-    compileOnly 'de.tr7zw:item-nbt-api-plugin:2.12.4'
-    api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.13'
-    api 'com.github.StarDevelopmentLLC.StarLib:all:1.0.0-alpha.21'
+    compileOnly 'de.tr7zw:item-nbt-api-plugin:2.13.1'
+    api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.14'
+    api 'com.github.StarDevelopmentLLC.StarLib:all:1.0.0-alpha.23'
     api 'dev.dejvokep:boosted-yaml-spigot:1.4'
     api project(':base')
     api project(':v1_8')
