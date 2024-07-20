@@ -1,6 +1,7 @@
 package com.stardevllc.starcore;
 
 import com.stardevllc.starcore.actor.ServerActor;
+import com.stardevllc.starcore.cache.PlayerCache;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
@@ -27,6 +28,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Map;
 import java.util.UUID;
 
 public class StarCore extends JavaPlugin {
@@ -34,12 +36,15 @@ public class StarCore extends JavaPlugin {
     private UUID consoleUnqiueId;
     private Config colorsConfig;
     private Config mainConfig;
+    private Config playersDB;
     private GuiManager guiManager;
     private SkinManager skinManager;
 
     private ItemWrapper itemWrapper;
     private EnchantWrapper enchantWrapper;
     private ColorHandler colorHandler;
+    
+    private PlayerCache playerCache = new PlayerCache();
 
     public void onEnable() {
         mainConfig = new Config(new File(getDataFolder(), "config.yml"));
@@ -82,7 +87,13 @@ public class StarCore extends JavaPlugin {
         if (mainConfig.getBoolean("save-colors")) {
             loadColors();
         }
-
+        
+        mainConfig.addDefault("save-player-info", true, " This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
+        if (mainConfig.getBoolean("save-player-info")) {
+            loadPlayers();
+        }
+        Bukkit.getServer().getServicesManager().register(PlayerCache.class, playerCache, this, ServicePriority.High);
+        
         mainConfig.addDefault("messages.command.reload", "&aSuccessfully reloaded configs.", " The message sent when /starcore reload is a success");
         mainConfig.addDefault("messages.command.invalidsubcommand", "&cInvalid subcommand.", " The message sent when an invalid sub-command is provided to /starcore");
         mainConfig.addDefault("messages.command.nopermission", "&cYou do not have permission to use that command.", " The message displayed when no permission is detected for the /starcore command.");
@@ -124,6 +135,7 @@ public class StarCore extends JavaPlugin {
     public void reload(boolean save) {
         if (save) {
             saveColors();
+            savePlayers();
         }
 
         colorHandler.getCustomColors().forEach((code, color) -> {
@@ -131,12 +143,40 @@ public class StarCore extends JavaPlugin {
                 colorHandler.removeColor(code);
             }
         });
-
-        loadColors();
+    
+        if (mainConfig.getBoolean("save-colors")) {
+            loadColors();
+        }
+        
+        if (mainConfig.getBoolean("save-player-info")) {
+            loadPlayers();
+        }
 
         this.mainConfig = new Config(new File(getDataFolder(), "config.yml"));
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
+    }
+
+    public void savePlayers() {
+        if (this.playersDB != null) {
+            for (Map.Entry<UUID, String> entry : this.playerCache.getEntries().entrySet()) {
+                this.playersDB.set("players." + entry.getKey().toString(), entry.getValue());
+            }
+            
+            this.playersDB.save();
+        }
+    }
+    
+    public void loadPlayers() {
+        this.playersDB = new Config(new File(getDataFolder(), "players.yml"));
+        if (this.playersDB.contains("players")) {
+            Section playersSection = this.playersDB.getSection("players");
+            if (playersSection != null) {
+                for (Object key : playersSection.getKeys()) {
+                    this.playerCache.addEntry(UUID.fromString(key.toString()), playersSection.getString(key.toString()));
+                }
+            }
+        }
     }
 
     public void loadColors() {
@@ -183,6 +223,7 @@ public class StarCore extends JavaPlugin {
     @Override
     public void onDisable() {
         saveColors();
+        savePlayers();
     }
 
     public UUID getConsoleUnqiueId() {
