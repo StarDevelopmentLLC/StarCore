@@ -6,6 +6,7 @@ import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
 import com.stardevllc.starcore.gui.GuiManager;
+import com.stardevllc.starcore.listener.PlayerListener;
 import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.task.SpigotTaskFactory;
 import com.stardevllc.starcore.utils.Config;
@@ -82,6 +83,8 @@ public class StarCore extends JavaPlugin {
         Bukkit.getServer().getServicesManager().register(ColorHandler.class, colorHandler, this, ServicePriority.Highest);
         Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Highest);
         Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Highest);
+
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (mainConfig.getBoolean("save-colors")) {
@@ -224,6 +227,10 @@ public class StarCore extends JavaPlugin {
     public void onDisable() {
         saveColors();
         savePlayers();
+    }
+
+    public PlayerCache getPlayerCache() {
+        return playerCache;
     }
 
     public UUID getConsoleUnqiueId() {
