@@ -8,8 +8,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,9 +54,15 @@ public class PlayerManager implements Listener {
         Section playersSection = this.playersConfig.getSection("players");
         if (playersSection != null) {
             for (Object key : playersSection.getKeys()) {
-                StarPlayer player = new StarPlayer(UUID.fromString(key.toString()), playersSection.getString(key.toString()));
-                player.setCustomData((Map<String, Object>) playersSection.getMapList(key + ".customData").getFirst());
-                this.addPlayer(player);
+                Section dataSection = playersSection.getSection(key.toString());
+                if (dataSection != null) {
+                    Map<String, Object> serialized = new HashMap<>();
+                    for (Object dataKey : dataSection.getKeys()) {
+                        serialized.put(dataKey.toString(), dataSection.get(dataKey.toString()));    
+                    }
+
+                    this.addPlayer(new StarPlayer(serialized));
+                }
             }
         }
     }
@@ -62,6 +70,17 @@ public class PlayerManager implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (!this.playerRegistry.contains(e.getPlayer().getUniqueId())) {
-            this.playerRegistry.register(new StarPlayer(e.getPlayer()));        }
+            this.playerRegistry.register(new StarPlayer(e.getPlayer()));        
+        }
+
+        StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
+        starPlayer.setLastLogin(System.currentTimeMillis());
+    }
+    
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
+        starPlayer.setLastLogin(System.currentTimeMillis());
+        starPlayer.setPlaytime(starPlayer.getPlaytime() + (starPlayer.getLastLogout() - starPlayer.getLastLogin()));
     }
 }
