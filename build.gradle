@@ -51,7 +51,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.13.2'
     api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.14'
-    api 'com.github.StarDevelopmentLLC.StarLib:all:1.0.0-alpha.25'
+    api 'com.github.StarDevelopmentLLC.StarLib:all:1.0.0-alpha.26'
     api 'dev.dejvokep:boosted-yaml-spigot:1.4'
     api project(':base')
     api project(':v1_8')

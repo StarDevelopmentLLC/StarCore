@@ -1,12 +1,11 @@
 package com.stardevllc.starcore;
 
 import com.stardevllc.starcore.actor.ServerActor;
-import com.stardevllc.starcore.cache.player.PlayerCache;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
 import com.stardevllc.starcore.gui.GuiManager;
-import com.stardevllc.starcore.listener.PlayerListener;
+import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.task.SpigotTaskFactory;
 import com.stardevllc.starcore.config.Config;
@@ -43,7 +42,7 @@ public class StarCore extends JavaPlugin {
     private EnchantWrapper enchantWrapper;
     private ColorHandler colorHandler;
     
-    private PlayerCache playerCache;
+    private PlayerManager playerManager;
 
     public void onEnable() {
         mainConfig = new Config(new File(getDataFolder(), "config.yml"));
@@ -82,20 +81,19 @@ public class StarCore extends JavaPlugin {
         Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Highest);
         Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Highest);
 
-        Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (mainConfig.getBoolean("save-colors")) {
             loadColors();
         }
         
-        this.playerCache = new PlayerCache(new File(getDataFolder(), "players.yml"));
+        this.playerManager = new PlayerManager(this);
+        getServer().getPluginManager().registerEvents(playerManager, this);
         
         mainConfig.addDefault("save-player-info", true, " This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         if (mainConfig.getBoolean("save-player-info")) {
-            this.playerCache.load();
+            this.playerManager.load();
         }
-        Bukkit.getServer().getServicesManager().register(PlayerCache.class, playerCache, this, ServicePriority.High);
+        Bukkit.getServer().getServicesManager().register(PlayerManager.class, playerManager, this, ServicePriority.High);
         
         mainConfig.addDefault("messages.command.reload", "&aSuccessfully reloaded configs.", " The message sent when /starcore reload is a success");
         mainConfig.addDefault("messages.command.invalidsubcommand", "&cInvalid subcommand.", " The message sent when an invalid sub-command is provided to /starcore");
@@ -138,7 +136,7 @@ public class StarCore extends JavaPlugin {
     public void reload(boolean save) {
         if (save) {
             saveColors();
-            this.playerCache.save();
+            this.playerManager.save();
         }
 
         colorHandler.getCustomColors().forEach((code, color) -> {
@@ -152,7 +150,7 @@ public class StarCore extends JavaPlugin {
         }
         
         if (mainConfig.getBoolean("save-player-info")) {
-            this.playerCache.load();
+            this.playerManager.load();
         }
 
         this.mainConfig = new Config(new File(getDataFolder(), "config.yml"));
@@ -206,11 +204,11 @@ public class StarCore extends JavaPlugin {
     @Override
     public void onDisable() {
         saveColors();
-        this.playerCache.save();
+        this.playerManager.save();
     }
 
-    public PlayerCache getPlayerCache() {
-        return playerCache;
+    public PlayerManager getPlayerManager() {
+        return playerManager;
     }
 
     public UUID getConsoleUnqiueId() {
