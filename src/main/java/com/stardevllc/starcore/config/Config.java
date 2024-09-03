@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.utils;
+package com.stardevllc.starcore.config;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.Block;
@@ -962,7 +962,6 @@ public class Config {
     public List<Map<?, ?>> getMapList(String route) {
         return document.getMapList(route);
     }
-
 
     public List<String> getComments() {
         return document.getComments();
