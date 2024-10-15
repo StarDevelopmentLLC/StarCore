@@ -1,5 +1,6 @@
 package com.stardevllc.starcore;
 
+import com.stardevllc.clock.ClockManager;
 import com.stardevllc.starcore.actor.ServerActor;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorHandler;
@@ -7,7 +8,6 @@ import com.stardevllc.starcore.color.CustomColor;
 import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
-import com.stardevllc.starcore.task.SpigotTaskFactory;
 import com.stardevllc.starcore.config.Config;
 import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
 import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
@@ -18,8 +18,6 @@ import com.stardevllc.starcore.v1_8.EnchantWrapper_1_8;
 import com.stardevllc.starcore.v1_8.ItemWrapper_1_8;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
-import com.stardevllc.starlib.clock.ClockManager;
-import com.stardevllc.starlib.task.TaskFactory;
 import com.stardevllc.starsql.StarSQL;
 import com.stardevllc.starsql.model.DatabaseRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -115,7 +113,6 @@ public class StarCore extends JavaPlugin {
         mainConfig.addDefault("messages.command.color.remove.success", "&eYou removed &b{OLDCODE} &eas a custom color.", " The message sent when the code is removed successfully in /starcore color remove command");
         mainConfig.save();
 
-        getServer().getServicesManager().register(TaskFactory.class, new SpigotTaskFactory(this), this, ServicePriority.Normal);
         ClockManager clockManager = new ClockManager(getLogger(), 50L);
         getServer().getServicesManager().register(ClockManager.class, clockManager, this, ServicePriority.Normal);
         getServer().getScheduler().runTaskTimer(this, clockManager.getRunnable(), 1L, 1L);

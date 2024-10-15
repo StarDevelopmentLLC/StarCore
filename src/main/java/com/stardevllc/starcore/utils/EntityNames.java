@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.utils;
 
-import com.stardevllc.starlib.helper.StringHelper;
+import com.stardevllc.helper.StringHelper;
 import org.bukkit.entity.EntityType;
 
 import java.util.HashMap;

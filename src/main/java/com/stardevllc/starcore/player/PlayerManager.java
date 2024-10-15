@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.player;
 
+import com.stardevllc.registry.UUIDRegistry;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.config.Config;
-import com.stardevllc.starlib.registry.UUIDRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

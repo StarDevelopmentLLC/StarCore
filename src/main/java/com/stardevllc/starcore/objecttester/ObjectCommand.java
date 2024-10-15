@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.objecttester;
 
+import com.stardevllc.helper.ReflectionHelper;
 import com.stardevllc.starcore.objecttester.codex.*;
 import com.stardevllc.starcore.color.ColorHandler;
-import com.stardevllc.starlib.reflection.ReflectionHelper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
