@@ -80,7 +80,7 @@ public class PlayerManager implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
-        starPlayer.setLastLogin(System.currentTimeMillis());
+        starPlayer.setLastLogout(System.currentTimeMillis());
         starPlayer.setPlaytime(starPlayer.getPlaytime() + (starPlayer.getLastLogout() - starPlayer.getLastLogin()));
     }
 }
