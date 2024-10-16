@@ -21,8 +21,7 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT'
     api 'de.tr7zw:item-nbt-api-plugin:2.13.1'
-    api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.14'
-    api 'com.github.StarDevelopmentLLC.StarLib:all:1.0.0-alpha.25'
+    api 'com.github.StarDevelopmentLLC:StarSQL:1.0.0-alpha.15'
     api 'dev.dejvokep:boosted-yaml-spigot:1.4'
 }
 
