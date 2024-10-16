@@ -1,5 +1,6 @@
 package com.stardevllc.starcore.player;
 
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -40,7 +41,16 @@ public class StarPlayer {
         this.playtime = Long.parseLong(serialized.getOrDefault("playtime", "0").toString());
         this.lastLogin = Long.parseLong(serialized.getOrDefault("lastLogin", "0").toString());
         this.lastLogout = Long.parseLong(serialized.getOrDefault("lastLogout", "0").toString());
-        this.customData = (Map<String, Object>) serialized.getOrDefault("customData", new HashMap<>());
+        Object rawCustomData = serialized.get("customData");
+        if (rawCustomData != null) {
+            if (rawCustomData instanceof Map) {
+                customData.putAll((Map<String, Object>) rawCustomData);
+            } else if (rawCustomData instanceof Section dataSection) {
+                for (Object key : dataSection.getKeys()) {
+                    this.customData.put((String) key, dataSection.get((String) key));
+                }
+            }
+        }
     }
 
     public UUID getUniqueId() {
