@@ -5,10 +5,10 @@ import com.stardevllc.starcore.actor.ServerActor;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
+import com.stardevllc.starcore.config.Config;
 import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
-import com.stardevllc.starcore.config.Config;
 import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
 import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;
@@ -16,8 +16,11 @@ import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
 import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
 import com.stardevllc.starcore.v1_8.EnchantWrapper_1_8;
 import com.stardevllc.starcore.v1_8.ItemWrapper_1_8;
+import com.stardevllc.starcore.v1_8.PlayerHandWrapper_1_8;
+import com.stardevllc.starcore.v1_9.PlayerHandWrapper_1_9;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
+import com.stardevllc.starcore.wrapper.PlayerHandWrapper;
 import com.stardevllc.starsql.StarSQL;
 import com.stardevllc.starsql.model.DatabaseRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -39,6 +42,7 @@ public class StarCore extends JavaPlugin {
     private ItemWrapper itemWrapper;
     private EnchantWrapper enchantWrapper;
     private ColorHandler colorHandler;
+    private PlayerHandWrapper playerHandWrapper;
     
     private PlayerManager playerManager;
 
@@ -50,34 +54,38 @@ public class StarCore extends JavaPlugin {
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
         NMSVersion version = NMSVersion.CURRENT_VERSION;
         
-        switch (version) {
-            case v1_8_R1, v1_8_R2, v1_8_R3, v1_9_R1, v1_9_R2, v1_10_R1 -> {
-                itemWrapper = new ItemWrapper_1_8();
-                enchantWrapper = new EnchantWrapper_1_8();
-                colorHandler = new ColorHandler_1_8();
-            }
-            case v1_11_R1, v1_12_R1, v1_13_R1 -> {
-                itemWrapper = new ItemWrapper_1_11();
-                enchantWrapper = new EnchantWrapper_1_8();
-                colorHandler = new ColorHandler_1_8();
-            }
-            case v1_13_R2, v1_14_R1, v1_15_R1 -> {
-                itemWrapper = new ItemWrapper_1_13_R2();
-                enchantWrapper = new EnchantWrapper_1_13_R2();
-                colorHandler = new ColorHandler_1_8();
-            }
-            default -> {
-                itemWrapper = new ItemWrapper_1_13_R2();
-                enchantWrapper = new EnchantWrapper_1_13_R2();
-                colorHandler = new ColorHandler_1_16();
-            }
+        if (version.ordinal() < NMSVersion.v1_9_R1.ordinal()) {
+            this.playerHandWrapper = new PlayerHandWrapper_1_8();
+        } else {
+            this.playerHandWrapper = new PlayerHandWrapper_1_9();
+        }
+        
+        if (version.ordinal() < NMSVersion.v1_13_R2.ordinal()) {
+            this.enchantWrapper = new EnchantWrapper_1_8();
+        } else {
+            this.enchantWrapper = new EnchantWrapper_1_13_R2();
+        }
+        
+        if (version.ordinal() < NMSVersion.v1_11_R1.ordinal()) {
+            this.itemWrapper = new ItemWrapper_1_8();
+        } else if (version.ordinal() < NMSVersion.v1_13_R2.ordinal()){
+            this.itemWrapper = new ItemWrapper_1_11();
+        } else {
+            this.itemWrapper = new ItemWrapper_1_13_R2();
+        }
+        
+        if (version.ordinal() < NMSVersion.v1_16_R1.ordinal()) {
+            this.colorHandler = new ColorHandler_1_8();
+        } else {
+            this.colorHandler = new ColorHandler_1_16();
         }
         
         ColorHandler.setInstance(colorHandler);
         
-        Bukkit.getServer().getServicesManager().register(ColorHandler.class, colorHandler, this, ServicePriority.Highest);
-        Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Highest);
-        Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Highest);
+        Bukkit.getServer().getServicesManager().register(ColorHandler.class, colorHandler, this, ServicePriority.Normal);
+        Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Normal);
+        Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Normal);
+        Bukkit.getServer().getServicesManager().register(PlayerHandWrapper.class, playerHandWrapper, this, ServicePriority.Normal);
 
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (mainConfig.getBoolean("save-colors")) {
@@ -173,6 +181,10 @@ public class StarCore extends JavaPlugin {
                 }
             }
         }
+    }
+
+    public PlayerHandWrapper getPlayerHandWrapper() {
+        return playerHandWrapper;
     }
 
     public ItemWrapper getItemWrapper() {

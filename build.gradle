@@ -57,6 +57,7 @@ dependencies {
     api 'com.github.StarDevelopmentLLC:registry:0.1.0'
     api project(':base')
     api project(':v1_8')
+    api project(':v1_9')
     api project(':v1_11')
     api project(':v1_13')
     api project(':v1_13_R2')
