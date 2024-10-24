@@ -171,8 +171,6 @@ public class StarCore extends JavaPlugin {
         ServerActor.serverUUID = this.consoleUnqiueId;
     }
     
-    
-
     public void loadColors() {
         this.colorsConfig = new Config(new File(getDataFolder(), "colors.yml"));
         if (this.colorsConfig.contains("colors")) {
