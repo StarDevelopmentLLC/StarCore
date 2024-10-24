@@ -42,8 +42,10 @@ public enum NMSVersion {
             Method getServerMethod = bukkitClass.getMethod("getServer");
             String a = getServerMethod.invoke(null).getClass().getPackage().getName();
             String version = a.substring(a.lastIndexOf('.') + 1);
+            System.out.println("[StarCore] Detected NMS Version: " + version);
             return valueOf(version);
         } catch (Exception e) {
+            System.out.println("[StarCore] NMS Version incompatible with this version of StarCore, is it up to date?");
             return NMSVersion.UNDEFINED;
         }
     }
