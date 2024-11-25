@@ -9,13 +9,10 @@ import com.stardevllc.starcore.config.Config;
 import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
-import com.stardevllc.starcore.spawner.SpawnerFactory;
 import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
-import com.stardevllc.starcore.v1_13.StarSpawner_1_13;
 import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
-import com.stardevllc.starcore.v1_21.StarSpawner_1_21;
 import com.stardevllc.starcore.v1_8.*;
 import com.stardevllc.starcore.v1_9.PlayerHandWrapper_1_9;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
@@ -76,14 +73,6 @@ public class StarCore extends JavaPlugin {
             this.colorHandler = new ColorHandler_1_8();
         } else {
             this.colorHandler = new ColorHandler_1_16();
-        }
-        
-        if (version.ordinal() < NMSVersion.v1_14_R1.ordinal()) {
-            SpawnerFactory.setSpawnerFunction(StarSpawner_1_8::new);
-        } else if (version.ordinal() < NMSVersion.v1_21_R1.ordinal()) {
-            SpawnerFactory.setSpawnerFunction(StarSpawner_1_13::new);
-        } else {
-            SpawnerFactory.setSpawnerFunction(StarSpawner_1_21::new);
         }
         
         ColorHandler.setInstance(colorHandler);
