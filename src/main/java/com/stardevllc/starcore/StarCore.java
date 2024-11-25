@@ -21,8 +21,6 @@ import com.stardevllc.starcore.v1_9.PlayerHandWrapper_1_9;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
 import com.stardevllc.starcore.wrapper.PlayerHandWrapper;
-import com.stardevllc.starsql.StarSQL;
-import com.stardevllc.starsql.model.DatabaseRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
@@ -139,9 +137,6 @@ public class StarCore extends JavaPlugin {
         guiManager = new GuiManager(this);
         guiManager.setup();
         getServer().getServicesManager().register(GuiManager.class, guiManager, this, ServicePriority.Normal);
-
-        StarSQL.setLogger(getLogger());
-        getServer().getServicesManager().register(DatabaseRegistry.class, StarSQL.createDatabaseRegistry(), this, ServicePriority.Highest);
 
         getCommand("starcore").setExecutor(new StarCoreCmd(this));
     }
