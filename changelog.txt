@@ -1,3 +1,47 @@
+0.1.0
+- IMPORTANT: Version Scheme Changed
+- Fixed an issue with the Gradle config that was causing NBT-API to be shaded in
+- Updated NBT-API to 2.14.0
+- Removed StarSQL as a dependency
+- Removed the Spawner Wrapper code (This was an undocumented feature in 1.0.0-alpha.46)
+
+1.0.0-alpha.46
+- Updated the property library to 0.1.3 to fix a critical bug
+
+1.0.0-alpha.45 
+- Added a wrapper class for getting a Player's hand item
+- Added console output for the NMS Version detection
+
+1.0.0-alpha.43 
+- Fixed a bug with the custom player data loading. This was due to an unknown change in a library
+
+1.0.0-alpha.41-42
+- Moved to using new libraries
+
+1.0.0-alpha.38 
+- Fixed a bug with the inventory gui that was causing some events to not be cancelled
+- Updated StarLib to 1.0.0-alpha.25 (New feature)
+- Updated the XMaterial class to the new 1.21 things
+
+1.0.0-alpha.36-37
+- Updated StarLib
+- Updated StarSQL
+- Minimum Java Version 21
+
+1.0.0-alpha.35
+- Fixed a bug in the GUI system where if you click outside of the bounds, it would cause an error
+
+1.0.0-alpha.34 
+- Fixed a bug where the ItemWrapper and EnchantWrapper were not registered to the Bukkit ServicesManager
+
+1.0.0-alpha.33
+- Updated StarLib to 1.0.0-alpha.20
+- Moved to using a Multi-Module setup for version specific handling
+- Refactored ColorUtils to ColorHandler to make it easier to manage versions
+
+1.0.0-alpha.30-1.0.0-alpha.32
+- Updates to Internal Libraries
+
 1.0.0-alpha.29
 - Updated StarLib to 1.0.0-alpha.15
 - Updated StarClock to 1.0.0-alpha.12
