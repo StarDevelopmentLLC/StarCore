@@ -20,6 +20,7 @@ import com.stardevllc.starcore.wrapper.ItemWrapper;
 import com.stardevllc.starcore.wrapper.PlayerHandWrapper;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -127,7 +128,10 @@ public class StarCore extends JavaPlugin {
         guiManager.setup();
         getServer().getServicesManager().register(GuiManager.class, guiManager, this, ServicePriority.Normal);
 
-        getCommand("starcore").setExecutor(new StarCoreCmd(this));
+        StarCoreCmd starCoreCmd = new StarCoreCmd(this);
+        PluginCommand pluginStarCoreCmd = getCommand("starcore");
+        pluginStarCoreCmd.setExecutor(starCoreCmd);
+        pluginStarCoreCmd.setTabCompleter(starCoreCmd);
     }
 
     public void reload(boolean save) {

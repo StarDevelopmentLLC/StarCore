@@ -1,18 +1,21 @@
 package com.stardevllc.starcore.cmds;
 
 import com.stardevllc.starcore.StarCore;
-import com.stardevllc.starcore.gui.handler.InventoryHandler;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
+import com.stardevllc.starcore.gui.handler.InventoryHandler;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.inventory.Inventory;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-public class StarCoreCmd implements CommandExecutor {
+public class StarCoreCmd implements TabExecutor {
 
     private StarCore plugin;
 
@@ -36,7 +39,7 @@ public class StarCoreCmd implements CommandExecutor {
                 ColorHandler.getInstance().coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
                 return true;
             }
-            
+
             plugin.reload(false);
             sender.sendMessage(ColorHandler.getInstance().color("&aSuccessfully reloaded configs."));
         } else if (args[0].equalsIgnoreCase("color")) {
@@ -57,7 +60,7 @@ public class StarCoreCmd implements CommandExecutor {
                     ColorHandler.getInstance().coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
                     return true;
                 }
-                
+
                 if (!(args.length > 2)) {
                     ColorHandler.getInstance().coloredMessage(sender, "&cUsage: /" + label + " " + args[0] + " " + args[1] + " symbols");
                     ColorHandler.getInstance().coloredMessage(sender, "&cUsage: /" + label + " " + args[0] + " " + args[1] + " codes");
@@ -81,7 +84,7 @@ public class StarCoreCmd implements CommandExecutor {
                     ColorHandler.getInstance().coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
                     return true;
                 }
-                
+
                 if (!(args.length > 3)) {
                     sender.sendMessage(ColorHandler.getInstance().color("&cUsage: /" + label + " " + args[0] + " " + args[1] + " <code> <hex> [permission]"));
                     return true;
@@ -122,7 +125,7 @@ public class StarCoreCmd implements CommandExecutor {
                     ColorHandler.getInstance().coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
                     return true;
                 }
-                
+
                 if (!(args.length > 2)) {
                     sender.sendMessage(ColorHandler.getInstance().color("&cUsage: /" + label + " " + args[0] + " " + args[1] + " <code>"));
                     return true;
@@ -155,5 +158,63 @@ public class StarCoreCmd implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!sender.hasPermission("starcore.admin")) {
+            return List.of();
+        }
+
+        if (args.length == 1) {
+            return sortAndFilter(args[0], "reload", "color", "gui");
+        }
+
+        if (args[0].equalsIgnoreCase("gui")) {
+            if (args.length == 2) {
+                return sortAndFilter(args[1], "list");
+            }
+        }
+
+        if (args[0].equalsIgnoreCase("color")) {
+            if (args.length == 2) {
+                return sortAndFilter(args[1], "list", "add", "remove");
+            } else if (args[1].equalsIgnoreCase("list")) {
+                if (args.length == 3) {
+                    return sortAndFilter(args[2], "symbols", "codes");
+                }
+            } else if (args[1].equalsIgnoreCase("add")) {
+                if (args.length == 3) {
+                    return List.of("<code>");
+                } else if (args.length == 4) {
+                    return List.of("<hex>");
+                } else if (args.length == 5) {
+                    return List.of("[permission]");
+                }
+            } else if (args[1].equalsIgnoreCase("remove")) {
+                if (args.length == 3) {
+                    sortAndFilter(args[2], new LinkedList<>(ColorHandler.getInstance().getCustomColors().keySet()));
+                }
+            }
+        }
+
+        return List.of();
+    }
+    
+    private static List<String> sortAndFilter(String arg, List<String> completions) {
+        completions.removeIf(option -> !option.toLowerCase().startsWith(arg));
+        Collections.sort(completions);
+
+        return completions;
+    }
+
+    private static List<String> sortAndFilter(String arg, String... values) {
+        List<String> completions = new LinkedList<>();
+        if (values == null) {
+            return completions;
+        }
+
+        completions.addAll(List.of(values));
+        return sortAndFilter(arg, completions);
     }
 }
