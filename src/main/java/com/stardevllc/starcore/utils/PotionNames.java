@@ -34,7 +34,7 @@ public class PotionNames {
             } 
         }
         
-        if (NMSVersion.CURRENT_VERSION != NMSVersion.v1_20_R4) {
+        if (NMSVersion.CURRENT_VERSION.ordinal() < NMSVersion.v1_20_R4.ordinal()) {
             Class<PotionEffectType> effectClass = PotionEffectType.class;
 
             try {
