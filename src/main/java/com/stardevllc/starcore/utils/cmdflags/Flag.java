@@ -19,4 +19,14 @@ public interface Flag {
     default Object valueIfNotPresent() {
         return false;
     }
+    
+    static boolean equals(Flag flag, Object other) {
+        if (other instanceof Flag otherFlag) {
+            if (flag.type() == otherFlag.type()) {
+                return flag.name().equalsIgnoreCase(otherFlag.name());
+            }
+        }
+        
+        return false;
+    }
 }
