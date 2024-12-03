@@ -13,7 +13,10 @@ import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
 import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
-import com.stardevllc.starcore.v1_8.*;
+import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
+import com.stardevllc.starcore.v1_8.EnchantWrapper_1_8;
+import com.stardevllc.starcore.v1_8.ItemWrapper_1_8;
+import com.stardevllc.starcore.v1_8.PlayerHandWrapper_1_8;
 import com.stardevllc.starcore.v1_9.PlayerHandWrapper_1_9;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
@@ -132,6 +135,8 @@ public class StarCore extends JavaPlugin {
         PluginCommand pluginStarCoreCmd = getCommand("starcore");
         pluginStarCoreCmd.setExecutor(starCoreCmd);
         pluginStarCoreCmd.setTabCompleter(starCoreCmd);
+        
+//        getCommand("test").setExecutor(new TestCmd());
     }
 
     public void reload(boolean save) {
