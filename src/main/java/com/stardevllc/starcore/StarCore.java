@@ -135,8 +135,6 @@ public class StarCore extends JavaPlugin {
         PluginCommand pluginStarCoreCmd = getCommand("starcore");
         pluginStarCoreCmd.setExecutor(starCoreCmd);
         pluginStarCoreCmd.setTabCompleter(starCoreCmd);
-        
-//        getCommand("test").setExecutor(new TestCmd());
     }
 
     public void reload(boolean save) {
