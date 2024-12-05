@@ -3,23 +3,23 @@ package com.stardevllc.starcore.utils.cmdflags;
 import java.util.*;
 
 public class CmdFlags {
-    protected Set<Flag> flags = new LinkedHashSet<>(); //This is just a list of valid flags for the command
-    
-    protected Map<Flag, Object> flagValues = new HashMap<>(); //This is the values of the flags after parsing
+    protected Set<Flag> flags; //This is just a list of valid flags for the command
     
     public CmdFlags(Set<Flag> flags) {
-        this.flags.addAll(flags);
+        this.flags = Collections.unmodifiableSet(flags);
     }
     
     public CmdFlags(Flag... flags) {
         if (flags != null) {
-            this.flags.addAll(List.of(flags));
+            this.flags = Set.of(flags);
         }
     }
     
-    public String[] parse(String[] args) {
+    public ParseResult parse(String[] args) {
         LinkedList<String> argsList = new LinkedList<>(List.of(args));
         ListIterator<String> iterator = argsList.listIterator();
+        
+        Map<Flag, Object> flagValues = new HashMap<>();
         
         while (iterator.hasNext()) {
             String arg = iterator.next();
@@ -61,19 +61,15 @@ public class CmdFlags {
         }
 
         for (Flag flag : this.flags) {
-            if (!this.flagValues.containsKey(flag)) {
+            if (!flagValues.containsKey(flag)) {
                 if (flag.type() == FlagType.PRESENCE) {
-                    this.flagValues.put(flag, flag.valueIfNotPresent());
+                    flagValues.put(flag, flag.valueIfNotPresent());
                 } else if (flag.type() == FlagType.COMPLEX) {
-                    this.flagValues.put(flag, flag.defaultValue());
+                    flagValues.put(flag, flag.defaultValue());
                 }
             }
         }
         
-        return argsList.toArray(new String[0]);
-    }
-
-    public Map<Flag, Object> getFlagValues() {
-        return flagValues;
+        return new ParseResult(argsList.toArray(new String[0]), flagValues);
     }
 }
