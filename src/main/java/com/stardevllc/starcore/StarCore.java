@@ -1,7 +1,7 @@
 package com.stardevllc.starcore;
 
+import com.stardevllc.actors.ServerActor;
 import com.stardevllc.clock.ClockManager;
-import com.stardevllc.starcore.actor.ServerActor;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
