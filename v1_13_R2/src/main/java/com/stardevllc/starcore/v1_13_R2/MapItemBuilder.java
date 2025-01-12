@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.v1_13_R2;
 
+import com.stardevllc.config.Section;
 import com.stardevllc.starcore.item.ItemBuilder;
 import com.stardevllc.starcore.xseries.XMaterial;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;

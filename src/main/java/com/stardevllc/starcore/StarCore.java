@@ -2,6 +2,7 @@ package com.stardevllc.starcore;
 
 import com.stardevllc.actors.ServerActor;
 import com.stardevllc.clock.ClockManager;
+import com.stardevllc.config.Section;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
@@ -20,7 +21,6 @@ import com.stardevllc.starcore.v1_9.PlayerHandWrapper_1_9;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
 import com.stardevllc.starcore.wrapper.PlayerHandWrapper;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.ServicePriority;
@@ -159,11 +159,11 @@ public class StarCore extends JavaPlugin {
     public void loadColors() {
         this.colorsConfig = new Config(new File(getDataFolder(), "colors.yml"));
         if (this.colorsConfig.contains("colors")) {
-            Section colorsSection = this.colorsConfig.getSection("colors");
+            Section colorsSection = this.colorsConfig.getConfigurationSection("colors");
             if (colorsSection != null) {
-                for (Object key : colorsSection.getKeys()) {
+                for (String key : colorsSection.getKeys()) {
                     CustomColor customColor = new CustomColor(this);
-                    customColor.symbolCode((String) key);
+                    customColor.symbolCode(key);
                     customColor.hexValue(colorsConfig.getString("colors." + key + ".hex"));
                     if (this.colorsConfig.contains("colors." + key + ".permission")) {
                         customColor.permission(colorsConfig.getString("colors." + key + ".permission"));

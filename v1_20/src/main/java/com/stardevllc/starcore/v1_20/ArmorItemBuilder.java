@@ -1,10 +1,10 @@
 package com.stardevllc.starcore.v1_20;
 
+import com.stardevllc.config.Section;
 import com.stardevllc.starcore.item.ItemBuilder;
 import com.stardevllc.starcore.item.enums.ArmorMaterial;
 import com.stardevllc.starcore.item.enums.ArmorSlot;
 import com.stardevllc.starcore.xseries.XMaterial;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;

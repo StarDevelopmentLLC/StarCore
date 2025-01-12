@@ -1,10 +1,10 @@
 package com.stardevllc.starcore.v1_16;
 
+import com.stardevllc.config.Section;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.item.ItemBuilder;
 import com.stardevllc.starcore.item.enums.BookType;
 import com.stardevllc.starcore.xseries.XMaterial;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;

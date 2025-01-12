@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.v1_14;
 
+import com.stardevllc.config.Section;
 import com.stardevllc.starcore.item.ItemBuilder;
 import com.stardevllc.starcore.xseries.XMaterial;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 
@@ -37,7 +37,7 @@ public class CrossbowItemBuilder extends ItemBuilder {
         Section projectilesSection = section.getSection("projectiles");
         if (projectilesSection != null) {
             for (Object key : projectilesSection.getKeys()) {
-                builder.addProjectile(projectilesSection.getAs(key.toString(), ItemStack.class));
+//                TODO builder.addProjectile(projectilesSection.getAs(key.toString(), ItemStack.class));
             }
         }
         return builder;

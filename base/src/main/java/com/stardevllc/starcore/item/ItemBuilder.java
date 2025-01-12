@@ -1,5 +1,6 @@
 package com.stardevllc.starcore.item;
 
+import com.stardevllc.config.Section;
 import com.stardevllc.starcore.wrapper.AttributeModifierWrapper;
 import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
@@ -9,7 +10,6 @@ import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -75,18 +75,18 @@ public class ItemBuilder implements Cloneable {
             }
         }
 
-        Section enchantsSection = section.getSection("enchantments");
+        Section enchantsSection = section.getConfigurationSection("enchantments");
         if (enchantsSection != null) {
-            for (Object enchantName : enchantsSection.getKeys()) {
+            for (Object enchantName : enchantsSection.getKeys(false)) {
                 Enchantment enchantment = ENCHANT_WRAPPER.getEnchantmentByKey(enchantName.toString().replace("_", ":"));
                 int level = enchantsSection.getInt(enchantName.toString());
                 itemBuilder.addEnchant(enchantment, level);
             }
         }
 
-        Section attributesSection = section.getSection("attributes");
+        Section attributesSection = section.getConfigurationSection("attributes");
         if (attributesSection != null) {
-            for (Object key : attributesSection.getKeys()) {
+            for (Object key : attributesSection.getKeys(false)) {
                 String attribute = key.toString().toUpperCase();
                 String name = attributesSection.getString(key + ".name");
                 double amount = attributesSection.getDouble(key + ".amount");

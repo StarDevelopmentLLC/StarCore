@@ -23,7 +23,6 @@ package com.stardevllc.starcore.xseries;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -67,10 +66,8 @@ public final class ReflectionUtils {
      * <a href="https://forums.papermc.io/threads/paper-velocity-1-20-4.998/#post-2955">Paper no-relocation</a>
      * strategy.
      */
-    @Nullable
     public static final String NMS_VERSION = findNMSVersionString();
 
-    @Nullable
     public static String findNMSVersionString() {
         // This needs to be right below VERSION because of initialization order.
         // This package loop is used to avoid implementation-dependant strings like Bukkit.getVersion() or Bukkit.getBukkitVersion()
@@ -354,7 +351,7 @@ public final class ReflectionUtils {
      * @see #getNMSClass(String)
      * @since 4.0.0
      */
-    public static Class<?> getNMSClass(@Nullable String packageName, String name) {
+    public static Class<?> getNMSClass(String packageName, String name) {
         if (packageName != null && supports(17)) name = packageName + '.' + name;
 
         try {
@@ -417,7 +414,6 @@ public final class ReflectionUtils {
         }
     }
 
-    @Nullable
     public static Object getHandle(Player player) {
         Objects.requireNonNull(player, "Cannot get handle of null player");
         try {
