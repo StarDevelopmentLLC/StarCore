@@ -3,17 +3,14 @@ package com.stardevllc.starcore.cmds;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
-import com.stardevllc.starcore.gui.handler.InventoryHandler;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.inventory.Inventory;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class StarCoreCmd implements TabExecutor {
 
@@ -141,17 +138,6 @@ public class StarCoreCmd implements TabExecutor {
                 sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.color.remove.success").replace("{OLDCODE}", code)));
             } else {
                 sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.invalidsubcommand")));
-            }
-        } else if (args[0].equalsIgnoreCase("gui")) {
-            if (args[1].equalsIgnoreCase("list")) {
-                if (!sender.hasPermission("starcore.admin.gui.list")) {
-                    sender.sendMessage(ChatColor.RED + "You do not have permission to use that command.");
-                    return true;
-                }
-                Map<Inventory, InventoryHandler> activeHandlers = plugin.getGuiManager().getActiveHandlers();
-                sender.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD + "Active GUIs Information");
-                sender.sendMessage(ChatColor.YELLOW + " Total Active: " + ChatColor.AQUA + activeHandlers.size());
-                activeHandlers.forEach((inv, handler) -> sender.sendMessage(ChatColor.YELLOW + "  Handler " + ChatColor.AQUA + handler.getClass().getSimpleName() + ChatColor.YELLOW + " with " + ChatColor.AQUA + inv.getViewers().size() + ChatColor.YELLOW + " total viewer(s)."));
             }
         } else {
             sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.invalidsubcommand")));

@@ -6,7 +6,6 @@ import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.color.CustomColor;
 import com.stardevllc.starcore.config.Config;
-import com.stardevllc.starcore.gui.GuiManager;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
@@ -35,7 +34,6 @@ public class StarCore extends JavaPlugin {
     private UUID consoleUnqiueId;
     private Config colorsConfig;
     private Config mainConfig;
-    private GuiManager guiManager;
     private SkinManager skinManager;
 
     private ItemWrapper itemWrapper;
@@ -126,10 +124,6 @@ public class StarCore extends JavaPlugin {
         
         this.skinManager = new SkinManager();
         getServer().getServicesManager().register(SkinManager.class, this.skinManager, this, ServicePriority.Normal);
-
-        guiManager = new GuiManager(this);
-        guiManager.setup();
-        getServer().getServicesManager().register(GuiManager.class, guiManager, this, ServicePriority.Normal);
 
         StarCoreCmd starCoreCmd = new StarCoreCmd(this);
         PluginCommand pluginStarCoreCmd = getCommand("starcore");
@@ -223,10 +217,6 @@ public class StarCore extends JavaPlugin {
 
     public Config getMainConfig() {
         return mainConfig;
-    }
-
-    public GuiManager getGuiManager() {
-        return guiManager;
     }
 
     public SkinManager getSkinManager() {
