@@ -55,7 +55,7 @@ dependencies {
     api 'com.github.StarDevelopmentLLC:helper:0.1.1'
     api 'com.github.StarDevelopmentLLC:registry:0.1.0'
     api 'com.github.StarDevelopmentLLC:actors:0.1.0'
-    api 'com.github.StarDevelopmentLLC:config:0.1.1'
+    api 'com.github.StarDevelopmentLLC:config:0.1.2'
     api 'com.github.StarDevelopmentLLC:colors:0.1.4'
     api project(':base')
     api project(':v1_8')
