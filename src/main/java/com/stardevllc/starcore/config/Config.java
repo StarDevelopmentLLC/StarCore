@@ -16,6 +16,10 @@ public class Config {
     protected File file;
 
     public Config(File file) {
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -29,8 +33,10 @@ public class Config {
     }
     
     public void addDefault(String path, Object value, String... comments) {
-        config.set(path, value);
-        config.setComments(path, comments);
+        if (!config.contains(path)) {
+            config.set(path, value);
+            config.setComments(path, comments);
+        }
     }
     
     public void save() {
