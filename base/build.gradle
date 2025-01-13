@@ -21,7 +21,8 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT'
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.14.0'
-    api 'dev.dejvokep:boosted-yaml-spigot:1.4'
+    api 'com.github.StarDevelopmentLLC:config:0.1.2'
+    api 'com.github.StarDevelopmentLLC:colors:0.1.4'
 }
 
 java {

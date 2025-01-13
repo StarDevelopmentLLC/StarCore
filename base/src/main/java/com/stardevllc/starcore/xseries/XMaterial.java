@@ -28,8 +28,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -1611,7 +1609,6 @@ public enum XMaterial {
 
     private final String[] legacy;
 
-    @Nullable
     private final Material material;
 
     XMaterial(int data, String... legacy) {
@@ -1640,7 +1637,6 @@ public enum XMaterial {
         return Data.VERSION;
     }
     
-    @Nullable
     private static XMaterial requestOldXMaterial(String name, byte data) {
         String holder = name + data;
         XMaterial cache = NAME_CACHE.getIfPresent(holder);
@@ -1801,7 +1797,6 @@ public enum XMaterial {
         return new String(chs, 0, count);
     }
     
-    @ApiStatus.Internal
     public static boolean supports(int version) {
         return Data.VERSION >= version;
     }
@@ -1855,7 +1850,6 @@ public enum XMaterial {
         return data;
     }
     
-    @Nullable
     public ItemStack parseItem() {
         Material material = this.parseMaterial();
         if (material == null) return null;
@@ -1867,7 +1861,6 @@ public enum XMaterial {
         return base;
     }
     
-    @Nullable
     public Material parseMaterial() {
         return this.material;
     }
@@ -1886,8 +1879,7 @@ public enum XMaterial {
         return this.material != null;
     }
     
-    @Nullable
-    public XMaterial or(@Nullable XMaterial alternateMaterial) {
+    public XMaterial or(XMaterial alternateMaterial) {
         return isSupported() ? this : alternateMaterial;
     }
     
@@ -1916,7 +1908,6 @@ public enum XMaterial {
      *
      * @since 9.0.0
      */
-    @ApiStatus.Internal
     private static final class Data {
         private static final int VERSION;
 

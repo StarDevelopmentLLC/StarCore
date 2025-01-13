@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.v1_14_4;
 
+import com.stardevllc.config.Section;
 import com.stardevllc.starcore.item.ItemBuilder;
 import com.stardevllc.starcore.xseries.XMaterial;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.potion.PotionEffect;
@@ -33,7 +33,7 @@ public class StewItemBuilder extends ItemBuilder {
         Section effectsSection = section.getSection("effects");
         if (effectsSection != null) {
             for (Object key : effectsSection.getKeys()) {
-                builder.addEffect(effectsSection.getAs(key.toString(), PotionEffect.class));
+                //TODO builder.addEffect(effectsSection.getAs(key.toString(), PotionEffect.class));
             }
         }
         return builder;

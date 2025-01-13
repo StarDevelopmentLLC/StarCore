@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.item.material;
 
+import com.stardevllc.config.Section;
 import com.stardevllc.starcore.item.ItemBuilder;
 import com.stardevllc.starcore.xseries.XMaterial;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -37,7 +37,7 @@ public class BannerItemBuilder extends ItemBuilder {
 
     protected static BannerItemBuilder createFromConfig(Section section) {
         BannerItemBuilder builder = new BannerItemBuilder();
-        Section patternsSection = section.getSection("patterns");
+        Section patternsSection = section.getConfigurationSection("patterns");
         if (patternsSection != null) {
             for (Object key : patternsSection.getKeys()) {
                 PatternType type = PatternType.valueOf(patternsSection.getString(key + ".type"));

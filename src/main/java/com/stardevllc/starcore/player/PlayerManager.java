@@ -1,9 +1,9 @@
 package com.stardevllc.starcore.player;
 
+import com.stardevllc.config.Section;
 import com.stardevllc.registry.UUIDRegistry;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.config.Config;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -51,7 +51,7 @@ public class PlayerManager implements Listener {
             return;
         }
         
-        Section playersSection = this.playersConfig.getSection("players");
+        Section playersSection = this.playersConfig.getConfigurationSection("players");
         if (playersSection != null) {
             for (Object key : playersSection.getKeys()) {
                 Section dataSection = playersSection.getSection(key.toString());

@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.player;
 
-import dev.dejvokep.boostedyaml.block.implementation.Section;
+import com.stardevllc.config.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -46,8 +46,8 @@ public class StarPlayer {
             if (rawCustomData instanceof Map) {
                 customData.putAll((Map<String, Object>) rawCustomData);
             } else if (rawCustomData instanceof Section dataSection) {
-                for (Object key : dataSection.getKeys()) {
-                    this.customData.put((String) key, dataSection.get((String) key));
+                for (String key : dataSection.getKeys()) {
+                    this.customData.put(key, dataSection.get(key));
                 }
             }
         }

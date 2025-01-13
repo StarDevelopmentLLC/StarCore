@@ -29,7 +29,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -54,7 +53,6 @@ import java.util.concurrent.Callable;
  * For static Action bars you'll need to send the packet every
  * 2 seconds (40 ticks) for it to stay on the screen without fading.
  * <p>
- * PacketPlayOutTitle: https://wiki.vg/Protocol#Title
  *
  * @author Crypto Morin
  * @version 4.0.0
@@ -183,7 +181,7 @@ public final class ActionBar {
      * @since 1.0.0
      */
     @SuppressWarnings("DynamicRegexReplaceableByCompiledPattern")
-    public static void sendActionBar(Player player, @Nullable String message) {
+    public static void sendActionBar(Player player, String message) {
         Objects.requireNonNull(player, "Cannot send action bar to null player");
         Objects.requireNonNull(message, "Cannot send null actionbar message");
 
@@ -243,7 +241,7 @@ public final class ActionBar {
      * @see #sendActionBar(Player, String)
      * @since 1.0.0
      */
-    public static void sendPlayersActionBar(@Nullable String message) {
+    public static void sendPlayersActionBar(String message) {
         for (Player player : Bukkit.getOnlinePlayers()) sendActionBar(player, message);
     }
 
