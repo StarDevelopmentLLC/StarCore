@@ -1,9 +1,10 @@
 package com.stardevllc.starcore.cmds;
 
+import com.stardevllc.colors.StarColors;
+import com.stardevllc.colors.base.ColorHandler;
+import com.stardevllc.colors.base.CustomColor;
 import com.stardevllc.starcore.StarCore;
-import com.stardevllc.starcore.color.ColorHandler;
-import com.stardevllc.starcore.color.CustomColor;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -22,80 +23,80 @@ public class StarCoreCmd implements TabExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("starcore.admin")) {
-            sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.nopermission")));
+            sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.nopermission")));
             return true;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(ColorHandler.getInstance().color("&cUsage: /" + label + " <subcommand> <args>"));
+            sender.sendMessage(StarColors.color("&cUsage: /" + label + " <subcommand> <args>"));
             return true;
         }
 
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("starcore.admin.reload")) {
-                ColorHandler.getInstance().coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
+                StarColors.coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
                 return true;
             }
 
             plugin.reload(false);
-            sender.sendMessage(ColorHandler.getInstance().color("&aSuccessfully reloaded configs."));
+            sender.sendMessage(StarColors.color("&aSuccessfully reloaded configs."));
         } else if (args[0].equalsIgnoreCase("color")) {
             if (!sender.hasPermission("starcore.admin.color")) {
-                sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.nopermission")));
+                sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.nopermission")));
                 return true;
             }
 
             if (!(args.length > 1)) {
-                sender.sendMessage(ColorHandler.getInstance().color("&cUsage: /" + label + " " + args[0] + " list <symbols|colors>"));
-                sender.sendMessage(ColorHandler.getInstance().color("&cUsage: /" + label + " " + args[0] + " add <code> <hex> [permission]"));
-                sender.sendMessage(ColorHandler.getInstance().color("&cUsage: /" + label + " " + args[0] + " remove <code>"));
+                sender.sendMessage(StarColors.color("&cUsage: /" + label + " " + args[0] + " list <symbols|colors>"));
+                sender.sendMessage(StarColors.color("&cUsage: /" + label + " " + args[0] + " add <code> <hex> [permission]"));
+                sender.sendMessage(StarColors.color("&cUsage: /" + label + " " + args[0] + " remove <code>"));
                 return true;
             }
 
             if (args[1].equalsIgnoreCase("list")) {
                 if (!sender.hasPermission("starcore.admin.color.list")) {
-                    ColorHandler.getInstance().coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
+                    StarColors.coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
                     return true;
                 }
 
                 if (!(args.length > 2)) {
-                    ColorHandler.getInstance().coloredMessage(sender, "&cUsage: /" + label + " " + args[0] + " " + args[1] + " symbols");
-                    ColorHandler.getInstance().coloredMessage(sender, "&cUsage: /" + label + " " + args[0] + " " + args[1] + " codes");
+                    StarColors.coloredMessage(sender, "&cUsage: /" + label + " " + args[0] + " " + args[1] + " symbols");
+                    StarColors.coloredMessage(sender, "&cUsage: /" + label + " " + args[0] + " " + args[1] + " codes");
                     return true;
                 }
 
                 if (args[2].equalsIgnoreCase("symbols")) {
                     StringBuilder symbolBuilder = new StringBuilder();
-                    for (Character c : ColorHandler.getInstance().getPrefixSymbols()) {
-                        symbolBuilder.append(ColorHandler.getInstance().color("&b")).append(c).append(ColorHandler.getInstance().color("&e, "));
+                    for (Character c : StarColors.getPrefixSymbols()) {
+                        symbolBuilder.append(StarColors.color("&b")).append(c).append(StarColors.color("&e, "));
                     }
                     String charList = symbolBuilder.toString().trim();
                     charList = charList.substring(0, charList.length() - 2);
-                    sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.color.list.symbols.header")) + charList);
+                    sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.color.list.symbols.header")) + charList);
                 } else if (args[2].equalsIgnoreCase("codes")) {
-                    sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.color.list.colors")));
-                    ColorHandler.getInstance().getCustomColors().forEach((code, color) -> sender.sendMessage(ColorHandler.getInstance().color("  &8- &b") + code + "§8: §b" + color.getHex() + ColorHandler.getInstance().color(" &8[&e" + color.getOwner().getName() + "&8]" + (!color.getPermission().isEmpty() ? " &8<&d" + color.getPermission() + "&8>" : ""))));
+                    sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.color.list.colors")));
+                    StarColors.getCustomColors().forEach((code, color) -> sender.sendMessage(StarColors.color("  &8- &b") + code + "§8: §b" + color.getHex() + StarColors.color(" &8[&e" + color.getOwner().getName() + "&8]" + (!color.getPermission().isEmpty() ? " &8<&d" + color.getPermission() + "&8>" : ""))));
                 }
             } else if (args[1].equalsIgnoreCase("add")) {
                 if (!sender.hasPermission("starcore.admin.color.add")) {
-                    ColorHandler.getInstance().coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
+                    StarColors.coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
                     return true;
                 }
 
                 if (!(args.length > 3)) {
-                    sender.sendMessage(ColorHandler.getInstance().color("&cUsage: /" + label + " " + args[0] + " " + args[1] + " <code> <hex> [permission]"));
+                    sender.sendMessage(StarColors.color("&cUsage: /" + label + " " + args[0] + " " + args[1] + " <code> <hex> [permission]"));
                     return true;
                 }
 
                 String code = args[2];
 
                 if (ColorHandler.isSpigotColor(code)) {
-                    sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.color.add.cannot-override-spigot")));
+                    sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.color.add.cannot-override-spigot")));
                     return true;
                 }
 
                 if (!ColorHandler.isValidCode(code)) {
-                    sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.color.add.invalid-code")));
+                    sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.color.add.invalid-code")));
                     return true;
                 }
 
@@ -107,40 +108,40 @@ public class StarCoreCmd implements TabExecutor {
                 }
 
                 if (!ColorHandler.isValidHex(hex)) {
-                    sender.sendMessage(ColorHandler.getInstance().color("&cThe color value you provided is not a valid HEX code."));
-                    sender.sendMessage(ColorHandler.getInstance().color("&c  HEX values must match ALL of the following"));
-                    sender.sendMessage(ColorHandler.getInstance().color("&c    - First Character must be a ") + "#");
-                    sender.sendMessage(ColorHandler.getInstance().color("&c    - The length must be 3 or 6 characters not including the ") + "#");
-                    sender.sendMessage(ColorHandler.getInstance().color("&c    - Characters must be 0-9 and a-f (case insensitive)"));
+                    sender.sendMessage(StarColors.color("&cThe color value you provided is not a valid HEX code."));
+                    sender.sendMessage(StarColors.color("&c  HEX values must match ALL of the following"));
+                    sender.sendMessage(StarColors.color("&c    - First Character must be a ") + "#");
+                    sender.sendMessage(StarColors.color("&c    - The length must be 3 or 6 characters not including the ") + "#");
+                    sender.sendMessage(StarColors.color("&c    - Characters must be 0-9 and a-f (case insensitive)"));
                     return true;
                 }
 
-                ColorHandler.getInstance().addCustomColor(new CustomColor(plugin).hexValue(hex).symbolCode(code).permission(permission));
+                StarColors.addCustomColor(new CustomColor(plugin).hexValue(hex).symbolCode(code).permission(permission));
                 sender.sendMessage(ChatColor.YELLOW + "You added " + ChatColor.AQUA + code + " " + ChatColor.YELLOW + "with the HEX Code " + ChatColor.AQUA + hex + ChatColor.YELLOW + " as a custom color.");
             } else if (args[1].equalsIgnoreCase("remove")) {
                 if (!sender.hasPermission("starcore.admin.color.remove")) {
-                    ColorHandler.getInstance().coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
+                    StarColors.coloredMessage(sender, plugin.getMainConfig().getString("messages.command.nopermission"));
                     return true;
                 }
 
                 if (!(args.length > 2)) {
-                    sender.sendMessage(ColorHandler.getInstance().color("&cUsage: /" + label + " " + args[0] + " " + args[1] + " <code>"));
+                    sender.sendMessage(StarColors.color("&cUsage: /" + label + " " + args[0] + " " + args[1] + " <code>"));
                     return true;
                 }
 
                 String code = args[2];
-                if (ColorHandler.getInstance().getCustomColor(code) == null) {
-                    sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.color.remove.not-registered")));
+                if (StarColors.getCustomColor(code) == null) {
+                    sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.color.remove.not-registered")));
                     return true;
                 }
 
-                ColorHandler.getInstance().removeColor(code);
-                sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.color.remove.success").replace("{OLDCODE}", code)));
+                StarColors.removeColor(code);
+                sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.color.remove.success").replace("{OLDCODE}", code)));
             } else {
-                sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.invalidsubcommand")));
+                sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.invalidsubcommand")));
             }
         } else {
-            sender.sendMessage(ColorHandler.getInstance().color(plugin.getMainConfig().getString("messages.command.invalidsubcommand")));
+            sender.sendMessage(StarColors.color(plugin.getMainConfig().getString("messages.command.invalidsubcommand")));
         }
 
         return true;
@@ -179,7 +180,7 @@ public class StarCoreCmd implements TabExecutor {
                 }
             } else if (args[1].equalsIgnoreCase("remove")) {
                 if (args.length == 3) {
-                    sortAndFilter(args[2], new LinkedList<>(ColorHandler.getInstance().getCustomColors().keySet()));
+                    sortAndFilter(args[2], new LinkedList<>(StarColors.getCustomColors().keySet()));
                 }
             }
         }

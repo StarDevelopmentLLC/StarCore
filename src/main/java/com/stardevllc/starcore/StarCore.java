@@ -2,18 +2,16 @@ package com.stardevllc.starcore;
 
 import com.stardevllc.actors.ServerActor;
 import com.stardevllc.clock.ClockManager;
+import com.stardevllc.colors.StarColors;
+import com.stardevllc.colors.base.CustomColor;
 import com.stardevllc.config.Section;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
-import com.stardevllc.starcore.color.ColorHandler;
-import com.stardevllc.starcore.color.CustomColor;
 import com.stardevllc.starcore.config.Config;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
 import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;
-import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
-import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
 import com.stardevllc.starcore.v1_8.EnchantWrapper_1_8;
 import com.stardevllc.starcore.v1_8.ItemWrapper_1_8;
 import com.stardevllc.starcore.v1_8.PlayerHandWrapper_1_8;
@@ -38,7 +36,6 @@ public class StarCore extends JavaPlugin {
 
     private ItemWrapper itemWrapper;
     private EnchantWrapper enchantWrapper;
-    private ColorHandler colorHandler;
     private PlayerHandWrapper playerHandWrapper;
     
     private PlayerManager playerManager;
@@ -71,15 +68,6 @@ public class StarCore extends JavaPlugin {
             this.itemWrapper = new ItemWrapper_1_13_R2();
         }
         
-        if (version.ordinal() < NMSVersion.v1_16_R1.ordinal()) {
-            this.colorHandler = new ColorHandler_1_8();
-        } else {
-            this.colorHandler = new ColorHandler_1_16();
-        }
-        
-        ColorHandler.setInstance(colorHandler);
-        
-        Bukkit.getServer().getServicesManager().register(ColorHandler.class, colorHandler, this, ServicePriority.Normal);
         Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Normal);
         Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Normal);
         Bukkit.getServer().getServicesManager().register(PlayerHandWrapper.class, playerHandWrapper, this, ServicePriority.Normal);
@@ -137,9 +125,9 @@ public class StarCore extends JavaPlugin {
             this.playerManager.save();
         }
 
-        colorHandler.getCustomColors().forEach((code, color) -> {
+        StarColors.getCustomColors().forEach((code, color) -> {
             if (color.getOwner().getName().equalsIgnoreCase(getName())) {
-                colorHandler.removeColor(code);
+                StarColors.removeColor(code);
             }
         });
     
@@ -168,7 +156,7 @@ public class StarCore extends JavaPlugin {
                     if (this.colorsConfig.contains("colors." + key + ".permission")) {
                         customColor.permission(colorsConfig.getString("colors." + key + ".permission"));
                     }
-                    colorHandler.addCustomColor(customColor);
+                    StarColors.addCustomColor(customColor);
                 }
             }
         }
@@ -189,7 +177,7 @@ public class StarCore extends JavaPlugin {
     public void saveColors() {
         if (colorsConfig != null) {
             colorsConfig.set("colors", null);
-            for (CustomColor color : colorHandler.getCustomColors().values()) {
+            for (CustomColor color : StarColors.getCustomColors().values()) {
                 if (color.getOwner().getName().equalsIgnoreCase(getName())) {
                     colorsConfig.set("colors." + color.getChatCode() + ".hex", color.getHex());
                     if (color.getPermission() != null) {

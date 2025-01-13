@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.v1_16;
 
+import com.stardevllc.colors.StarColors;
 import com.stardevllc.config.Section;
-import com.stardevllc.starcore.color.ColorHandler;
 import com.stardevllc.starcore.item.ItemBuilder;
 import com.stardevllc.starcore.item.enums.BookType;
 import com.stardevllc.starcore.xseries.XMaterial;
@@ -71,13 +71,13 @@ public class BookItemBuilder extends ItemBuilder {
     }
     
     public BookItemBuilder addPage(String page) {
-        this.pages.add(TextComponent.fromLegacyText(ColorHandler.getInstance().color(page)));
+        this.pages.add(TextComponent.fromLegacyText(StarColors.color(page)));
         return this;
     }
     
     public BookItemBuilder setPages(List<String> pages) {
         this.pages.clear();
-        pages.forEach(page -> this.pages.add(TextComponent.fromLegacyText(ColorHandler.getInstance().color(page))));
+        pages.forEach(page -> this.pages.add(TextComponent.fromLegacyText(StarColors.color(page))));
         return this;
     }
     
@@ -110,8 +110,8 @@ public class BookItemBuilder extends ItemBuilder {
     @Override
     protected BookMeta createItemMeta() {
         BookMeta itemMeta = (BookMeta) super.createItemMeta();
-        itemMeta.setTitle(ColorHandler.getInstance().color(this.title));
-        itemMeta.setAuthor(ColorHandler.getInstance().color(this.author));
+        itemMeta.setTitle(StarColors.color(this.title));
+        itemMeta.setAuthor(StarColors.color(this.author));
         itemMeta.setGeneration(generation);
         itemMeta.spigot().setPages(this.pages);
         return itemMeta;

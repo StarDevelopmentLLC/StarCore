@@ -276,11 +276,11 @@ public class ItemBuilder implements Cloneable {
         }
 
         if (this.displayName != null) {
-            itemMeta.setDisplayName(ColorHandler.getInstance().color(this.displayName));
+            itemMeta.setDisplayName(StarColors.color(this.displayName));
         }
 
         if (!this.lore.isEmpty()) {
-            List<String> coloredLore = this.lore.stream().map(line -> ColorHandler.getInstance().color(line)).collect(Collectors.toCollection(LinkedList::new));
+            List<String> coloredLore = this.lore.stream().map(StarColors::color).collect(Collectors.toCollection(LinkedList::new));
             itemMeta.setLore(coloredLore);
         }
 
