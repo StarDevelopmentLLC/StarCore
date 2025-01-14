@@ -7,7 +7,6 @@ import com.stardevllc.starcore.wrapper.EnchantWrapper;
 import com.stardevllc.starcore.wrapper.ItemWrapper;
 import com.stardevllc.starcore.xseries.XMaterial;
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
 import org.bukkit.Bukkit;
@@ -137,10 +136,14 @@ public class ItemBuilder implements Cloneable {
     public static ItemBuilder fromItemStack(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         ItemBuilder itemBuilder = getSubClassFromMeta(itemMeta, "createFromItemStack", ItemStack.class, itemStack);
-        NBTItem nbtItem = new NBTItem(itemStack);
 
-        itemBuilder.displayName(itemMeta.getDisplayName()).amount(itemStack.getAmount()).addItemFlags(itemMeta.getItemFlags().toArray(new ItemFlag[0]))
-                .unbreakable(nbtItem.getBoolean("Unbreakable")).setLore(itemMeta.getLore()).setEnchants(itemMeta.getEnchants()).damage(nbtItem.getInteger("Damage"));
+        itemBuilder.displayName(itemMeta.getDisplayName()).amount(itemStack.getAmount())
+                .addItemFlags(itemMeta.getItemFlags().toArray(new ItemFlag[0]))
+                .setLore(itemMeta.getLore()).setEnchants(itemMeta.getEnchants());
+        
+        NBT.get(itemStack, nbt -> {
+            itemBuilder.unbreakable(nbt.getBoolean("Unbreakable")).damage(nbt.getInteger("Damage"));
+        });
         Map<String, AttributeModifierWrapper> attributeModifiers = ITEM_WRAPPER.getAttributeModifiers(itemStack);
         if (attributeModifiers != null) {
             itemBuilder.attributes.putAll(attributeModifiers);
@@ -304,35 +307,35 @@ public class ItemBuilder implements Cloneable {
         ItemMeta itemMeta = createItemMeta();
         itemStack.setItemMeta(itemMeta);
         
-        NBTItem nbtItem = new NBTItem(itemStack);
+        NBT.modify(itemStack, nbtItem -> {
+            if (!this.customNBT.isEmpty()) {
+                ReadWriteNBT customCompound = nbtItem.getOrCreateCompound("custom");
+                this.customNBT.forEach((key, value) -> {
+                    if (value instanceof String str) {
+                        customCompound.setString(key, str);
+                    } else if (value instanceof Integer i) {
+                        customCompound.setInteger(key, i);
+                    } else if (value instanceof Double d) {
+                        customCompound.setDouble(key, d);
+                    } else if (value instanceof Byte b) {
+                        customCompound.setByte(key, b);
+                    } else if (value instanceof Short s) {
+                        customCompound.setShort(key, s);
+                    } else if (value instanceof Long l) {
+                        customCompound.setLong(key, l);
+                    } else if (value instanceof Float f) {
+                        customCompound.setFloat(key, f);
+                    } else if (value instanceof Boolean b) {
+                        customCompound.setBoolean(key, b);
+                    } else if (value instanceof UUID uuid) {
+                        customCompound.setUUID(key, uuid);
+                    }
+                });
+            }
 
-        if (!this.customNBT.isEmpty()) {
-            ReadWriteNBT customCompound = nbtItem.getOrCreateCompound("custom");
-            this.customNBT.forEach((key, value) -> {
-                if (value instanceof String str) {
-                    customCompound.setString(key, str);
-                } else if (value instanceof Integer i) {
-                    customCompound.setInteger(key, i);
-                } else if (value instanceof Double d) {
-                    customCompound.setDouble(key, d);
-                } else if (value instanceof Byte b) {
-                    customCompound.setByte(key, b);
-                } else if (value instanceof Short s) {
-                    customCompound.setShort(key, s);
-                } else if (value instanceof Long l) {
-                    customCompound.setLong(key, l);
-                } else if (value instanceof Float f) {
-                    customCompound.setFloat(key, f);
-                } else if (value instanceof Boolean b) {
-                    customCompound.setBoolean(key, b);
-                } else if (value instanceof UUID uuid) {
-                    customCompound.setUUID(key, uuid);
-                }
-            });
-        }
-
-        nbtItem.setBoolean("Unbreakable", unbreakable);
-        nbtItem.setInteger("Damage", this.damage);
+            nbtItem.setBoolean("Unbreakable", unbreakable);
+            nbtItem.setInteger("Damage", this.damage);
+        });
 
         return itemStack;
     }
