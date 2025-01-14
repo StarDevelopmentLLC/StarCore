@@ -10,6 +10,8 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.stardevllc.mcwrappers.MCWrappers.ENCHANT_WRAPPER;
+
 public class EnchantedBookBuilder extends ItemBuilder {
     
     static {

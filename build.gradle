@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.github.StarDevelopmentLLC'
-version '0.1.9'
+version '0.1.10'
 
 repositories {
 //    mavenLocal()
@@ -58,9 +58,6 @@ dependencies {
     api 'com.github.StarDevelopmentLLC:config:0.1.2'
     api 'com.github.StarDevelopmentLLC:colors:0.1.4'
     api project(':base')
-    api project(':v1_8')
-    api project(':v1_9')
-    api project(':v1_11')
     api project(':v1_13')
     api project(':v1_13_R2')
     api project(':v1_14')

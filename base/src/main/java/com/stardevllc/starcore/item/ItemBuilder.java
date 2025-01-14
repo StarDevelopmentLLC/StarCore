@@ -2,9 +2,7 @@ package com.stardevllc.starcore.item;
 
 import com.stardevllc.colors.StarColors;
 import com.stardevllc.config.Section;
-import com.stardevllc.starcore.wrapper.AttributeModifierWrapper;
-import com.stardevllc.starcore.wrapper.EnchantWrapper;
-import com.stardevllc.starcore.wrapper.ItemWrapper;
+import com.stardevllc.mcwrappers.base.AttributeModifierWrapper;
 import com.stardevllc.starcore.xseries.XMaterial;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
@@ -25,17 +23,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static com.stardevllc.mcwrappers.MCWrappers.*;
+
 public class ItemBuilder implements Cloneable {
 
     protected static final Map<Class<? extends ItemMeta>, Class<? extends ItemBuilder>> META_TO_BUILDERS = new HashMap<>();
-
-    protected static final ItemWrapper ITEM_WRAPPER;
-    protected static final EnchantWrapper ENCHANT_WRAPPER;
-
-    static {
-        ITEM_WRAPPER = Bukkit.getServicesManager().getRegistration(ItemWrapper.class).getProvider();
-        ENCHANT_WRAPPER = Bukkit.getServicesManager().getRegistration(EnchantWrapper.class).getProvider();
-    }
 
     protected XMaterial material;
     protected int amount;

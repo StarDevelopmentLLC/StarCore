@@ -9,16 +9,6 @@ import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Config;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
-import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
-import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
-import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;
-import com.stardevllc.starcore.v1_8.EnchantWrapper_1_8;
-import com.stardevllc.starcore.v1_8.ItemWrapper_1_8;
-import com.stardevllc.starcore.v1_8.PlayerHandWrapper_1_8;
-import com.stardevllc.starcore.v1_9.PlayerHandWrapper_1_9;
-import com.stardevllc.starcore.wrapper.EnchantWrapper;
-import com.stardevllc.starcore.wrapper.ItemWrapper;
-import com.stardevllc.starcore.wrapper.PlayerHandWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.ServicePriority;
@@ -34,10 +24,6 @@ public class StarCore extends JavaPlugin {
     private Config mainConfig;
     private SkinManager skinManager;
 
-    private ItemWrapper itemWrapper;
-    private EnchantWrapper enchantWrapper;
-    private PlayerHandWrapper playerHandWrapper;
-    
     private PlayerManager playerManager;
 
     public void onEnable() {
@@ -46,31 +32,6 @@ public class StarCore extends JavaPlugin {
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
-        NMSVersion version = NMSVersion.CURRENT_VERSION;
-        
-        if (version.ordinal() < NMSVersion.v1_9_R1.ordinal()) {
-            this.playerHandWrapper = new PlayerHandWrapper_1_8();
-        } else {
-            this.playerHandWrapper = new PlayerHandWrapper_1_9();
-        }
-        
-        if (version.ordinal() < NMSVersion.v1_13_R2.ordinal()) {
-            this.enchantWrapper = new EnchantWrapper_1_8();
-        } else {
-            this.enchantWrapper = new EnchantWrapper_1_13_R2();
-        }
-        
-        if (version.ordinal() < NMSVersion.v1_11_R1.ordinal()) {
-            this.itemWrapper = new ItemWrapper_1_8();
-        } else if (version.ordinal() < NMSVersion.v1_13_R2.ordinal()){
-            this.itemWrapper = new ItemWrapper_1_11();
-        } else {
-            this.itemWrapper = new ItemWrapper_1_13_R2();
-        }
-        
-        Bukkit.getServer().getServicesManager().register(ItemWrapper.class, itemWrapper, this, ServicePriority.Normal);
-        Bukkit.getServer().getServicesManager().register(EnchantWrapper.class, enchantWrapper, this, ServicePriority.Normal);
-        Bukkit.getServer().getServicesManager().register(PlayerHandWrapper.class, playerHandWrapper, this, ServicePriority.Normal);
 
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (mainConfig.getBoolean("save-colors")) {
@@ -160,18 +121,6 @@ public class StarCore extends JavaPlugin {
                 }
             }
         }
-    }
-
-    public PlayerHandWrapper getPlayerHandWrapper() {
-        return playerHandWrapper;
-    }
-
-    public ItemWrapper getItemWrapper() {
-        return itemWrapper;
-    }
-
-    public EnchantWrapper getEnchantWrapper() {
-        return enchantWrapper;
     }
 
     public void saveColors() {
