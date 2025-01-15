@@ -57,15 +57,6 @@ dependencies {
     api 'com.github.StarDevelopmentLLC:actors:0.1.0'
     api 'com.github.StarDevelopmentLLC:config:0.1.2'
     api 'com.github.StarDevelopmentLLC:colors:0.1.4'
-    api project(':base')
-    api project(':v1_13')
-    api project(':v1_13_R2')
-    api project(':v1_14')
-    api project(':v1_14_4')
-    api project(':v1_16')
-    api project(':v1_17')
-    api project(':v1_19_3')
-    api project(':v1_20')
 }
 
 java {
