@@ -1,12 +1,11 @@
 package com.stardevllc.starcore;
 
 import com.stardevllc.actors.ServerActor;
-import com.stardevllc.clock.ClockManager;
 import com.stardevllc.colors.StarColors;
 import com.stardevllc.colors.base.CustomColor;
 import com.stardevllc.config.Section;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
-import com.stardevllc.starcore.config.Config;
+import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
 import org.bukkit.Bukkit;
@@ -20,14 +19,14 @@ import java.util.UUID;
 public class StarCore extends JavaPlugin {
 
     private UUID consoleUnqiueId;
-    private Config colorsConfig;
-    private Config mainConfig;
+    private Configuration colorsConfig;
+    private Configuration mainConfig;
     private SkinManager skinManager;
 
     private PlayerManager playerManager;
 
     public void onEnable() {
-        mainConfig = new Config(new File(getDataFolder(), "config.yml"));
+        mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
         mainConfig.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
@@ -67,10 +66,6 @@ public class StarCore extends JavaPlugin {
         mainConfig.addDefault("messages.command.color.remove.success", "&eYou removed &b{OLDCODE} &eas a custom color.", " The message sent when the code is removed successfully in /starcore color remove command");
         mainConfig.save();
 
-        ClockManager clockManager = new ClockManager(getLogger(), 50L);
-        getServer().getServicesManager().register(ClockManager.class, clockManager, this, ServicePriority.Normal);
-        getServer().getScheduler().runTaskTimer(this, clockManager.getRunnable(), 1L, 1L);
-        
         this.skinManager = new SkinManager();
         getServer().getServicesManager().register(SkinManager.class, this.skinManager, this, ServicePriority.Normal);
 
@@ -100,13 +95,13 @@ public class StarCore extends JavaPlugin {
             this.playerManager.load();
         }
 
-        this.mainConfig = new Config(new File(getDataFolder(), "config.yml"));
+        this.mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
     }
     
     public void loadColors() {
-        this.colorsConfig = new Config(new File(getDataFolder(), "colors.yml"));
+        this.colorsConfig = new Configuration(new File(getDataFolder(), "colors.yml"));
         if (this.colorsConfig.contains("colors")) {
             Section colorsSection = this.colorsConfig.getConfigurationSection("colors");
             if (colorsSection != null) {
@@ -152,7 +147,7 @@ public class StarCore extends JavaPlugin {
         return consoleUnqiueId;
     }
 
-    public Config getMainConfig() {
+    public Configuration getMainConfig() {
         return mainConfig;
     }
 

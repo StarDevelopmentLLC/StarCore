@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Config {
+public class Configuration {
 
     protected YamlConfig config;
     protected File file;
 
-    public Config(File file) {
+    public Configuration(File file) {
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
