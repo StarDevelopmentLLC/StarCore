@@ -3,7 +3,7 @@ package com.stardevllc.starcore.player;
 import com.stardevllc.config.Section;
 import com.stardevllc.registry.UUIDRegistry;
 import com.stardevllc.starcore.StarCore;
-import com.stardevllc.starcore.config.Config;
+import com.stardevllc.starcore.config.Configuration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,11 +18,11 @@ import java.util.UUID;
 public class PlayerManager implements Listener {
     private final UUIDRegistry<StarPlayer> playerRegistry = new UUIDRegistry.Builder<StarPlayer>().keyRetriever(StarPlayer::getUniqueId).build();
 
-    private Config playersConfig;
+    private Configuration playersConfig;
 
     public PlayerManager(StarCore plugin) {
         if (plugin.getMainConfig().getBoolean("save-player-info")) {
-            playersConfig = new Config(new File(plugin.getDataFolder(), "players.yml"));
+            playersConfig = new Configuration(new File(plugin.getDataFolder(), "players.yml"));
         }
     }
 

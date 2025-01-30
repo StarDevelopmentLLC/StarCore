@@ -19,31 +19,19 @@ public class Cuboid {
     }
 
     public Cuboid(Location pos1, Location pos2) {
-        if (!pos1.getWorld().getName().equalsIgnoreCase(pos2.getWorld().getName())) {
-            throw new IllegalArgumentException("Could not construct a cuboid in different worlds.");
-        }
-
-        this.worldName = pos1.getWorld().getName();
-        this.world = pos1.getWorld();
-        this.xMin = Math.min(pos1.getBlockX(), pos2.getBlockX());
-        this.yMin = Math.min(pos1.getBlockY(), pos2.getBlockY());
-        this.zMin = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
-        this.xMax = Math.max(pos1.getBlockX(), pos2.getBlockX());
-        this.yMax = Math.max(pos1.getBlockY(), pos2.getBlockY());
-        this.zMax = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
+        setBounds(pos1, pos2);
     }
 
     public Cuboid(String worldName, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
         this.worldName = worldName;
-        this.xMin = xMin;
-        this.yMin = yMin;
-        this.zMin = zMin;
-        this.xMax = xMax;
-        this.yMax = yMax;
-        this.zMax = zMax;
+        setBounds(xMin, yMin, zMin, xMax, yMax, zMax);
     }
 
     protected void setBounds(Location pos1, Location pos2) {
+        if (!pos1.getWorld().getName().equalsIgnoreCase(pos2.getWorld().getName())) {
+            throw new IllegalArgumentException("Could not set bounds of a cuboid in different worlds.");
+        }
+        
         this.worldName = pos1.getWorld().getName();
         this.world = pos1.getWorld();
         this.xMin = Math.min(pos1.getBlockX(), pos2.getBlockX());
