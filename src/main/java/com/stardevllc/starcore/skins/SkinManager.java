@@ -15,19 +15,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@SuppressWarnings("deprecation")
 public class SkinManager {
     private static final String MINESKIN_URL = "https://api.mineskin.org/generate/url?url=%s";
-    private static final String MOJANG_NAME_URL = "https://api.mojang.com/users/profiles/minecraft/%s";
+    private static final String MOJANG_NAME_URL = "https://api.minecraftservices.com/minecraft/profile/lookup/name/%s";
     private static final String MOJANG_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
 
     private Map<String, Skin> skins = new HashMap<>();
+    private Map<String, UUID> nameToUUID = new HashMap<>();
     
     private JsonObject getObjectFromURL(String urlString) throws IOException {
         URL url = URI.create(urlString).toURL();
         URLConnection request = url.openConnection();
+        request.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0");
         request.connect();
 
-        JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) request.getContent()));
+        JsonElement root = new JsonParser().parse(new InputStreamReader((InputStream) request.getContent()));
         return root.getAsJsonObject();
     }
     
@@ -57,6 +60,10 @@ public class SkinManager {
     }
 
     public Skin getFromMojang(String playerName) {
+        if (this.nameToUUID.containsKey(playerName)) {
+            return getFromMojang(this.nameToUUID.get(playerName));
+        }
+        
         try {
             JsonObject object = getObjectFromURL(String.format(MOJANG_NAME_URL, playerName));
 
@@ -64,7 +71,9 @@ public class SkinManager {
                 throw new IllegalArgumentException("Couldn't find the user " + playerName + ".");
             }
 
-            return getFromMojang(StringHelper.toUUID(object.get("id").getAsString()));
+            UUID uuid = StringHelper.toUUID(object.get("id").getAsString());
+            this.nameToUUID.put(playerName, uuid);
+            return getFromMojang(uuid);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,8 +82,12 @@ public class SkinManager {
     }
 
     public Skin getFromMojang(UUID playerId) {
+        if (this.skins.containsKey(playerId.toString())) {
+            return this.skins.get(playerId.toString());
+        }
+        
         try {
-            JsonObject object = getObjectFromURL(String.format(MOJANG_URL, playerId.toString()));
+            JsonObject object = getObjectFromURL(String.format(MOJANG_URL, playerId));
 
             if (object.has("errorMessage")) {
                 throw new IllegalArgumentException("Couldn't find the user " + playerId + ".");
