@@ -2,10 +2,19 @@ package com.stardevllc.starcore.utils;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
-public class Position {
+public class Position implements ConfigurationSerializable, Cloneable {
+    
+    static {
+        ConfigurationSerialization.registerClass(Position.class);
+    }
+    
     protected double x, y, z;
     protected float yaw, pitch;
 
@@ -27,6 +36,14 @@ public class Position {
         this.z = z;
         this.yaw = yaw;
         this.pitch = pitch;
+    }
+    
+    public Position(Map<String, Object> serialized) {
+        this.x = (double) serialized.get("x");
+        this.y = (double) serialized.get("y");
+        this.z = (double) serialized.get("z");
+        this.yaw = (float) ((double) serialized.get("yaw"));
+        this.pitch = (float) ((double) serialized.get("pitch"));
     }
 
     public double getX() {
@@ -102,5 +119,15 @@ public class Position {
 
     public int hashCode() {
         return Objects.hash(x, y, z);
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        return new HashMap<>(Map.of("x", this.x, "y", this.y, "z", this.z, "yaw", this.yaw, "pitch", this.pitch));
+    }
+    
+    @Override
+    public Position clone() {
+        return new Position(this.x, this.y, this.z, this.yaw, this.pitch);
     }
 }
