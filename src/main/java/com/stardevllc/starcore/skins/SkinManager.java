@@ -1,7 +1,6 @@
 package com.stardevllc.starcore.skins;
 
 import com.google.gson.*;
-import com.stardevllc.skins.Skin;
 
 import java.io.*;
 import java.net.*;

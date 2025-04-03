@@ -1,7 +1,7 @@
 package com.stardevllc.starcore;
 
-import com.stardevllc.actors.ServerActor;
 import com.stardevllc.config.Section;
+import com.stardevllc.starcore.actors.ServerActor;
 import com.stardevllc.starcore.base.colors.CustomColor;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Configuration;

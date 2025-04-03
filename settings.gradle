@@ -6,4 +6,7 @@ rootProject.name = 'StarCore'
 
 include('base')
 include('v1_8')
+include('v1_9')
+include('v1_11')
+include('v1_13_R2')
 include('v1_16')
