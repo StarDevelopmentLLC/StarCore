@@ -3,3 +3,7 @@ plugins {
 }
 
 rootProject.name = 'StarCore'
+
+include('base')
+include('v1_8')
+include('v1_16')

@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.utils;
 
 import com.stardevllc.helper.StringHelper;
-import com.stardevllc.starcore.NMSVersion;
+import com.stardevllc.starcore.base.NMSVersion;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
