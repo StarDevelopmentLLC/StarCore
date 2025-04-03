@@ -3,6 +3,8 @@ package com.stardevllc.starcore;
 import com.stardevllc.config.Section;
 import com.stardevllc.starcore.actors.ServerActor;
 import com.stardevllc.starcore.base.colors.CustomColor;
+import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
+import com.stardevllc.starcore.base.wrappers.MCWrappers;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
@@ -17,12 +19,18 @@ import java.util.UUID;
 
 public class StarCore extends JavaPlugin {
 
+    static {
+        ItemBuilder.colorFunction = StarColors::color;
+    }
+    
     private UUID consoleUnqiueId;
     private Configuration colorsConfig;
     private Configuration mainConfig;
     private SkinManager skinManager;
 
     private PlayerManager playerManager;
+    
+    private MCWrappers mcWrappers;
 
     public void onEnable() {
         mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
@@ -67,7 +75,10 @@ public class StarCore extends JavaPlugin {
 
         this.skinManager = new SkinManager();
         getServer().getServicesManager().register(SkinManager.class, this.skinManager, this, ServicePriority.Normal);
-
+        
+        this.mcWrappers = new MCWrappersImpl();
+        getServer().getServicesManager().register(MCWrappers.class, this.mcWrappers, this, ServicePriority.Highest);
+        
         StarCoreCmd starCoreCmd = new StarCoreCmd(this);
         PluginCommand pluginStarCoreCmd = getCommand("starcore");
         pluginStarCoreCmd.setExecutor(starCoreCmd);
