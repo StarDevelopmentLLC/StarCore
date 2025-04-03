@@ -127,6 +127,10 @@ public class ItemBuilder implements Cloneable {
         Material material = xMaterial.parseMaterial();
         ItemMeta itemMeta = Bukkit.getItemFactory().getItemMeta(material);
         
+        if (itemMeta == null) {
+            return new ItemBuilder(xMaterial);
+        }
+        
         Class<? extends ItemBuilder> builderClass = META_TO_BUILDERS.get(itemMeta.getClass());
         
         if (builderClass != null) {
