@@ -1,28 +1,24 @@
 package com.stardevllc.starcore.skins;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.stardevllc.helper.StringHelper;
+import com.google.gson.*;
+import com.stardevllc.skins.Skin;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.regex.Pattern;
 
-@SuppressWarnings("deprecation")
 public class SkinManager {
+    private static final Pattern UUID_PATTERN = Pattern.compile("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");
+
     private static final String MINESKIN_URL = "https://api.mineskin.org/generate/url?url=%s";
     private static final String MOJANG_NAME_URL = "https://api.minecraftservices.com/minecraft/profile/lookup/name/%s";
     private static final String MOJANG_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
 
+    private static Map<String, UUID> uuidCache = new HashMap<>();
+    private static Map<String, UUID> nameToUUID = new HashMap<>();
+    
     private Map<String, Skin> skins = new HashMap<>();
-    private Map<String, UUID> nameToUUID = new HashMap<>();
     
     private JsonObject getObjectFromURL(String urlString) throws IOException {
         URL url = URI.create(urlString).toURL();
@@ -49,7 +45,7 @@ public class SkinManager {
 
             JsonObject skinInfo = object.getAsJsonObject("data").getAsJsonObject("texture");
 
-            skin = new Skin(imageUrl, skinInfo.get("value").getAsString(), skinInfo.get("signature").getAsString());
+            skin = new Skin(null, null, imageUrl, skinInfo.get("value").getAsString(), skinInfo.get("signature").getAsString());
             this.skins.put(imageUrl, skin);
             return skin;
         } catch (Exception e) {
@@ -60,8 +56,8 @@ public class SkinManager {
     }
 
     public Skin getFromMojang(String playerName) {
-        if (this.nameToUUID.containsKey(playerName)) {
-            return getFromMojang(this.nameToUUID.get(playerName));
+        if (nameToUUID.containsKey(playerName)) {
+            return getFromMojang(nameToUUID.get(playerName));
         }
         
         try {
@@ -71,8 +67,8 @@ public class SkinManager {
                 throw new IllegalArgumentException("Couldn't find the user " + playerName + ".");
             }
 
-            UUID uuid = StringHelper.toUUID(object.get("id").getAsString());
-            this.nameToUUID.put(playerName, uuid);
+            UUID uuid = toUUID(object.get("id").getAsString());
+            nameToUUID.put(playerName, uuid);
             return getFromMojang(uuid);
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,16 +88,40 @@ public class SkinManager {
             if (object.has("errorMessage")) {
                 throw new IllegalArgumentException("Couldn't find the user " + playerId + ".");
             }
+            
+            String name = object.get("name").getAsString();
 
             JsonObject properties = object.getAsJsonArray("properties").get(0).getAsJsonObject();
 
-            Skin skin = new Skin(playerId.toString(), properties.get("value").getAsString(), properties.get("signature").getAsString());
-            this.skins.put(skin.identifier(), skin);
+            Skin skin = new Skin(playerId, name, playerId.toString(), properties.get("value").getAsString(), properties.get("signature").getAsString());
+            this.skins.put(skin.getIdentifier(), skin);
             return skin;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    public static UUID toUUID(String id) {
+        if (uuidCache.containsKey(id)) {
+            return uuidCache.get(id);
+        }
+
+        if (UUID_PATTERN.matcher(id).matches()) {
+            UUID uuid = UUID.fromString(id);
+            uuidCache.put(id, uuid);
+            return uuid;
+        }
+        
+        String oldId = id;
+        id = id.substring(0, 8) + "-" +
+                id.substring(8, 12) + "-" +
+                id.substring(12, 16) + "-" +
+                id.substring(16, 20) + "-" +
+                id.substring(20, 32);
+        UUID uuid = UUID.fromString(id);
+        uuidCache.put(oldId, uuid);
+        return uuid;
     }
 }

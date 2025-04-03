@@ -1,27 +1,40 @@
 package com.stardevllc.starcore.skins;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class Skin {
     private String identifier;
+    private String playerName;
+    private UUID uniqueId;
     private String value;
     private String signature;
 
-    public Skin(String identifier, String value, String signature) {
+    public Skin(UUID uuid, String playerName, String identifier, String value, String signature) {
+        this.uniqueId = uuid;
+        this.playerName = playerName;
         this.identifier = identifier;
         this.value = value;
         this.signature = signature;
     }
 
-    public String identifier() {
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public UUID getUniqueId() {
+        return uniqueId;
+    }
+
+    public String getIdentifier() {
         return identifier;
     }
 
-    public String value() {
+    public String getValue() {
         return value;
     }
 
-    public String signature() {
+    public String getSignature() {
         return signature;
     }
 
