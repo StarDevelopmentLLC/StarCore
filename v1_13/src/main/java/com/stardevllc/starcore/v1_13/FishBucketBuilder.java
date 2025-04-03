@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.v1_13;
 
 import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
-import com.stardevllc.starcore.base.itembuilder.XMaterial;
+import com.stardevllc.starcore.base.XMaterial;
 import org.bukkit.DyeColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.TropicalFish;

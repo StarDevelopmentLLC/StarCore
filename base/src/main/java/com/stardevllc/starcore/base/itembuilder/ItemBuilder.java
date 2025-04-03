@@ -1,5 +1,6 @@
 package com.stardevllc.starcore.base.itembuilder;
 
+import com.stardevllc.starcore.base.XMaterial;
 import com.stardevllc.starcore.base.wrappers.AttributeModifierWrapper;
 import com.stardevllc.starcore.base.wrappers.MCWrappers;
 import de.tr7zw.nbtapi.NBT;
