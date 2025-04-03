@@ -1,4 +1,4 @@
-package com.stardevllc.itembuilder.v1_14;
+package com.stardevllc.starcore.v1_14;
 
 import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
 import com.stardevllc.starcore.base.itembuilder.XMaterial;
