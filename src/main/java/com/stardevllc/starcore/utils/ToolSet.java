@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.utils;
 
-import com.stardevllc.starcore.xseries.XMaterial;
+import com.stardevllc.starcore.base.itembuilder.XMaterial;
 
 public enum ToolSet {
     
