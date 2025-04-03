@@ -60,8 +60,15 @@ dependencies {
     api project(':v1_8')
     api project(':v1_9')
     api project(':v1_11')
+    api project(':v1_13')
     api project(':v1_13_R2')
+    api project(':v1_14')
+    api project(':v1_14_4')
     api project(':v1_16')
+    api project(':v1_17')
+    api project(':v1_19_3')
+    api project(':v1_20')
+    api project(':v1_21')
 }
 
 java {
