@@ -1,6 +1,7 @@
 package com.stardevllc.starcore.player;
 
 import com.stardevllc.config.Section;
+import com.stardevllc.mojang.MojangAPI;
 import com.stardevllc.registry.UUIDRegistry;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.config.Configuration;
@@ -28,6 +29,19 @@ public class PlayerManager implements Listener {
 
     public void addPlayer(StarPlayer player) {
         playerRegistry.put(player.getUniqueId(), player);
+    }
+    
+    public StarPlayer getPlayer(UUID uuid) {
+        if (this.playerRegistry.contains(uuid)) {
+            StarPlayer starPlayer = playerRegistry.get(uuid);
+            if (starPlayer.getMojangProfile() == null) {
+                starPlayer.setMojangProfile(MojangAPI.getProfile(uuid));
+            }
+            
+            return starPlayer;
+        }
+        
+        return null;
     }
 
     public void save() {
@@ -73,7 +87,7 @@ public class PlayerManager implements Listener {
             this.playerRegistry.register(new StarPlayer(e.getPlayer()));        
         }
 
-        StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
+        StarPlayer starPlayer = getPlayer(e.getPlayer().getUniqueId());
         starPlayer.setLastLogin(System.currentTimeMillis());
     }
     

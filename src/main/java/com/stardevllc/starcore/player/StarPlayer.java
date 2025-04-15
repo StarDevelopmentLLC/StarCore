@@ -1,6 +1,7 @@
 package com.stardevllc.starcore.player;
 
 import com.stardevllc.config.Section;
+import com.stardevllc.mojang.MojangProfile;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -11,6 +12,8 @@ import java.util.UUID;
 public class StarPlayer {
     private final UUID uniqueId;
     private String name;
+    
+    private MojangProfile mojangProfile;
     
     private long playtime;
     private long lastLogin, lastLogout;
@@ -52,7 +55,15 @@ public class StarPlayer {
             }
         }
     }
-
+    
+    public MojangProfile getMojangProfile() {
+        return mojangProfile;
+    }
+    
+    public void setMojangProfile(MojangProfile mojangProfile) {
+        this.mojangProfile = mojangProfile;
+    }
+    
     public UUID getUniqueId() {
         return uniqueId;
     }
