@@ -2,26 +2,27 @@ package com.stardevllc.starcore.player;
 
 import com.stardevllc.config.Section;
 import com.stardevllc.mojang.MojangAPI;
+import com.stardevllc.mojang.MojangProfile;
 import com.stardevllc.registry.UUIDRegistry;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.config.Configuration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.Bukkit;
+import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerManager implements Listener {
     private final UUIDRegistry<StarPlayer> playerRegistry = new UUIDRegistry.Builder<StarPlayer>().keyRetriever(StarPlayer::getUniqueId).build();
 
     private Configuration playersConfig;
+    
+    private StarCore plugin;
 
     public PlayerManager(StarCore plugin) {
+        this.plugin = plugin;
         if (plugin.getMainConfig().getBoolean("save-player-info")) {
             playersConfig = new Configuration(new File(plugin.getDataFolder(), "players.yml"));
         }
@@ -35,7 +36,13 @@ public class PlayerManager implements Listener {
         if (this.playerRegistry.contains(uuid)) {
             StarPlayer starPlayer = playerRegistry.get(uuid);
             if (starPlayer.getMojangProfile() == null) {
-                starPlayer.setMojangProfile(MojangAPI.getProfile(uuid));
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                    MojangProfile profile = MojangAPI.getProfile(uuid);
+                    StarPlayer sp = playerRegistry.get(uuid);
+                    if (sp != null) {
+                        sp.setMojangProfile(profile);
+                    }
+                });
             }
             
             return starPlayer;
