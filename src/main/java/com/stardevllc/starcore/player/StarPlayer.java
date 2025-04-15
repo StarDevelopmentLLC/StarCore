@@ -69,6 +69,10 @@ public class StarPlayer {
     }
 
     public String getName() {
+        if (this.mojangProfile != null && !this.mojangProfile.getName().equals(this.name)) {
+            this.name = this.mojangProfile.getName();
+        }
+        
         return name;
     }
 
