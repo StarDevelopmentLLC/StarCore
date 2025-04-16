@@ -35,14 +35,16 @@ public class PlayerManager implements Listener {
     public StarPlayer getPlayer(UUID uuid) {
         if (this.playerRegistry.contains(uuid)) {
             StarPlayer starPlayer = playerRegistry.get(uuid);
-            if (starPlayer.getMojangProfile() == null) {
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                    MojangProfile profile = MojangAPI.getProfile(uuid);
-                    StarPlayer sp = playerRegistry.get(uuid);
-                    if (sp != null) {
-                        sp.setMojangProfile(profile);
-                    }
-                });
+            if (plugin.getMainConfig().getBoolean("use-mojang-api")) {
+                if (starPlayer.getMojangProfile() == null) {
+                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                        MojangProfile profile = MojangAPI.getProfile(uuid);
+                        StarPlayer sp = playerRegistry.get(uuid);
+                        if (sp != null) {
+                            sp.setMojangProfile(profile);
+                        }
+                    });
+                }
             }
             
             return starPlayer;

@@ -51,6 +51,9 @@ public class StarCore extends JavaPlugin {
         if (mainConfig.getBoolean("save-player-info")) {
             this.playerManager.load();
         }
+        
+        mainConfig.addDefault("use-mojang-api", true, "Use the Mojang API to get Skin Info for players.", "This is retrieved when a player joins, and done async to prevent lag.", "Disabling this could break plugins that rely on this.");
+        
         Bukkit.getServer().getServicesManager().register(PlayerManager.class, playerManager, this, ServicePriority.High);
         
         mainConfig.addDefault("messages.command.reload", "&aSuccessfully reloaded configs.", " The message sent when /starcore reload is a success");
