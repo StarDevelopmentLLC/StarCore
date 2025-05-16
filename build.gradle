@@ -1,11 +1,13 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'com.gradleup.shadow' version '9.0.0-beta2'
+    id 'com.gradleup.shadow' version '9.0.0-beta13'
 }
 
 group 'com.github.StarDevelopmentLLC'
-version '0.3.0'
+version '0.3.1'
 
 repositories {
     mavenLocal()
@@ -27,8 +29,8 @@ repositories {
 
 publishing {
     publications {
-        shadow(MavenPublication) { publication ->
-            project.shadow.component(publication)
+        shadow(MavenPublication) {
+            from components.shadow
         }
     }
 }
@@ -39,15 +41,14 @@ processResources {
     }
 }
 
-shadowJar {
-    archiveClassifier.set('')
-    //destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
+tasks.named('shadowJar', ShadowJar) {
+    archiveClassifier = ''
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT'
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.15.0'
-    api 'com.github.StarDevelopmentLLC:StarLib:0.3.0'
+    api 'com.github.StarDevelopmentLLC:StarLib:0.3.1'
     api 'com.github.StarDevelopmentLLC:config:0.1.4'
     
     //Project ones
