@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.github.StarDevelopmentLLC'
-version '0.4.0'
+version '0.4.1'
 
 repositories {
     mavenLocal()
@@ -48,23 +48,23 @@ tasks.named('shadowJar', ShadowJar) {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT'
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.15.0'
-    api 'com.github.StarDevelopmentLLC:StarLib:0.4.0'
-    api 'com.github.StarDevelopmentLLC:config:0.1.4'
+    implementation 'com.github.StarDevelopmentLLC:StarLib:0.4.0'
+    implementation 'com.github.StarDevelopmentLLC:config:0.1.4'
     
     //Project ones
-    api project(':base')
-    api project(':v1_8')
-    api project(':v1_9')
-    api project(':v1_11')
-    api project(':v1_13')
-    api project(':v1_13_R2')
-    api project(':v1_14')
-    api project(':v1_14_4')
-    api project(':v1_16')
-    api project(':v1_17')
-    api project(':v1_19_3')
-    api project(':v1_20')
-    api project(':v1_21')
+    implementation project(':base')
+    implementation project(':v1_8')
+    implementation project(':v1_9')
+    implementation project(':v1_11')
+    implementation project(':v1_13')
+    implementation project(':v1_13_R2')
+    implementation project(':v1_14')
+    implementation project(':v1_14_4')
+    implementation project(':v1_16')
+    implementation project(':v1_17')
+    implementation project(':v1_19_3')
+    implementation project(':v1_20')
+    implementation project(':v1_21')
 }
 
 java {
