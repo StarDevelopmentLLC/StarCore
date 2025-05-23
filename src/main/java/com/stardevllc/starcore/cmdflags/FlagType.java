@@ -1,5 +1,12 @@
 package com.stardevllc.starcore.cmdflags;
 
+import com.stardevllc.converter.string.EnumStringConverter;
+import com.stardevllc.converter.string.StringConverters;
+
 public enum FlagType {
-    PRESENCE, COMPLEX
+    PRESENCE, COMPLEX; 
+    
+    static {
+        StringConverters.addConverter(FlagType.class, new EnumStringConverter<>(FlagType.class));
+    }
 }

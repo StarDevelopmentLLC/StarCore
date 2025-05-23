@@ -1,5 +1,8 @@
 package com.stardevllc.starcore.base;
 
+import com.stardevllc.converter.string.EnumStringConverter;
+import com.stardevllc.converter.string.StringConverters;
+
 import java.lang.reflect.Method;
 
 public enum NMSVersion {
@@ -33,7 +36,8 @@ public enum NMSVersion {
     v1_21_R2, 
     v1_21_R3;
 
-    NMSVersion() {
+    static {
+        StringConverters.addConverter(NMSVersion.class, new EnumStringConverter<>(NMSVersion.class));
     }
 
     public static final NMSVersion CURRENT_VERSION = getCurrentVersion();

@@ -1,5 +1,7 @@
 package com.stardevllc.starcore.utils;
 
+import com.stardevllc.converter.string.EnumStringConverter;
+import com.stardevllc.converter.string.StringConverters;
 import com.stardevllc.starcore.base.XMaterial;
 
 public enum ToolSet {
@@ -10,6 +12,10 @@ public enum ToolSet {
     IRON(XMaterial.IRON_SWORD, XMaterial.IRON_PICKAXE, XMaterial.IRON_AXE, XMaterial.IRON_SHOVEL, XMaterial.IRON_HOE),
     DIAMOND(XMaterial.DIAMOND_SWORD, XMaterial.DIAMOND_PICKAXE, XMaterial.DIAMOND_AXE, XMaterial.DIAMOND_SHOVEL, XMaterial.DIAMOND_HOE),
     NETHERITE(XMaterial.NETHERITE_SWORD, XMaterial.NETHERITE_PICKAXE, XMaterial.NETHERITE_AXE, XMaterial.NETHERITE_SHOVEL, XMaterial.NETHERITE_HOE);
+    
+    static {
+        StringConverters.addConverter(ToolSet.class, new EnumStringConverter<>(ToolSet.class));
+    }
     
     private final XMaterial sword, pickaxe, axe, shovel, hoe;
 

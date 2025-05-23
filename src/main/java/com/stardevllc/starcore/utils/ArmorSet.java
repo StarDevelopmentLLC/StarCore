@@ -1,5 +1,7 @@
 package com.stardevllc.starcore.utils;
 
+import com.stardevllc.converter.string.EnumStringConverter;
+import com.stardevllc.converter.string.StringConverters;
 import com.stardevllc.starcore.base.XMaterial;
 
 public enum ArmorSet {
@@ -11,6 +13,10 @@ public enum ArmorSet {
     IRON(XMaterial.IRON_HELMET, XMaterial.IRON_CHESTPLATE, XMaterial.IRON_LEGGINGS, XMaterial.IRON_BOOTS),
     DIAMOND(XMaterial.DIAMOND_HELMET, XMaterial.DIAMOND_CHESTPLATE, XMaterial.DIAMOND_LEGGINGS, XMaterial.DIAMOND_BOOTS), 
     NETHERITE(XMaterial.NETHERITE_HELMET, XMaterial.NETHERITE_CHESTPLATE, XMaterial.NETHERITE_LEGGINGS, XMaterial.NETHERITE_BOOTS);
+    
+    static {
+        StringConverters.addConverter(ArmorSet.class, new EnumStringConverter<>(ArmorSet.class));
+    }
 
     private final XMaterial helmet, chestplate, leggings, boots;
 

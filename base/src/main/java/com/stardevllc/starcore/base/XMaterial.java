@@ -24,6 +24,8 @@ package com.stardevllc.starcore.base;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.stardevllc.converter.string.EnumStringConverter;
+import com.stardevllc.converter.string.StringConverters;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -1568,6 +1570,10 @@ public enum XMaterial {
     ZOMBIE_VILLAGER_SPAWN_EGG(27, "MONSTER_EGG"),
     ZOMBIE_WALL_HEAD(2, "SKULL", "SKULL_ITEM"),
     ZOMBIFIED_PIGLIN_SPAWN_EGG(57, "MONSTER_EGG", "ZOMBIE_PIGMAN_SPAWN_EGG");
+    
+    static {
+        StringConverters.addConverter(XMaterial.class, new EnumStringConverter<>(XMaterial.class));
+    }
     
     public static final XMaterial[] VALUES = values();
     
