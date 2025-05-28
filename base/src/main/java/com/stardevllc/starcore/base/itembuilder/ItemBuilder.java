@@ -387,6 +387,10 @@ public class ItemBuilder implements Cloneable {
                 break;
             }
         }
+        
+        if (itemBuilderClass == null) {
+            itemBuilderClass = ItemBuilder.class;
+        }
 
         try {
             Method method = itemBuilderClass.getDeclaredMethod(methodName, paramClass);
