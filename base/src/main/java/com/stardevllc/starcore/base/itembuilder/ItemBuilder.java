@@ -93,7 +93,7 @@ public class ItemBuilder implements Cloneable {
     }
     
     protected static ItemBuilder createFromItemStack(ItemStack itemStack) {
-        return new ItemBuilder();
+        return new ItemBuilder(XMaterial.matchXMaterial(itemStack.getType()));
     }
     
     protected static MCWrappers getMCWrappers() {
@@ -240,7 +240,9 @@ public class ItemBuilder implements Cloneable {
 
     public <T extends ItemBuilder> T setLore(List<String> lore) {
         this.lore.clear();
-        this.lore.addAll(lore);
+        if (lore != null) {
+            this.lore.addAll(lore);
+        }
         return (T) this;
     }
 
@@ -320,6 +322,11 @@ public class ItemBuilder implements Cloneable {
     public ItemStack build() {
         if (amount < 1) {
             amount = 1;
+        }
+        
+        if (material == null) {
+            Bukkit.getLogger().severe("[StarCore] Material was null in ItemBuilder.build()");
+            return null;
         }
 
         if (material.parseMaterial() == null) {
