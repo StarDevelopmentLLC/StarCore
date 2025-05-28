@@ -92,6 +92,10 @@ public class ItemBuilder implements Cloneable {
         return itemBuilder;
     }
     
+    protected static ItemBuilder createFromItemStack(ItemStack itemStack) {
+        return new ItemBuilder();
+    }
+    
     protected static MCWrappers getMCWrappers() {
         return Bukkit.getServicesManager().getRegistration(MCWrappers.class).getProvider();
     }
@@ -398,7 +402,13 @@ public class ItemBuilder implements Cloneable {
             return (ItemBuilder) method.invoke(null, param);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | ClassCastException e) {
             Logger logger = Bukkit.getLogger();
-            logger.log(Level.SEVERE, "Error while parsing an ItemStack into an ItemBuilder", e);
+            logger.severe("Error while parsing an ItemStack into an ItemBuilder");
+            logger.severe("  ItemMeta Class: " + itemMeta.getClass().getName());
+            logger.severe("  MethodName: " + methodName);
+            logger.severe("  ParamClass: " + paramClass);
+            logger.severe("  Param: " + param);
+            logger.severe("  ItemBuilder class: " + itemBuilderClass.getName());
+            logger.log(Level.SEVERE, "", e);
             return null;
         }
     }
