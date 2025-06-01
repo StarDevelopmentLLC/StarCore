@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.skins;
+package com.stardevllc.starcore.base.model;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -40,8 +40,12 @@ public class Skin {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
         var that = (Skin) obj;
         return Objects.equals(this.identifier, that.identifier) &&
                 Objects.equals(this.value, that.value) &&
