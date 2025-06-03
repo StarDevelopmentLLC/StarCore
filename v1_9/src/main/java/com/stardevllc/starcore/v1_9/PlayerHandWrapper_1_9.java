@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.v1_9;
 
-import com.stardevllc.starcore.base.wrappers.PlayerHandWrapper;
+import com.stardevllc.starcore.api.wrappers.PlayerHandWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

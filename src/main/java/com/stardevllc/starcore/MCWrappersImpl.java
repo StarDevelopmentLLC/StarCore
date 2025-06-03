@@ -1,14 +1,14 @@
 package com.stardevllc.starcore;
 
+import com.stardevllc.starcore.api.wrappers.*;
 import com.stardevllc.starcore.base.NMSVersion;
-import com.stardevllc.starcore.base.wrappers.*;
 import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
 import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_8.*;
 import com.stardevllc.starcore.v1_9.PlayerHandWrapper_1_9;
 
-public class MCWrappersImpl implements MCWrappers{
+public class MCWrappersImpl implements MCWrappers {
     
     private EnchantWrapper enchantWrapper;
     private ItemWrapper itemWrapper;

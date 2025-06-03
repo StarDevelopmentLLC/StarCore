@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.v1_11;
 
-import com.stardevllc.starcore.base.wrappers.AttributeModifierWrapper;
-import com.stardevllc.starcore.base.wrappers.ItemWrapper;
+import com.stardevllc.starcore.api.wrappers.AttributeModifierWrapper;
+import com.stardevllc.starcore.api.wrappers.ItemWrapper;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

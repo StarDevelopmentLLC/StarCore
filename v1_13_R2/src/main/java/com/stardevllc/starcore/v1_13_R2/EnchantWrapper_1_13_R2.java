@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.v1_13_R2;
 
-import com.stardevllc.starcore.base.wrappers.EnchantWrapper;
+import com.stardevllc.starcore.api.wrappers.EnchantWrapper;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 

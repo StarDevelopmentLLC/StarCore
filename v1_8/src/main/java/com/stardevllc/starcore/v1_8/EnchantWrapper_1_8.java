@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.v1_8;
 
-import com.stardevllc.starcore.base.wrappers.EnchantWrapper;
+import com.stardevllc.starcore.api.wrappers.EnchantWrapper;
 import org.bukkit.enchantments.Enchantment;
 
 public class EnchantWrapper_1_8 implements EnchantWrapper {
