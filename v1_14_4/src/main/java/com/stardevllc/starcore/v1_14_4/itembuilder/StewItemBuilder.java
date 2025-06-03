@@ -1,7 +1,7 @@
-package com.stardevllc.starcore.v1_14_4;
+package com.stardevllc.starcore.v1_14_4.itembuilder;
 
 import com.stardevllc.starcore.api.XMaterial;
-import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
+import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;

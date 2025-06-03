@@ -1,9 +1,9 @@
-package com.stardevllc.starcore.v1_20;
+package com.stardevllc.starcore.v1_20.itembuilder;
 
 import com.stardevllc.starcore.api.XMaterial;
-import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
-import com.stardevllc.starcore.base.itembuilder.enums.ArmorMaterial;
-import com.stardevllc.starcore.base.itembuilder.enums.ArmorSlot;
+import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
+import com.stardevllc.starcore.api.itembuilder.enums.ArmorMaterial;
+import com.stardevllc.starcore.api.itembuilder.enums.ArmorSlot;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;

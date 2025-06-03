@@ -1,7 +1,7 @@
-package com.stardevllc.starcore.v1_19_3;
+package com.stardevllc.starcore.v1_19_3.itembuilder;
 
 import com.stardevllc.starcore.api.XMaterial;
-import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
+import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.MusicInstrument;
 import org.bukkit.NamespacedKey;
