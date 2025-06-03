@@ -38,7 +38,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("UnstableApiUsage")
+@SuppressWarnings({"UnstableApiUsage", "ConstantExpression"})
 public enum XMaterial {
     ACACIA_BOAT("BOAT_ACACIA"),
     ACACIA_BUTTON("WOOD_BUTTON"),
@@ -1593,7 +1593,9 @@ public enum XMaterial {
     private static final Set<String> DUPLICATED;
 
     static {
-        for (XMaterial material : VALUES) NAMES.put(material.name(), material);
+        for (XMaterial material : VALUES) {
+            NAMES.put(material.name(), material);
+        }
     }
 
     static {
@@ -1622,10 +1624,12 @@ public enum XMaterial {
         this.legacy = legacy;
 
         Material mat = null;
-        if ((!Data.ISFLAT && this.isDuplicated()) || (mat = Material.getMaterial(this.name())) == null) {
+        if (!Data.ISFLAT && this.isDuplicated() || (mat = Material.getMaterial(this.name())) == null) {
             for (int i = legacy.length - 1; i >= 0; i--) {
                 mat = Material.getMaterial(legacy[i]);
-                if (mat != null) break;
+                if (mat != null) {
+                    break;
+                }
             }
         }
         this.material = mat;
@@ -1646,7 +1650,9 @@ public enum XMaterial {
     private static XMaterial requestOldXMaterial(String name, byte data) {
         String holder = name + data;
         XMaterial cache = NAME_CACHE.getIfPresent(holder);
-        if (cache != null) return cache;
+        if (cache != null) {
+            return cache;
+        }
 
         for (XMaterial material : VALUES) {
             // Not using material.name().equals(name) check is intended.
@@ -1676,8 +1682,9 @@ public enum XMaterial {
     }
     
     public static Optional<XMaterial> matchXMaterial(String name) {
-        if (name == null || name.isEmpty())
+        if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Cannot match a material with null or empty material name");
+        }
         Optional<XMaterial> oldMatch = matchXMaterialWithData(name);
         return oldMatch.isPresent() ? oldMatch : matchDefinedXMaterial(format(name), UNKNOWN_DATA_VALUE);
     }
@@ -1721,7 +1728,7 @@ public enum XMaterial {
         if (!supports(9) && material.equals("POTION")) {
             // Source: v1.8.8 org.bukkit.potion.Potion.fromDamage(int damage)
             int damage = item.getDurability();
-            return ((damage & 16384) > 0) ? SPLASH_POTION : POTION;
+            return (damage & 16384) > 0 ? SPLASH_POTION : POTION;
         }
 
         // Refer to the enum for info.
@@ -1745,7 +1752,9 @@ public enum XMaterial {
 
         // No orElseThrow, I don't want to deal with Java's final variable bullshit.
         Optional<XMaterial> result = matchDefinedXMaterial(material, data);
-        if (result.isPresent()) return result.get();
+        if (result.isPresent()) {
+            return result.get();
+        }
         throw new IllegalArgumentException("Unsupported material from item: " + material + " (" + data + ')');
     }
     
@@ -1755,22 +1764,25 @@ public enum XMaterial {
         boolean isAMap = name.equalsIgnoreCase("MAP");
 
         // Do basic number and boolean checks before accessing more complex enum stuff.
-        if (Data.ISFLAT || (!isAMap && data <= 0 && !(duplicated = isDuplicated(name)))) {
+        if (Data.ISFLAT || !isAMap && data <= 0 && !(duplicated = isDuplicated(name))) {
             Optional<XMaterial> xMaterial = getIfPresent(name);
-            if (xMaterial.isPresent()) return xMaterial;
+            if (xMaterial.isPresent()) {
+                return xMaterial;
+            }
         }
         // Usually flat versions wouldn't pass this point, but some special materials do.
 
         XMaterial oldXMaterial = requestOldXMaterial(name, data);
         if (oldXMaterial == null) {
             // Special case. Refer to FILLED_MAP for more info.
-            return (data >= 0 && isAMap) ? Optional.of(FILLED_MAP) : Optional.empty();
+            return data >= 0 && isAMap ? Optional.of(FILLED_MAP) : Optional.empty();
         }
         
         boolean isPlural = oldXMaterial == CARROTS || oldXMaterial == POTATOES || oldXMaterial == BRICKS;
 
-        if (!Data.ISFLAT && isPlural && (duplicated == null ? isDuplicated(name) : duplicated))
+        if (!Data.ISFLAT && isPlural && (duplicated == null ? isDuplicated(name) : duplicated)) {
             return getIfPresent(name);
+        }
         return Optional.of(oldXMaterial);
     }
     
@@ -1783,19 +1795,22 @@ public enum XMaterial {
         for (int i = 0; i < len; i++) {
             char ch = name.charAt(i);
 
-            if (!appendUnderline && count != 0 && (ch == '-' || ch == ' ' || ch == '_') && chs[count] != '_')
+            if (!appendUnderline && count != 0 && (ch == '-' || ch == ' ' || ch == '_') && chs[count] != '_') {
                 appendUnderline = true;
-            else {
+            } else {
                 boolean number = false;
                 // Old materials have numbers in them.
-                if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (number = (ch >= '0' && ch <= '9'))) {
+                if (ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || (number = ch >= '0' && ch <= '9')) {
                     if (appendUnderline) {
                         chs[count++] = '_';
                         appendUnderline = false;
                     }
 
-                    if (number) chs[count++] = ch;
-                    else chs[count++] = (char) (ch & 0x5f);
+                    if (number) {
+                        chs[count++] = ch;
+                    } else {
+                        chs[count++] = (char) (ch & 0x5f);
+                    }
                 }
             }
         }
@@ -1817,7 +1832,9 @@ public enum XMaterial {
         Objects.requireNonNull(material, () -> "Unsupported material: " + this.name());
 
         item.setType(material);
-        if (!Data.ISFLAT && material.getMaxDurability() <= 0) item.setDurability(this.data);
+        if (!Data.ISFLAT && material.getMaxDurability() <= 0) {
+            item.setDurability(this.data);
+        }
         // Splash Potions weren't an official material pre-flattening.
         if (!Data.ISFLAT && this == SPLASH_POTION) {
             item.setDurability((short) 16384); // Hard-coded as 'data' is only a byte.
@@ -1827,7 +1844,9 @@ public enum XMaterial {
     
     private boolean anyMatchLegacy(String name) {
         for (int i = this.legacy.length - 1; i >= 0; i--) {
-            if (name.equals(this.legacy[i])) return true;
+            if (name.equals(this.legacy[i])) {
+                return true;
+            }
         }
         return false;
     }
@@ -1844,7 +1863,9 @@ public enum XMaterial {
         // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/diff/src/main/java/org/bukkit/Material.java?until=1cb03826ebde4ef887519ce37b0a2a341494a183
         // Should start working again in 1.16+
         Material material = this.parseMaterial();
-        if (material == null) return -1;
+        if (material == null) {
+            return -1;
+        }
         try {
             return material.getId();
         } catch (IllegalArgumentException ignored) {
@@ -1858,7 +1879,9 @@ public enum XMaterial {
     
     public ItemStack parseItem() {
         Material material = this.parseMaterial();
-        if (material == null) return null;
+        if (material == null) {
+            return null;
+        }
         ItemStack base = Data.ISFLAT ? new ItemStack(material) : new ItemStack(material, 1, this.data);
         // Splash Potions weren't an official material pre-flattening.
         if (!Data.ISFLAT && this == SPLASH_POTION) {
@@ -1873,7 +1896,9 @@ public enum XMaterial {
     
     public boolean isSimilar(ItemStack item) {
         Objects.requireNonNull(item, "Cannot compare with null ItemStack");
-        if (item.getType() != this.parseMaterial()) return false;
+        if (item.getType() != this.parseMaterial()) {
+            return false;
+        }
         // Special case for splash potions.
         if (this == SPLASH_POTION) {
             return Data.ISFLAT || item.getDurability() == (short) 16384;
@@ -1921,8 +1946,11 @@ public enum XMaterial {
             String version = Bukkit.getVersion();
             Matcher matcher = Pattern.compile("MC: \\d\\.(\\d+)").matcher(version);
 
-            if (matcher.find()) VERSION = Integer.parseInt(matcher.group(1));
-            else throw new IllegalArgumentException("Failed to parse server version from: " + version);
+            if (matcher.find()) {
+                VERSION = Integer.parseInt(matcher.group(1));
+            } else {
+                throw new IllegalArgumentException("Failed to parse server version from: " + version);
+            }
         }
         
         private static final boolean ISFLAT = supports(13);
