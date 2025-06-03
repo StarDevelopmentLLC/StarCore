@@ -48,7 +48,7 @@ tasks.named('shadowJar', ShadowJar) {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT'
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.15.0'
-    implementation 'com.github.StarDevelopmentLLC:StarCoreAPI:0.1.0'
+    implementation 'com.github.StarDevelopmentLLC:StarCoreAPI:0.1.1'
     implementation 'com.github.StarDevelopmentLLC:StarLib:0.4.4'
     implementation 'com.github.StarDevelopmentLLC:config:0.1.4'
     
