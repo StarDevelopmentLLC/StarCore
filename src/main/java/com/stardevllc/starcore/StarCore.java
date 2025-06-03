@@ -3,6 +3,7 @@ package com.stardevllc.starcore;
 import com.stardevllc.config.Section;
 import com.stardevllc.starcore.actors.ServerActor;
 import com.stardevllc.starcore.api.wrappers.MCWrappers;
+import com.stardevllc.starcore.api.wrappers.com.stardevllc.starcore.api.StarCoreAPI;
 import com.stardevllc.starcore.base.colors.CustomColor;
 import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
@@ -86,6 +87,8 @@ public class StarCore extends JavaPlugin {
         PluginCommand pluginStarCoreCmd = getCommand("starcore");
         pluginStarCoreCmd.setExecutor(starCoreCmd);
         pluginStarCoreCmd.setTabCompleter(starCoreCmd);
+        
+        StarCoreAPI.setAPI(new StarCoreAPIImpl(this));
     }
 
     public void reload(boolean save) {
@@ -151,7 +154,11 @@ public class StarCore extends JavaPlugin {
         saveColors();
         this.playerManager.save();
     }
-
+    
+    public MCWrappers getMcWrappers() {
+        return mcWrappers;
+    }
+    
     public PlayerManager getPlayerManager() {
         return playerManager;
     }
