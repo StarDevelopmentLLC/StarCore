@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
-    api project(':base')
+    compileOnly 'com.github.StarDevelopmentLLC:StarCoreAPI:0.1.0'
 }
 
 java {
