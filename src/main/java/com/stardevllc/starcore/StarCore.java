@@ -1,9 +1,9 @@
 package com.stardevllc.starcore;
 
 import com.stardevllc.config.Section;
-import com.stardevllc.starcore.actors.ServerActor;
 import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.StarCoreAPI;
+import com.stardevllc.starcore.api.actors.ServerActor;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.api.wrappers.MCWrappers;
 import com.stardevllc.starcore.base.NMSVersion;
