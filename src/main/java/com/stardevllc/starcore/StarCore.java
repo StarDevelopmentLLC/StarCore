@@ -2,14 +2,18 @@ package com.stardevllc.starcore;
 
 import com.stardevllc.config.Section;
 import com.stardevllc.starcore.actors.ServerActor;
+import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.StarCoreAPI;
+import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.api.wrappers.MCWrappers;
-import com.stardevllc.starcore.base.colors.CustomColor;
+import com.stardevllc.starcore.base.NMSVersion;
 import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
+import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
+import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.ServicePriority;
@@ -89,6 +93,13 @@ public class StarCore extends JavaPlugin {
         pluginStarCoreCmd.setTabCompleter(starCoreCmd);
         
         StarCoreAPI.setAPI(new StarCoreAPIImpl(this));
+        
+        NMSVersion currentVersion = NMSVersion.CURRENT_VERSION;
+        if (currentVersion.ordinal() < NMSVersion.v1_16_R1.ordinal()) {
+            StarColors.setColorHandler(new ColorHandler_1_8());
+        } else {
+            StarColors.setColorHandler(new ColorHandler_1_16());
+        }
     }
 
     public void reload(boolean save) {

@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.v1_16;
 
-import com.stardevllc.starcore.base.colors.CustomColor;
+import com.stardevllc.starcore.api.colors.CustomColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

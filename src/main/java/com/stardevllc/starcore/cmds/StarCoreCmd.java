@@ -1,9 +1,9 @@
 package com.stardevllc.starcore.cmds;
 
-import com.stardevllc.starcore.StarColors;
 import com.stardevllc.starcore.StarCore;
-import com.stardevllc.starcore.base.colors.ColorHandler;
-import com.stardevllc.starcore.base.colors.CustomColor;
+import com.stardevllc.starcore.api.StarColors;
+import com.stardevllc.starcore.api.colors.ColorHandler;
+import com.stardevllc.starcore.api.colors.CustomColor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
