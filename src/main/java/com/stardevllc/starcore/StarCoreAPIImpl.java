@@ -1,7 +1,7 @@
 package com.stardevllc.starcore;
 
+import com.stardevllc.starcore.api.StarCoreAPI;
 import com.stardevllc.starcore.api.wrappers.MCWrappers;
-import com.stardevllc.starcore.api.wrappers.com.stardevllc.starcore.api.StarCoreAPI;
 
 public class StarCoreAPIImpl extends StarCoreAPI {
     
