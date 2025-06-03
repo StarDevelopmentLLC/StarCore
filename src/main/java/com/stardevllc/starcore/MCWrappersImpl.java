@@ -1,7 +1,7 @@
 package com.stardevllc.starcore;
 
+import com.stardevllc.starcore.api.NMSVersion;
 import com.stardevllc.starcore.api.wrappers.*;
-import com.stardevllc.starcore.base.NMSVersion;
 import com.stardevllc.starcore.v1_11.ItemWrapper_1_11;
 import com.stardevllc.starcore.v1_13_R2.EnchantWrapper_1_13_R2;
 import com.stardevllc.starcore.v1_13_R2.ItemWrapper_1_13_R2;

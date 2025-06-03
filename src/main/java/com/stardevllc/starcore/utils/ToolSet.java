@@ -2,7 +2,7 @@ package com.stardevllc.starcore.utils;
 
 import com.stardevllc.converter.string.EnumStringConverter;
 import com.stardevllc.converter.string.StringConverters;
-import com.stardevllc.starcore.base.XMaterial;
+import com.stardevllc.starcore.api.XMaterial;
 
 public enum ToolSet {
     

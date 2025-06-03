@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.base.itembuilder;
 
+import com.stardevllc.starcore.api.XMaterial;
 import com.stardevllc.starcore.api.wrappers.AttributeModifierWrapper;
 import com.stardevllc.starcore.api.wrappers.MCWrappers;
-import com.stardevllc.starcore.base.XMaterial;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;

@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.base.itembuilder.material;
 
+import com.stardevllc.starcore.api.XMaterial;
 import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
-import com.stardevllc.starcore.base.XMaterial;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;

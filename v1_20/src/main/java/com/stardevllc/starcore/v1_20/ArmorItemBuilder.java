@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.v1_20;
 
+import com.stardevllc.starcore.api.XMaterial;
 import com.stardevllc.starcore.base.itembuilder.ItemBuilder;
-import com.stardevllc.starcore.base.XMaterial;
 import com.stardevllc.starcore.base.itembuilder.enums.ArmorMaterial;
 import com.stardevllc.starcore.base.itembuilder.enums.ArmorSlot;
 import org.bukkit.Bukkit;
