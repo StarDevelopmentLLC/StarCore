@@ -41,7 +41,6 @@ public class StarCore extends JavaPlugin {
         mainConfig.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
-        Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
 
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (mainConfig.getBoolean("save-colors")) {
@@ -105,6 +104,7 @@ public class StarCore extends JavaPlugin {
         pluginStarCoreCmd.setTabCompleter(starCoreCmd);
         
         StarCoreAPI.setAPI(new StarCoreAPIImpl(this));
+        Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
         
         NMSVersion currentVersion = NMSVersion.CURRENT_VERSION;
         if (currentVersion.ordinal() < NMSVersion.v1_16_R1.ordinal()) {
