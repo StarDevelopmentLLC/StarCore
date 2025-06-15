@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.github.StarDevelopmentLLC'
-version '0.5.6'
+version '0.5.7'
 
 publishing {
     publications {
@@ -25,6 +25,7 @@ processResources {
 
 tasks.named('shadowJar', ShadowJar) {
     archiveClassifier = ''
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 dependencies {
