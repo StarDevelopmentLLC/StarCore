@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.v1_8_R1.itembuilder;
 
-import com.stardevllc.starcore.api.XMaterial;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
+import com.stardevllc.starmclib.XMaterial;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;

@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.v1_13_R2.itembuilder;
 
-import com.stardevllc.starcore.api.XMaterial;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
+import com.stardevllc.starmclib.XMaterial;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;

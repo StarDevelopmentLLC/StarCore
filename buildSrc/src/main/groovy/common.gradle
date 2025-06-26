@@ -21,8 +21,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.StarDevelopmentLLC:StarCoreAPI:0.1.7'
-    implementation 'com.github.StarDevelopmentLLC:StarLib:0.6.3'
+    implementation 'com.github.StarDevelopmentLLC:StarCoreAPI:0.2.0'
+    implementation 'com.github.StarDevelopmentLLC:StarMCLib:0.1.0'
+    implementation 'com.github.StarDevelopmentLLC:StarLib:0.8.0'
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.15.0'
 }
 

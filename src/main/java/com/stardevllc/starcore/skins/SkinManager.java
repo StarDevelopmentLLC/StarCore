@@ -3,7 +3,7 @@ package com.stardevllc.starcore.skins;
 import com.stardevllc.helper.StringHelper;
 import com.stardevllc.mojang.MojangAPI;
 import com.stardevllc.mojang.MojangProfile;
-import com.stardevllc.starcore.api.Skin;
+import com.stardevllc.starmclib.Skin;
 
 import java.util.*;
 

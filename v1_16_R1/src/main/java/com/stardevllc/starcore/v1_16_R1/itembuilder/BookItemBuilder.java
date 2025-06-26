@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.v1_16_R1.itembuilder;
 
-import com.stardevllc.starcore.api.XMaterial;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starcore.api.itembuilder.enums.BookType;
+import com.stardevllc.starmclib.XMaterial;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;

@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.utils;
 
 import com.stardevllc.helper.StringHelper;
-import com.stardevllc.starcore.api.NMSVersion;
+import com.stardevllc.starmclib.MinecraftVersion;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class PotionNames {
             } 
         }
         
-        if (NMSVersion.CURRENT_VERSION.ordinal() < NMSVersion.v1_20_R4.ordinal()) {
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() < MinecraftVersion.v1_20_6.ordinal()) {
             Class<PotionEffectType> effectClass = PotionEffectType.class;
 
             try {

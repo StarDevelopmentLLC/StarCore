@@ -2,7 +2,6 @@ package com.stardevllc.starcore;
 
 import com.stardevllc.config.Section;
 import com.stardevllc.starcore.api.*;
-import com.stardevllc.starcore.api.actors.ServerActor;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starcore.api.wrappers.MCWrappers;
@@ -12,6 +11,8 @@ import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.v1_16_R1.ColorHandler_1_16_R1;
 import com.stardevllc.starcore.v1_8_R1.ColorHandler_1_8_R1;
+import com.stardevllc.starmclib.MinecraftVersion;
+import com.stardevllc.starmclib.actors.ServerActor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.ServicePriority;
@@ -106,8 +107,8 @@ public class StarCore extends JavaPlugin {
         StarCoreAPI.setAPI(new StarCoreAPIImpl(this));
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
         
-        NMSVersion currentVersion = NMSVersion.CURRENT_VERSION;
-        if (currentVersion.ordinal() < NMSVersion.v1_16_R1.ordinal()) {
+        MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
+        if (currentVersion.ordinal() < MinecraftVersion.v1_16.ordinal()) {
             StarColors.setColorHandler(new ColorHandler_1_8_R1());
         } else {
             StarColors.setColorHandler(new ColorHandler_1_16_R1());
