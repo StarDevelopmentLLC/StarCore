@@ -42,8 +42,8 @@ public class Position implements ConfigurationSerializable, Cloneable {
         this.x = (double) serialized.get("x");
         this.y = (double) serialized.get("y");
         this.z = (double) serialized.get("z");
-        this.yaw = (float) ((double) serialized.get("yaw"));
-        this.pitch = (float) ((double) serialized.get("pitch"));
+        this.yaw = (float) (double) serialized.get("yaw");
+        this.pitch = (float) (double) serialized.get("pitch");
     }
 
     public double getX() {
