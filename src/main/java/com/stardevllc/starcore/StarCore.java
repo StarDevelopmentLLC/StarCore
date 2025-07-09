@@ -9,8 +9,8 @@ import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.skins.SkinManager;
-import com.stardevllc.starcore.v1_16_R1.ColorHandler_1_16_R1;
-import com.stardevllc.starcore.v1_8_R1.ColorHandler_1_8_R1;
+import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
+import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
 import com.stardevllc.starmclib.MinecraftVersion;
 import com.stardevllc.starmclib.actors.ServerActor;
 import org.bukkit.Bukkit;
@@ -109,9 +109,9 @@ public class StarCore extends JavaPlugin {
         
         MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
         if (currentVersion.ordinal() < MinecraftVersion.v1_16.ordinal()) {
-            StarColors.setColorHandler(new ColorHandler_1_8_R1());
+            StarColors.setColorHandler(new ColorHandler_1_8());
         } else {
-            StarColors.setColorHandler(new ColorHandler_1_16_R1());
+            StarColors.setColorHandler(new ColorHandler_1_16());
         }
     }
 
