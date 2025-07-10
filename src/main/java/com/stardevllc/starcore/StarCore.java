@@ -12,6 +12,7 @@ import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
 import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
 import com.stardevllc.starmclib.MinecraftVersion;
+import com.stardevllc.starmclib.StarColorsAdventure;
 import com.stardevllc.starmclib.actors.ServerActor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -36,6 +37,8 @@ public class StarCore extends JavaPlugin {
     private PlayerManager playerManager;
     
     private MCWrappers mcWrappers;
+    
+    private StarColorsAdventure starColorsAdventure;
 
     public void onEnable() {
         mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
@@ -74,7 +77,7 @@ public class StarCore extends JavaPlugin {
             messagesConfig.set("command.color.listcolors", null);
         }
         
-        messagesConfig.addDefault("command.color.list.symbols", "&eList of valid color prefix characters: &r{symbols}", " The format to use for the list of color symbols.");
+        messagesConfig.addDefault("command.color.list.symbols", "&eList of valid color prefix characters: &r", " The format to use for the list of color symbols.");
         messagesConfig.addDefault("command.color.list.colors", "&eList of registered colors: ", " The header text for the /starcore colors list codes command");
         messagesConfig.addDefault("command.color.add.cannot-override-spigot", "&cYou cannot override default spigot colors. Please choose a different code.", " The error message for when someone tries to override a spigot color in /starcore color add command");
         messagesConfig.addDefault("command.color.add.invalid-code", "&cThe code you provided is not valid. Codes must be 2 characters and start with a valid symbol. &eUse the /starcore color listsymbols &ccommand.", " The error message for when someone tries to use an invalid 2 character code in the /starcore color add command.");
@@ -113,8 +116,15 @@ public class StarCore extends JavaPlugin {
         } else {
             StarColors.setColorHandler(new ColorHandler_1_16());
         }
+        
+        this.starColorsAdventure = new StarColorsAdventure(this);
+        Bukkit.getServer().getServicesManager().register(StarColorsAdventure.class, starColorsAdventure, this, ServicePriority.Normal);
     }
-
+    
+    public Configuration getMessagesConfig() {
+        return messagesConfig;
+    }
+    
     public void reload(boolean save) {
         if (save) {
             saveColors();
@@ -138,6 +148,10 @@ public class StarCore extends JavaPlugin {
         this.mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
+    }
+    
+    public StarColorsAdventure getColors() {
+        return starColorsAdventure;
     }
     
     public void loadColors() {
