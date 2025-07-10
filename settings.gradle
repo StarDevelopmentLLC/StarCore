@@ -4,6 +4,7 @@ plugins {
 
 rootProject.name = 'StarCore'
 
+include('api')
 include('v1_8')
 include('v1_9')
 include('v1_11')

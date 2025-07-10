@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.github.StarDevelopmentLLC:config:0.1.4'
     
     //Project ones
+    implementation project(':api')
     implementation project(':v1_8')
     implementation project(':v1_9')
     implementation project(':v1_11')

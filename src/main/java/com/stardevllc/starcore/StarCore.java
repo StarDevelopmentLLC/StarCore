@@ -1,28 +1,26 @@
 package com.stardevllc.starcore;
 
 import com.stardevllc.config.Section;
-import com.stardevllc.starcore.api.*;
+import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starcore.api.wrappers.MCWrappers;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
-import com.stardevllc.starcore.skins.SkinManager;
 import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
 import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
 import com.stardevllc.starmclib.MinecraftVersion;
-import com.stardevllc.starmclib.StarColorsAdventure;
 import com.stardevllc.starmclib.actors.ServerActor;
+import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.UUID;
 
-public class StarCore extends JavaPlugin {
+public class StarCore extends ExtendedJavaPlugin {
 
     static {
         ItemBuilder.colorFunction = StarColors::color;
@@ -32,15 +30,13 @@ public class StarCore extends JavaPlugin {
     private Configuration mainConfig;
     private Configuration colorsConfig;
     private Configuration messagesConfig;
-    private SkinManager skinManager;
 
     private PlayerManager playerManager;
     
     private MCWrappers mcWrappers;
     
-    private StarColorsAdventure starColorsAdventure;
-
     public void onEnable() {
+        super.onEnable();
         mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
         mainConfig.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
@@ -96,9 +92,6 @@ public class StarCore extends JavaPlugin {
         messagesConfig.save();
         mainConfig.save();
         
-        this.skinManager = new SkinManager();
-        getServer().getServicesManager().register(SkinManager.class, this.skinManager, this, ServicePriority.Normal);
-        
         this.mcWrappers = new MCWrappersImpl();
         getServer().getServicesManager().register(MCWrappers.class, this.mcWrappers, this, ServicePriority.Highest);
         
@@ -107,7 +100,6 @@ public class StarCore extends JavaPlugin {
         pluginStarCoreCmd.setExecutor(starCoreCmd);
         pluginStarCoreCmd.setTabCompleter(starCoreCmd);
         
-        StarCoreAPI.setAPI(new StarCoreAPIImpl(this));
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
         
         MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
@@ -116,15 +108,8 @@ public class StarCore extends JavaPlugin {
         } else {
             StarColors.setColorHandler(new ColorHandler_1_16());
         }
-        
-        this.starColorsAdventure = new StarColorsAdventure(this);
-        Bukkit.getServer().getServicesManager().register(StarColorsAdventure.class, starColorsAdventure, this, ServicePriority.Normal);
     }
-    
-    public Configuration getMessagesConfig() {
-        return messagesConfig;
-    }
-    
+
     public void reload(boolean save) {
         if (save) {
             saveColors();
@@ -148,10 +133,6 @@ public class StarCore extends JavaPlugin {
         this.mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
-    }
-    
-    public StarColorsAdventure getColors() {
-        return starColorsAdventure;
     }
     
     public void loadColors() {
@@ -208,8 +189,8 @@ public class StarCore extends JavaPlugin {
     public Configuration getMainConfig() {
         return mainConfig;
     }
-
-    public SkinManager getSkinManager() {
-        return skinManager;
+    
+    public Configuration getMessagesConfig() {
+        return messagesConfig;
     }
 }
