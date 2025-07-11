@@ -2,19 +2,45 @@ package com.stardevllc.starcore;
 
 import com.stardevllc.config.Section;
 import com.stardevllc.starcore.api.StarColors;
+import com.stardevllc.starcore.api.StarEvents;
 import com.stardevllc.starcore.api.colors.CustomColor;
+import com.stardevllc.starcore.api.events.*;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starcore.api.wrappers.MCWrappers;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
-import com.stardevllc.starcore.v1_16.ColorHandler_1_16;
+import com.stardevllc.starcore.v1_10_2.events.EntityEvents_1_10_2;
+import com.stardevllc.starcore.v1_11_2.events.EntityEvents_1_11_2;
+import com.stardevllc.starcore.v1_11_2.events.InventoryEvents_1_11_2;
+import com.stardevllc.starcore.v1_12_2.events.*;
+import com.stardevllc.starcore.v1_13.events.*;
+import com.stardevllc.starcore.v1_13_2.events.*;
+import com.stardevllc.starcore.v1_14_4.events.*;
+import com.stardevllc.starcore.v1_15_2.events.EntityEvents_1_15_2;
+import com.stardevllc.starcore.v1_15_2.events.WorldEvents_1_15_2;
+import com.stardevllc.starcore.v1_16_1.ColorHandler_1_16_1;
+import com.stardevllc.starcore.v1_16_1.events.*;
+import com.stardevllc.starcore.v1_16_3.events.EntityEvents_1_16_3;
+import com.stardevllc.starcore.v1_16_5.events.*;
+import com.stardevllc.starcore.v1_17_1.events.*;
+import com.stardevllc.starcore.v1_18_1.events.BlockEvents_1_18_1;
+import com.stardevllc.starcore.v1_19_3.events.InventoryEvents_1_19_3;
+import com.stardevllc.starcore.v1_20_1.events.EntityEvents_1_20_1;
+import com.stardevllc.starcore.v1_21_1.events.*;
+import com.stardevllc.starcore.v1_21_3.events.PlayerEvents_1_21_3;
 import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
+import com.stardevllc.starcore.v1_8_3.events.BlockEvents_1_8_3;
+import com.stardevllc.starcore.v1_8_8.events.EntityEvents_1_8_8;
+import com.stardevllc.starcore.v1_8_8.events.PlayerEvents_1_8_8;
+import com.stardevllc.starcore.v1_9_4.events.PlayerEvents_1_9_4;
+import com.stardevllc.starcore.v1_9_4.events.ServerEvents_1_9_4;
 import com.stardevllc.starmclib.MinecraftVersion;
 import com.stardevllc.starmclib.actors.ServerActor;
 import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 
 import java.io.File;
@@ -37,6 +63,7 @@ public class StarCore extends ExtendedJavaPlugin {
     
     public void onEnable() {
         super.onEnable();
+        StarEvents.subscribe(getEventBus());
         mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
         mainConfig.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
@@ -48,7 +75,8 @@ public class StarCore extends ExtendedJavaPlugin {
         }
         
         this.playerManager = new PlayerManager(this);
-        getServer().getPluginManager().registerEvents(playerManager, this);
+        PluginManager pluginManager = getServer().getPluginManager();
+        pluginManager.registerEvents(playerManager, this);
         
         mainConfig.addDefault("save-player-info", true, " This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         if (mainConfig.getBoolean("save-player-info")) {
@@ -106,7 +134,128 @@ public class StarCore extends ExtendedJavaPlugin {
         if (currentVersion.ordinal() < MinecraftVersion.v1_16.ordinal()) {
             StarColors.setColorHandler(new ColorHandler_1_8());
         } else {
-            StarColors.setColorHandler(new ColorHandler_1_16());
+            StarColors.setColorHandler(new ColorHandler_1_16_1());
+        }
+        
+        pluginManager.registerEvents(new BlockEvents(), this);
+        pluginManager.registerEvents(new EnchantEvents(), this);
+        pluginManager.registerEvents(new EntityEvents(), this);
+        pluginManager.registerEvents(new HangingEvents(), this);
+        pluginManager.registerEvents(new InventoryEvents(), this);
+        pluginManager.registerEvents(new PlayerEvents(), this);
+        pluginManager.registerEvents(new ServerEvents(), this);
+        pluginManager.registerEvents(new VehicleEvents(), this);
+        pluginManager.registerEvents(new WeatherEvents(), this);
+        pluginManager.registerEvents(new WorldEvents(), this);
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_8_3.ordinal()) {
+            pluginManager.registerEvents(new BlockEvents_1_8_3(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_8_4.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_8_8(), this);
+            pluginManager.registerEvents(new PlayerEvents_1_8_8(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_9_4.ordinal()) {
+            pluginManager.registerEvents(new PlayerEvents_1_9_4(), this);
+            pluginManager.registerEvents(new ServerEvents_1_9_4(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_10.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_10_2(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_11.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_11_2(), this);
+            pluginManager.registerEvents(new InventoryEvents_1_11_2(), this);
+        }
+        
+        //The pickup item event was deprecated and replaced in 1.12
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() < MinecraftVersion.v1_12.ordinal()) {
+            pluginManager.registerEvents(new PlayerItemPickupListener_1_8_1_11(), this);
+            pluginManager.registerEvents(new PlayerAchievmentListener_1_8_1_11(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_12_2.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_12_2(), this);
+            pluginManager.registerEvents(new PlayerEvents_1_12_2(), this);
+            pluginManager.registerEvents(new ServerEvents_1_12_2(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_13.ordinal()) {
+            pluginManager.registerEvents(new BlockEvents_1_13(), this);
+            pluginManager.registerEvents(new EntityEvents_1_13(), this);
+            pluginManager.registerEvents(new PlayerEvents_1_13(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_13_2.ordinal()) {
+            pluginManager.registerEvents(new BlockEvents_1_13_2(), this);
+            pluginManager.registerEvents(new EntityEvents_1_13_2(), this);
+            pluginManager.registerEvents(new PlayerEvents_1_13_2(), this);
+            pluginManager.registerEvents(new ServerEvents_1_13_2(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() < MinecraftVersion.v1_14_4.ordinal()) {
+            pluginManager.registerEvents(new EntityCreatePortalListener_1_8_1_14_4(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_14_4.ordinal()) {
+            pluginManager.registerEvents(new BlockEvents_1_14_4(), this);
+            pluginManager.registerEvents(new EntityEvents_1_14_4(), this);
+            pluginManager.registerEvents(new InventoryEvents_1_14_4(), this);
+            pluginManager.registerEvents(new PlayerEvents_1_14_4(), this);
+            pluginManager.registerEvents(new RaidEvents_1_14_4(), this);
+            pluginManager.registerEvents(new WorldEvents_1_14_4(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_15_2.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_15_2(), this);
+            pluginManager.registerEvents(new WorldEvents_1_15_2(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_16_1.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_16_1(), this);
+            pluginManager.registerEvents(new InventoryEvents_1_16_1(), this);
+            pluginManager.registerEvents(new PlayerEvents_1_16_1(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_16_3.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_16_3(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_16_5.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_16_5(), this);
+            pluginManager.registerEvents(new InventoryEvents_1_16_5(), this);
+            pluginManager.registerEvents(new PlayerEvents_1_16_5(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_17_1.ordinal()) {
+            pluginManager.registerEvents(new BlockEvents_1_17_1(), this);
+            pluginManager.registerEvents(new InventoryEvents_1_17_1(), this);
+            pluginManager.registerEvents(new WorldEvents_1_17_1(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_18_1.ordinal()) {
+            pluginManager.registerEvents(new BlockEvents_1_18_1(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_19_3.ordinal()) {
+            pluginManager.registerEvents(new InventoryEvents_1_19_3(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_20.ordinal()) {
+            pluginManager.registerEvents(new EntityEvents_1_20_1(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_21_1.ordinal()) {
+            pluginManager.registerEvents(new BlockEvents_1_21_1(), this);
+            pluginManager.registerEvents(new EntityEvents_1_21_1(), this);
+            pluginManager.registerEvents(new PlayerEvents_1_21_1(), this);
+        }
+        
+        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_21_3.ordinal()) {
+            pluginManager.registerEvents(new PlayerEvents_1_21_3(), this);
         }
     }
 

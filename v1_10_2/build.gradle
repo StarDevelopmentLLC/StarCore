@@ -1,0 +1,9 @@
+plugins {
+    id 'common'
+}
+
+dependencies {
+    //All of 1.10 is the same
+    compileOnly 'org.spigotmc:spigot-api:1.10.2-R0.1-SNAPSHOT'
+    compileOnly project(':api')
+}

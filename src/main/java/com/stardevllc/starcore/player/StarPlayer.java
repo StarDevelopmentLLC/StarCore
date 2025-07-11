@@ -86,7 +86,7 @@ public class StarPlayer {
 
     public long getPlaytime() {
         if (lastLogout < lastLogin) {
-            return playtime + (System.currentTimeMillis() - lastLogin);
+            return playtime + System.currentTimeMillis() - lastLogin;
         }
         
         return playtime;
