@@ -5,7 +5,6 @@ import com.stardevllc.starcore.v1_11_2.ItemWrapper_1_11_2;
 import com.stardevllc.starcore.v1_13_2.EnchantWrapper_1_13_2;
 import com.stardevllc.starcore.v1_13_2.ItemWrapper_1_13_2;
 import com.stardevllc.starcore.v1_8.*;
-import com.stardevllc.starcore.v1_8_R1.*;
 import com.stardevllc.starcore.v1_9_2.PlayerHandWrapper_1_9_2;
 import com.stardevllc.starmclib.MinecraftVersion;
 
