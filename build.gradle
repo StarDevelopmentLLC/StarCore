@@ -6,13 +6,24 @@ plugins {
     id 'com.gradleup.shadow' version '9.0.0-beta13'
 }
 
-group 'com.github.StarDevelopmentLLC'
+group 'com.stardevllc'
 version '0.8.2'
 
 publishing {
+    repositories {
+        maven {
+            name="stardev"
+            url="https://repo.stardevllc.com/releases"
+            credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+    
     publications {
         shadow(MavenPublication) {
-            from components.shadow
+            from components.java
         }
     }
 }
@@ -61,3 +72,4 @@ tasks.compileJava.dependsOn(clean)
 tasks.jar.finalizedBy(shadowJar)
 tasks.publishToMavenLocal.dependsOn(shadowJar)
 tasks.build.finalizedBy(publishToMavenLocal)
+tasks.build.finalizedBy(publish)
