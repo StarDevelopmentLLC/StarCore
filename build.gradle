@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.stardevllc'
-version '0.8.2'
+version '0.8.3'
 
 publishing {
     repositories {
@@ -41,31 +41,31 @@ tasks.named('shadowJar', ShadowJar) {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.7-R0.1-SNAPSHOT'
-    api 'com.github.StarDevelopmentLLC:config:0.1.4'
+    api 'com.stardevllc:config:0.1.4'
     
     //Project ones
-    api project(':api')
-    api project(':v1_8')
-    api project(':v1_8_3')
-    api project(':v1_8_8')
-    api project(':v1_9_2')
-    api project(':v1_9_4')
-    api project(':v1_10_2')
-    api project(':v1_11_2')
-    api project(':v1_12_2')
-    api project(':v1_13')
-    api project(':v1_13_2')
-    api project(':v1_14_4')
-    api project(':v1_15_2')
-    api project(':v1_16_1')
-    api project(':v1_16_3')
-    api project(':v1_16_5')
-    api project(':v1_17_1')
-    api project(':v1_18_1')
-    api project(':v1_19_3')
-    api project(':v1_20_1')
-    api project(':v1_21_1')
-    api project(':v1_21_3')
+    implementation project(':api')
+    implementation project(':v1_8')
+    implementation project(':v1_8_3')
+    implementation project(':v1_8_8')
+    implementation project(':v1_9_2')
+    implementation project(':v1_9_4')
+    implementation project(':v1_10_2')
+    implementation project(':v1_11_2')
+    implementation project(':v1_12_2')
+    implementation project(':v1_13')
+    implementation project(':v1_13_2')
+    implementation project(':v1_14_4')
+    implementation project(':v1_15_2')
+    implementation project(':v1_16_1')
+    implementation project(':v1_16_3')
+    implementation project(':v1_16_5')
+    implementation project(':v1_17_1')
+    implementation project(':v1_18_1')
+    implementation project(':v1_19_3')
+    implementation project(':v1_20_1')
+    implementation project(':v1_21_1')
+    implementation project(':v1_21_3')
 }
 
 tasks.compileJava.dependsOn(clean)
