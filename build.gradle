@@ -47,6 +47,7 @@ tasks.named('shadowJar', ShadowJar) {
     archiveClassifier = ''
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     relocate('com.google', 'com.stardevllc.google')
+    relocate('net.kyori', 'com.stardevllc.adventure')
 }
 
 dependencies {
