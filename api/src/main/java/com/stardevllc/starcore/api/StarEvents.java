@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.api;
 
-import com.stardevllc.eventbus.IEventBus;
-import com.stardevllc.eventbus.impl.SimpleEventBus;
+import com.stardevllc.starlib.eventbus.IEventBus;
+import com.stardevllc.starlib.eventbus.impl.SimpleEventBus;
 import org.bukkit.event.Event;
 
 import java.util.*;

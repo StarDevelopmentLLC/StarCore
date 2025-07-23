@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.player;
 
 import com.stardevllc.config.Section;
-import com.stardevllc.mojang.MojangProfile;
+import com.stardevllc.starlib.mojang.MojangProfile;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 

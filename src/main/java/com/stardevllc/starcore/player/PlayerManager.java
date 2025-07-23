@@ -1,11 +1,11 @@
 package com.stardevllc.starcore.player;
 
 import com.stardevllc.config.Section;
-import com.stardevllc.mojang.MojangAPI;
-import com.stardevllc.mojang.MojangProfile;
-import com.stardevllc.registry.UUIDRegistry;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.config.Configuration;
+import com.stardevllc.starlib.mojang.MojangAPI;
+import com.stardevllc.starlib.mojang.MojangProfile;
+import com.stardevllc.starlib.registry.UUIDRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
