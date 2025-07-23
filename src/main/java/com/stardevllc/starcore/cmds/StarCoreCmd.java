@@ -4,6 +4,7 @@ import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.colors.ColorHandler;
 import com.stardevllc.starcore.api.colors.CustomColor;
+import com.stardevllc.starlib.dependency.Inject;
 import com.stardevllc.starmclib.StarColorsAdventure;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -16,11 +17,8 @@ import java.util.List;
 
 public class StarCoreCmd implements TabExecutor {
 
+    @Inject
     private StarCore plugin;
-
-    public StarCoreCmd(StarCore plugin) {
-        this.plugin = plugin;
-    }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         StarColorsAdventure colors = plugin.getColors();

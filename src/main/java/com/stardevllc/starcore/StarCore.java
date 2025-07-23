@@ -39,7 +39,6 @@ import com.stardevllc.starmclib.MinecraftVersion;
 import com.stardevllc.starmclib.actors.ServerActor;
 import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 
@@ -74,9 +73,7 @@ public class StarCore extends ExtendedJavaPlugin {
             loadColors();
         }
         
-        this.playerManager = new PlayerManager(this);
-        PluginManager pluginManager = getServer().getPluginManager();
-        pluginManager.registerEvents(playerManager, this);
+        this.playerManager = injector.inject(new PlayerManager()).init();
         
         mainConfig.addDefault("save-player-info", true, " This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         if (mainConfig.getBoolean("save-player-info")) {
@@ -84,8 +81,6 @@ public class StarCore extends ExtendedJavaPlugin {
         }
         
         mainConfig.addDefault("use-mojang-api", true, "Use the Mojang API to get Skin Info for players.", "This is retrieved when a player joins, and done async to prevent lag.", "Disabling this could break plugins that rely on this.");
-        
-        Bukkit.getServer().getServicesManager().register(PlayerManager.class, playerManager, this, ServicePriority.High);
         
         messagesConfig = new Configuration(new File(getDataFolder(), "messages.yml"));
         
@@ -123,10 +118,7 @@ public class StarCore extends ExtendedJavaPlugin {
         this.mcWrappers = new MCWrappersImpl();
         getServer().getServicesManager().register(MCWrappers.class, this.mcWrappers, this, ServicePriority.Highest);
         
-        StarCoreCmd starCoreCmd = new StarCoreCmd(this);
-        PluginCommand pluginStarCoreCmd = getCommand("starcore");
-        pluginStarCoreCmd.setExecutor(starCoreCmd);
-        pluginStarCoreCmd.setTabCompleter(starCoreCmd);
+        registerCommand("starcore", new StarCoreCmd());
         
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
         
@@ -137,6 +129,7 @@ public class StarCore extends ExtendedJavaPlugin {
             StarColors.setColorHandler(new ColorHandler_1_16_1());
         }
         
+        PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new BlockEvents(), this);
         pluginManager.registerEvents(new EnchantEvents(), this);
         pluginManager.registerEvents(new EntityEvents(), this);

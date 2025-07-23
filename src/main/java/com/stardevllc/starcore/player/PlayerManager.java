@@ -3,6 +3,7 @@ package com.stardevllc.starcore.player;
 import com.stardevllc.config.Section;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.config.Configuration;
+import com.stardevllc.starlib.dependency.Inject;
 import com.stardevllc.starlib.mojang.MojangAPI;
 import com.stardevllc.starlib.mojang.MojangProfile;
 import com.stardevllc.starlib.registry.UUIDRegistry;
@@ -10,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.*;
 
 import java.io.File;
 import java.util.*;
@@ -19,13 +21,21 @@ public class PlayerManager implements Listener {
 
     private Configuration playersConfig;
     
+    @Inject
     private StarCore plugin;
+    @Inject
+    private PluginManager pluginManager;
+    @Inject
+    private ServicesManager servicesManager;
 
-    public PlayerManager(StarCore plugin) {
-        this.plugin = plugin;
+    public PlayerManager init() {
         if (plugin.getMainConfig().getBoolean("save-player-info")) {
             playersConfig = new Configuration(new File(plugin.getDataFolder(), "players.yml"));
         }
+        
+        this.pluginManager.registerEvents(this, plugin);
+        this.servicesManager.register(PlayerManager.class, this, plugin, ServicePriority.Normal);
+        return this;
     }
 
     public void addPlayer(StarPlayer player) {
@@ -104,6 +114,6 @@ public class PlayerManager implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e) {
         StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
         starPlayer.setLastLogout(System.currentTimeMillis());
-        starPlayer.setPlaytime(starPlayer.getPlaytime() + (starPlayer.getLastLogout() - starPlayer.getLastLogin()));
+        starPlayer.setPlaytime(starPlayer.getPlaytime() + starPlayer.getLastLogout() - starPlayer.getLastLogin());
     }
 }
