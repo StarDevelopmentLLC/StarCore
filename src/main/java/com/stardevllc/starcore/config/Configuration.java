@@ -1,5 +1,6 @@
 package com.stardevllc.starcore.config;
 
+import com.stardevllc.config.Config;
 import com.stardevllc.config.Section;
 import com.stardevllc.config.file.yaml.YamlConfig;
 import com.stardevllc.config.serialization.ConfigSerializable;
@@ -29,6 +30,10 @@ public class Configuration {
         }
 
         this.file = file;
+        this.config = YamlConfig.loadConfiguration(file);
+    }
+    
+    public void reload() {
         this.config = YamlConfig.loadConfiguration(file);
     }
     
@@ -79,7 +84,7 @@ public class Configuration {
         return config.getName();
     }
 
-    public com.stardevllc.config.Config getRoot() {
+    public Config getRoot() {
         return config.getRoot();
     }
 
