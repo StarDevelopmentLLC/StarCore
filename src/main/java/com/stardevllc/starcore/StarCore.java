@@ -68,13 +68,16 @@ public class StarCore extends ExtendedJavaPlugin {
         StarMCLib.registerPluginInjector(this, getInjector());
         StarEvents.addChildBus(getEventBus());
         mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
+        getLogger().info("Initialized the main config");
         mainConfig.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
-
+        getLogger().info("Set the Console UUID to " + this.consoleUnqiueId);
+        
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (mainConfig.getBoolean("save-colors")) {
             loadColors();
+            getLogger().info("Loaded custom colors");
         }
         
         this.playerManager = injector.inject(new PlayerManager()).init();
@@ -82,11 +85,13 @@ public class StarCore extends ExtendedJavaPlugin {
         mainConfig.addDefault("save-player-info", true, " This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         if (mainConfig.getBoolean("save-player-info")) {
             this.playerManager.load();
+            getLogger().info("Loaded player data");
         }
         
         mainConfig.addDefault("use-mojang-api", true, "Use the Mojang API to get Skin Info for players.", "This is retrieved when a player joins, and done async to prevent lag.", "Disabling this could break plugins that rely on this.");
         
         messagesConfig = new Configuration(new File(getDataFolder(), "messages.yml"));
+        getLogger().info("Initialized the messages.yml file");
         
         messagesConfig.addDefault("command.reload", "&aSuccessfully reloaded configs.", " The message sent when /starcore reload is a success");
         messagesConfig.addDefault("command.invalidsubcommand", "&cInvalid subcommand.", " The message sent when an invalid sub-command is provided to /starcore");
@@ -126,6 +131,8 @@ public class StarCore extends ExtendedJavaPlugin {
         StarMCLib.GLOBAL_INJECTOR.setInstance(ItemWrapper.class, this.mcWrappers.getItemWrapper());
         StarMCLib.GLOBAL_INJECTOR.setInstance(EnchantWrapper.class, this.mcWrappers.getEnchantWrapper());
         StarMCLib.GLOBAL_INJECTOR.setInstance(PlayerHandWrapper.class, this.mcWrappers.getPlayerHandWrapper());
+        
+        getLogger().info("Initialized the MCWrapper utility");
         
         registerCommand("starcore", new StarCoreCmd());
         
@@ -260,6 +267,8 @@ public class StarCore extends ExtendedJavaPlugin {
         if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_21_3.ordinal()) {
             pluginManager.registerEvents(new PlayerEvents_1_21_3(), this);
         }
+        getLogger().info("Initialized the Event Passing listeners");
+        getLogger().info("StarCore finished loading");
     }
 
     public void reload(boolean save) {
