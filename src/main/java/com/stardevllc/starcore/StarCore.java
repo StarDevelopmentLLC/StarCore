@@ -6,7 +6,7 @@ import com.stardevllc.starcore.api.StarEvents;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.api.events.*;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
-import com.stardevllc.starcore.api.wrappers.MCWrappers;
+import com.stardevllc.starcore.api.wrappers.*;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
@@ -36,6 +36,7 @@ import com.stardevllc.starcore.v1_8_8.events.PlayerEvents_1_8_8;
 import com.stardevllc.starcore.v1_9_4.events.PlayerEvents_1_9_4;
 import com.stardevllc.starcore.v1_9_4.events.ServerEvents_1_9_4;
 import com.stardevllc.starmclib.MinecraftVersion;
+import com.stardevllc.starmclib.StarMCLib;
 import com.stardevllc.starmclib.actors.ServerActor;
 import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
 import org.bukkit.Bukkit;
@@ -62,7 +63,10 @@ public class StarCore extends ExtendedJavaPlugin {
     
     public void onEnable() {
         super.onEnable();
-        StarEvents.subscribe(getEventBus());
+        StarMCLib.init();
+        StarMCLib.registerPluginEventBus(getEventBus());
+        StarMCLib.registerPluginInjector(this, getInjector());
+        StarEvents.addChildBus(getEventBus());
         mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
         mainConfig.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
@@ -118,9 +122,15 @@ public class StarCore extends ExtendedJavaPlugin {
         this.mcWrappers = new MCWrappersImpl();
         getServer().getServicesManager().register(MCWrappers.class, this.mcWrappers, this, ServicePriority.Highest);
         
+        StarMCLib.GLOBAL_INJECTOR.setInstance(MCWrappers.class, this.mcWrappers);
+        StarMCLib.GLOBAL_INJECTOR.setInstance(ItemWrapper.class, this.mcWrappers.getItemWrapper());
+        StarMCLib.GLOBAL_INJECTOR.setInstance(EnchantWrapper.class, this.mcWrappers.getEnchantWrapper());
+        StarMCLib.GLOBAL_INJECTOR.setInstance(PlayerHandWrapper.class, this.mcWrappers.getPlayerHandWrapper());
+        
         registerCommand("starcore", new StarCoreCmd());
         
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
+        StarMCLib.GLOBAL_INJECTOR.setInstance(ServerActor.class, ServerActor.getServerActor());
         
         MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
         if (currentVersion.ordinal() < MinecraftVersion.v1_16.ordinal()) {
