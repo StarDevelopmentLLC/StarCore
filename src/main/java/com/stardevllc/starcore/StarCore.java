@@ -69,9 +69,12 @@ public class StarCore extends ExtendedJavaPlugin {
         StarEvents.addChildBus(getEventBus());
         mainConfig = new Configuration(new File(getDataFolder(), "config.yml"));
         getLogger().info("Initialized the main config");
+        
         mainConfig.addDefault("console-uuid", UUID.randomUUID().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
         this.consoleUnqiueId = UUID.fromString(mainConfig.getString("console-uuid"));
         ServerActor.serverUUID = this.consoleUnqiueId;
+        Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
+        StarMCLib.GLOBAL_INJECTOR.setInstance(ServerActor.class, ServerActor.getServerActor());
         getLogger().info("Set the Console UUID to " + this.consoleUnqiueId);
         
         mainConfig.addDefault("save-colors", false, " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
@@ -81,6 +84,7 @@ public class StarCore extends ExtendedJavaPlugin {
         }
         
         this.playerManager = injector.inject(new PlayerManager()).init();
+        StarMCLib.GLOBAL_INJECTOR.setInstance(PlayerManager.class, this.playerManager);
         
         mainConfig.addDefault("save-player-info", true, " This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         if (mainConfig.getBoolean("save-player-info")) {
@@ -135,9 +139,6 @@ public class StarCore extends ExtendedJavaPlugin {
         getLogger().info("Initialized the MCWrapper utility");
         
         registerCommand("starcore", new StarCoreCmd());
-        
-        Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
-        StarMCLib.GLOBAL_INJECTOR.setInstance(ServerActor.class, ServerActor.getServerActor());
         
         MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
         if (currentVersion.ordinal() < MinecraftVersion.v1_16.ordinal()) {
