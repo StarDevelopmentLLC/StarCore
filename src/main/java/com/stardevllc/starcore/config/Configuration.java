@@ -33,6 +33,23 @@ public class Configuration {
         this.config = YamlConfig.loadConfiguration(file);
     }
     
+    public void delete() {
+        this.file.delete();
+    }
+    
+    public void renameFile(String newName) {
+        save();
+        File oldFile = file;
+        File newFile = new File(oldFile.getParentFile(), newName + ".yml");
+        if (newFile.exists()) {
+            newFile.delete();
+        }
+        
+        oldFile.renameTo(newFile);
+        this.file = newFile;
+        this.config = YamlConfig.loadConfiguration(this.file);
+    }
+    
     public void reload() {
         this.config = YamlConfig.loadConfiguration(file);
     }
