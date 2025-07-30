@@ -1,23 +1,16 @@
 package com.stardevllc.starcore.v1_16_1.itembuilder;
 
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
-import com.stardevllc.starcore.api.itembuilder.enums.BookType;
 import com.stardevllc.starmclib.XMaterial;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class BookItemBuilder extends ItemBuilder {
-    
-    static {
-        ItemBuilder.META_TO_BUILDERS.put(BookMeta.class, BookItemBuilder.class);
-    }
+public class BookItemBuilder extends ItemBuilder<BookItemBuilder, BookMeta> {
     
     private String author;
     private List<BaseComponent[]> pages = new LinkedList<>();
@@ -28,45 +21,24 @@ public class BookItemBuilder extends ItemBuilder {
         super(material);
     }
     
-    protected BookItemBuilder() {
+    public BookItemBuilder(ItemStack itemStack) {
+        super(itemStack);
         
-    }
-
-    public BookItemBuilder(BookType bookType, String title, String author) {
-        super(XMaterial.valueOf(bookType.name() + "_BOOK"));
-        title(title).author(author);
-    }
-
-    protected static BookItemBuilder createFromItemStack(ItemStack itemStack) {
-        BookItemBuilder itemBuilder = new BookItemBuilder();
         BookMeta itemMeta = (BookMeta) itemStack.getItemMeta();
-        itemBuilder.setPagesComponents(itemMeta.spigot().getPages()).author(itemMeta.getAuthor()).title(itemMeta.getTitle()).generation(itemMeta.getGeneration());
-        return itemBuilder;
-    }
-
-    protected static BookItemBuilder createFromConfig(ConfigurationSection section) {
-        BookItemBuilder builder = new BookItemBuilder();
-        builder.title(section.getString("title"));
-        builder.author(section.getString("author"));
-        builder.generation(BookMeta.Generation.valueOf(section.getString("generation")));
-        ConfigurationSection pagesSection = section.getConfigurationSection("pages");
-        if (pagesSection != null) {
-            for (Object key : pagesSection.getKeys(false)) {
-                builder.addPage(ComponentSerializer.parse(pagesSection.getString(key.toString())));
-            }
+        if (itemMeta != null) {
+            this.author = itemMeta.getAuthor();
+            this.pages.addAll(itemMeta.spigot().getPages());
+            this.generation = itemMeta.getGeneration();
+            this.title = itemMeta.getTitle();
         }
-        return builder;
     }
-
-    @Override
-    public void saveToConfig(ConfigurationSection section) {
-        super.saveToConfig(section);
-        section.set("author", this.author);
-        section.set("title", this.title);
-        section.set("generation", this.generation.name());
-        for (int i = 0; i < pages.size(); i++) {
-            section.set("pages." + i, ComponentSerializer.toString(pages.get(i)));
-        }
+    
+    public BookItemBuilder(BookItemBuilder builder) {
+        super(builder);
+        this.author = builder.author;
+        this.pages.addAll(builder.pages);
+        this.generation = builder.generation;
+        this.title = builder.title;
     }
     
     public BookItemBuilder addPage(String page) {
@@ -108,7 +80,7 @@ public class BookItemBuilder extends ItemBuilder {
 
     @Override
     protected BookMeta createItemMeta() {
-        BookMeta itemMeta = (BookMeta) super.createItemMeta();
+        BookMeta itemMeta = super.createItemMeta();
         itemMeta.setTitle(title);
         itemMeta.setAuthor(author);
         itemMeta.setGeneration(generation);
@@ -118,10 +90,6 @@ public class BookItemBuilder extends ItemBuilder {
 
     @Override
     public BookItemBuilder clone() {
-        BookItemBuilder clone = (BookItemBuilder) super.clone();
-        clone.title = this.title;
-        clone.author = this.author;
-        clone.pages.addAll(this.pages);
-        return clone;
+        return new BookItemBuilder(this);
     }
 }

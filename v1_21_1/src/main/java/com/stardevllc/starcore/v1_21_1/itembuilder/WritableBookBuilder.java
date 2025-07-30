@@ -2,39 +2,32 @@ package com.stardevllc.starcore.v1_21_1.itembuilder;
 
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starmclib.XMaterial;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.WritableBookMeta;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class WritableBookBuilder extends ItemBuilder {
+public class WritableBookBuilder extends ItemBuilder<WritableBookBuilder, WritableBookMeta> {
 
-    static {
-        ItemBuilder.META_TO_BUILDERS.put(WritableBookMeta.class, WritableBookBuilder.class);
-    }
-    
     protected List<String> pages = new LinkedList<>();
     
     public WritableBookBuilder() {
-    }
-
-    public WritableBookBuilder(XMaterial material) {
-        super(material);
+        super(XMaterial.WRITABLE_BOOK);
     }
     
-    protected static WritableBookBuilder createFromItemStack(ItemStack itemStack) {
-        WritableBookBuilder itemBuilder = new WritableBookBuilder(XMaterial.matchXMaterial(itemStack));
+    public WritableBookBuilder(ItemStack itemStack) {
+        super(itemStack);
+        
         WritableBookMeta itemMeta = (WritableBookMeta) itemStack.getItemMeta();
-        itemBuilder.pages(itemMeta.getPages());
-        return itemBuilder;
+        if (itemMeta != null) {
+            this.pages.addAll(itemMeta.getPages());
+        }
     }
-
-    protected static WritableBookBuilder createFromConfig(ConfigurationSection section) {
-        WritableBookBuilder builder = new WritableBookBuilder();
-        builder.pages(section.getStringList("pages"));
-        return builder;
+    
+    public WritableBookBuilder(WritableBookBuilder builder) {
+        super(builder);
+        this.pages.addAll(builder.pages);
     }
     
     public WritableBookBuilder addPages(String... pages) {
@@ -56,15 +49,14 @@ public class WritableBookBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
-        super.saveToConfig(section);
-        section.set("pages", this.pages);
-    }
-
-    @Override
     protected WritableBookMeta createItemMeta() {
-        WritableBookMeta itemMeta = (WritableBookMeta) super.createItemMeta();
+        WritableBookMeta itemMeta = super.createItemMeta();
         itemMeta.setPages(this.pages);
         return itemMeta;
+    }
+    
+    @Override
+    public WritableBookBuilder clone() {
+        return new WritableBookBuilder(this);
     }
 }

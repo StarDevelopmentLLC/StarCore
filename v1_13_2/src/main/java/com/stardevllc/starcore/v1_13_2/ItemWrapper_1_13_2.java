@@ -12,7 +12,8 @@ import java.util.Map;
 
 public class ItemWrapper_1_13_2 implements ItemWrapper {
     @Override
-    public void addAttributeModifier(ItemMeta itemMeta, String attribute, AttributeModifierWrapper wrapper) {
+    public void addAttributeModifier(ItemStack itemStack, String attribute, AttributeModifierWrapper wrapper) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.addAttributeModifier(Attribute.valueOf(attribute.toUpperCase()), new AttributeModifier(wrapper.getUuid(), wrapper.getName(), wrapper.getAmount(), AttributeModifier.Operation.valueOf(wrapper.getOperation().toUpperCase()), wrapper.getSlot()));
     }
 

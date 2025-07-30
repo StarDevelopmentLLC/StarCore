@@ -2,36 +2,29 @@ package com.stardevllc.starcore.v1_21_1.itembuilder;
 
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starmclib.XMaterial;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.OminousBottleMeta;
 
-public class OminousBottleBuilder extends ItemBuilder {
+public class OminousBottleBuilder extends ItemBuilder<OminousBottleBuilder, OminousBottleMeta> {
 
-    static {
-        ItemBuilder.META_TO_BUILDERS.put(OminousBottleMeta.class, OminousBottleBuilder.class);
-    }
-    
     protected int amplifier;
     
     public OminousBottleBuilder() {
+        super(XMaterial.OMINOUS_BOTTLE);
     }
-
-    public OminousBottleBuilder(XMaterial material) {
-        super(material);
-    }
-
-    protected static OminousBottleBuilder createFromItemStack(ItemStack itemStack) {
-        OminousBottleBuilder itemBuilder = new OminousBottleBuilder(XMaterial.matchXMaterial(itemStack));
+    
+    public OminousBottleBuilder(ItemStack itemStack) {
+        super(itemStack);
+        
         OminousBottleMeta itemMeta = (OminousBottleMeta) itemStack.getItemMeta();
-        itemBuilder.amplifier(itemMeta.getAmplifier());
-        return itemBuilder;
+        if (itemMeta != null) {
+            this.amplifier = itemMeta.getAmplifier();
+        }
     }
-
-    protected static OminousBottleBuilder createFromConfig(ConfigurationSection section) {
-        OminousBottleBuilder builder = new OminousBottleBuilder();
-        builder.amplifier(section.getInt("amplifier"));
-        return builder;
+    
+    public OminousBottleBuilder(OminousBottleBuilder builder) {
+        super(builder);
+        this.amplifier = builder.amplifier;
     }
     
     public OminousBottleBuilder amplifier(int amplifier) {
@@ -40,15 +33,14 @@ public class OminousBottleBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(ConfigurationSection section) {
-        super.saveToConfig(section);
-        section.set("amplifier", this.amplifier);
-    }
-
-    @Override
     protected OminousBottleMeta createItemMeta() {
-        OminousBottleMeta itemMeta = (OminousBottleMeta) super.createItemMeta();
+        OminousBottleMeta itemMeta = super.createItemMeta();
         itemMeta.setAmplifier(this.amplifier);
         return itemMeta;
+    }
+    
+    @Override
+    public OminousBottleBuilder clone() {
+        return new OminousBottleBuilder(this);
     }
 }

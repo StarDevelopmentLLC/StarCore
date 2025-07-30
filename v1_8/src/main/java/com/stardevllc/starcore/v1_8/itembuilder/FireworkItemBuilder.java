@@ -3,17 +3,12 @@ package com.stardevllc.starcore.v1_8.itembuilder;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starmclib.XMaterial;
 import org.bukkit.FireworkEffect;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.*;
 
-public class FireworkItemBuilder extends ItemBuilder {
-    
-    static {
-        ItemBuilder.META_TO_BUILDERS.put(FireworkMeta.class, FireworkItemBuilder.class);
-    }
+public class FireworkItemBuilder extends ItemBuilder<FireworkItemBuilder, FireworkMeta> {
     
     private List<FireworkEffect> effects = new LinkedList<>();
     private int power;
@@ -21,38 +16,25 @@ public class FireworkItemBuilder extends ItemBuilder {
     public FireworkItemBuilder() {
         super(XMaterial.FIREWORK_ROCKET);
     }
-
-    public FireworkItemBuilder(FireworkEffect effect, int power) {
-        addEffect(effect).power(power);
+    
+    public FireworkItemBuilder(ItemStack itemStack) {
+        super(itemStack);
+        
+        FireworkMeta itemMeta = (FireworkMeta) itemStack.getItemMeta();
+        if (itemMeta != null) {
+            this.power = itemMeta.getPower();
+            this.effects.addAll(itemMeta.getEffects());
+        }
     }
     
-    protected static FireworkItemBuilder createFromItemStack(ItemStack itemStack) {
-        FireworkItemBuilder itemBuilder = new FireworkItemBuilder();
-        FireworkMeta meta = (FireworkMeta) itemStack.getItemMeta();
-        itemBuilder.power(meta.getPower()).setEffects(meta.getEffects());
-        return itemBuilder;
+    public FireworkItemBuilder(FireworkItemBuilder builder) {
+        super(builder);
+        this.effects.addAll(builder.effects);
+        this.power = builder.power;
     }
-
-    protected static FireworkItemBuilder createFromConfig(ConfigurationSection section) {
-        FireworkItemBuilder builder = new FireworkItemBuilder();
-        builder.power(section.getInt("power"));
-        ConfigurationSection effectsSection = section.getConfigurationSection("effects");
-        if (effectsSection != null) {
-            for (Object key : effectsSection.getKeys(false)) {
-                FireworkEffect object = (FireworkEffect) effectsSection.get(key.toString(), FireworkEffect.class);
-                builder.addEffect(object);
-            }
-        }
-        return builder;
-    }
-
-    @Override
-    public void saveToConfig(ConfigurationSection section) {
-        super.saveToConfig(section);
-        section.set("power", this.power);
-        for (int i = 0; i < effects.size(); i++) {
-            section.set("effects." + i, effects.get(i));
-        }
+    
+    public FireworkItemBuilder(FireworkEffect effect, int power) {
+        addEffect(effect).power(power);
     }
     
     public FireworkItemBuilder power(int power) {
@@ -78,7 +60,7 @@ public class FireworkItemBuilder extends ItemBuilder {
 
     @Override
     protected FireworkMeta createItemMeta() {
-        FireworkMeta itemMeta = (FireworkMeta) super.createItemMeta();
+        FireworkMeta itemMeta = super.createItemMeta();
         itemMeta.addEffects(this.effects);
         itemMeta.setPower(this.power);
         return itemMeta;
@@ -86,9 +68,6 @@ public class FireworkItemBuilder extends ItemBuilder {
 
     @Override
     public FireworkItemBuilder clone() {
-        FireworkItemBuilder clone = (FireworkItemBuilder) super.clone();
-        clone.power = this.power;
-        clone.effects.addAll(this.effects);
-        return clone;
+        return new FireworkItemBuilder(this);
     }
 }

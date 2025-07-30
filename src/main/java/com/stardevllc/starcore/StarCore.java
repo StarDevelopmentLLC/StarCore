@@ -10,31 +10,26 @@ import com.stardevllc.starcore.api.wrappers.*;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
-import com.stardevllc.starcore.v1_10_2.events.EntityEvents_1_10_2;
-import com.stardevllc.starcore.v1_11_2.events.EntityEvents_1_11_2;
-import com.stardevllc.starcore.v1_11_2.events.InventoryEvents_1_11_2;
-import com.stardevllc.starcore.v1_12_2.events.*;
-import com.stardevllc.starcore.v1_13.events.*;
-import com.stardevllc.starcore.v1_13_2.events.*;
-import com.stardevllc.starcore.v1_14_4.events.*;
-import com.stardevllc.starcore.v1_15_2.events.EntityEvents_1_15_2;
-import com.stardevllc.starcore.v1_15_2.events.WorldEvents_1_15_2;
-import com.stardevllc.starcore.v1_16_1.ColorHandler_1_16_1;
-import com.stardevllc.starcore.v1_16_1.events.*;
-import com.stardevllc.starcore.v1_16_3.events.EntityEvents_1_16_3;
-import com.stardevllc.starcore.v1_16_5.events.*;
-import com.stardevllc.starcore.v1_17_1.events.*;
-import com.stardevllc.starcore.v1_18_1.events.BlockEvents_1_18_1;
-import com.stardevllc.starcore.v1_19_3.events.InventoryEvents_1_19_3;
-import com.stardevllc.starcore.v1_20_1.events.EntityEvents_1_20_1;
-import com.stardevllc.starcore.v1_21_1.events.*;
-import com.stardevllc.starcore.v1_21_3.events.PlayerEvents_1_21_3;
-import com.stardevllc.starcore.v1_8.ColorHandler_1_8;
-import com.stardevllc.starcore.v1_8_3.events.BlockEvents_1_8_3;
-import com.stardevllc.starcore.v1_8_8.events.EntityEvents_1_8_8;
-import com.stardevllc.starcore.v1_8_8.events.PlayerEvents_1_8_8;
-import com.stardevllc.starcore.v1_9_4.events.PlayerEvents_1_9_4;
-import com.stardevllc.starcore.v1_9_4.events.ServerEvents_1_9_4;
+import com.stardevllc.starcore.v1_10_2.events.Module_1_10_2;
+import com.stardevllc.starcore.v1_11_2.events.Module_1_11_2;
+import com.stardevllc.starcore.v1_12_2.events.Module_1_12_2;
+import com.stardevllc.starcore.v1_13.Module_1_13;
+import com.stardevllc.starcore.v1_13_2.Module_1_13_2;
+import com.stardevllc.starcore.v1_14_4.Module_1_14_4;
+import com.stardevllc.starcore.v1_15_2.events.Module_1_15_2;
+import com.stardevllc.starcore.v1_16_1.Module_1_16_1;
+import com.stardevllc.starcore.v1_16_3.events.Module_1_16_3;
+import com.stardevllc.starcore.v1_16_5.events.Module_1_16_5;
+import com.stardevllc.starcore.v1_17_1.Module_1_17_1;
+import com.stardevllc.starcore.v1_18_1.events.Module_1_18_1;
+import com.stardevllc.starcore.v1_19_3.Module_1_19_3;
+import com.stardevllc.starcore.v1_20_1.Module_1_20_1;
+import com.stardevllc.starcore.v1_21_1.Module_1_21_1;
+import com.stardevllc.starcore.v1_21_3.events.Module_1_21_3;
+import com.stardevllc.starcore.v1_8.Module_1_8;
+import com.stardevllc.starcore.v1_8_3.events.Module_1_8_3;
+import com.stardevllc.starcore.v1_8_8.events.Module_1_8_8;
+import com.stardevllc.starcore.v1_9_4.events.Module_1_9_4;
 import com.stardevllc.starmclib.MinecraftVersion;
 import com.stardevllc.starmclib.StarMCLib;
 import com.stardevllc.starmclib.actors.ServerActor;
@@ -141,101 +136,42 @@ public class StarCore extends ExtendedJavaPlugin {
         registerCommand("starcore", new StarCoreCmd());
         
         MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
-        if (currentVersion.ordinal() < MinecraftVersion.v1_16.ordinal()) {
-            StarColors.setColorHandler(new ColorHandler_1_8());
-        } else {
-            StarColors.setColorHandler(new ColorHandler_1_16_1());
-        }
+        
+        new Module_1_8(this);
+        new Module_1_8_3(this);
+        new Module_1_8_8(this);
+        new Module_1_9_4(this);
+        new Module_1_10_2(this);
+        new Module_1_11_2(this);
+        new Module_1_12_2(this);
+        new Module_1_13(this);
+        new Module_1_13_2(this);
+        new Module_1_14_4(this);
+        new Module_1_15_2(this);
+        new Module_1_16_1(this);
+        new Module_1_16_3(this);
+        new Module_1_16_5(this);
+        new Module_1_17_1(this);
+        new Module_1_18_1(this);
+        new Module_1_19_3(this);
+        new Module_1_20_1(this);
+        new Module_1_21_1(this);
+        new Module_1_21_3(this);
         
         registerListeners(new BlockEvents(), new EnchantEvents(), new EntityEvents(), new HangingEvents(), new InventoryEvents(), 
                 new PlayerEvents(), new ServerEvents(), new VehicleEvents(), new WeatherEvents(), new WorldEvents());
         
         PluginManager pluginManager = getServer().getPluginManager();
         
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_8_3.ordinal()) {
-            registerListeners(new BlockEvents_1_8_3());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_8_4.ordinal()) {
-            registerListeners(new EntityEvents_1_8_8(), new PlayerEvents_1_8_8());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_9_4.ordinal()) {
-            registerListeners(new PlayerEvents_1_9_4(), new ServerEvents_1_9_4());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_10.ordinal()) {
-            registerListeners(new EntityEvents_1_10_2());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_11.ordinal()) {
-            registerListeners(new EntityEvents_1_11_2(), new InventoryEvents_1_11_2());
-        }
-        
         //The pickup item event was deprecated and replaced in 1.12
         if (MinecraftVersion.CURRENT_VERSION.ordinal() < MinecraftVersion.v1_12.ordinal()) {
             registerListeners(new PlayerItemPickupListener_1_8_1_11(), new PlayerAchievmentListener_1_8_1_11());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_12_2.ordinal()) {
-            registerListeners(new EntityEvents_1_12_2(), new PlayerEvents_1_12_2(), new ServerEvents_1_12_2());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_13.ordinal()) {
-            registerListeners(new BlockEvents_1_13(), new EntityEvents_1_13(), new PlayerEvents_1_13());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_13_2.ordinal()) {
-            registerListeners(new BlockEvents_1_13_2(), new EntityEvents_1_13_2(), new PlayerEvents_1_13_2(), new ServerEvents_1_13_2());
         }
         
         if (MinecraftVersion.CURRENT_VERSION.ordinal() < MinecraftVersion.v1_14_4.ordinal()) {
             registerListeners(new EntityCreatePortalListener_1_8_1_14_4());
         }
         
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_14_4.ordinal()) {
-            registerListeners(new BlockEvents_1_14_4(), new EntityEvents_1_14_4(), new InventoryEvents_1_14_4(), new PlayerEvents_1_14_4(), new RaidEvents_1_14_4(), new WorldEvents_1_14_4());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_15_2.ordinal()) {
-            registerListeners(new EntityEvents_1_15_2(), new WorldEvents_1_15_2());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_16_1.ordinal()) {
-            registerListeners(new EntityEvents_1_16_1(), new InventoryEvents_1_16_1(), new PlayerEvents_1_16_1());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_16_3.ordinal()) {
-            registerListeners(new EntityEvents_1_16_3());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_16_5.ordinal()) {
-            registerListeners(new EntityEvents_1_16_5(), new InventoryEvents_1_16_5(), new PlayerEvents_1_16_5());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_17_1.ordinal()) {
-            registerListeners(new BlockEvents_1_17_1(), new InventoryEvents_1_17_1(), new WorldEvents_1_17_1());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_18_1.ordinal()) {
-            registerListeners(new BlockEvents_1_18_1());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_19_3.ordinal()) {
-            registerListeners(new InventoryEvents_1_19_3());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_20.ordinal()) {
-            registerListeners(new EntityEvents_1_20_1());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_21_1.ordinal()) {
-            registerListeners(new BlockEvents_1_21_1(), new EntityEvents_1_21_1(), new PlayerEvents_1_21_1());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_21_3.ordinal()) {
-            pluginManager.registerEvents(new PlayerEvents_1_21_3(), this);
-        }
         getLogger().info("Initialized the Event Passing listeners");
         getLogger().info("StarCore finished loading");
     }

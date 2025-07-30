@@ -1,7 +1,6 @@
 package com.stardevllc.starcore;
 
 import com.stardevllc.starcore.api.wrappers.*;
-import com.stardevllc.starcore.v1_11_2.ItemWrapper_1_11_2;
 import com.stardevllc.starcore.v1_13_2.EnchantWrapper_1_13_2;
 import com.stardevllc.starcore.v1_13_2.ItemWrapper_1_13_2;
 import com.stardevllc.starcore.v1_8.*;
@@ -34,8 +33,6 @@ public class MCWrappersImpl implements MCWrappers {
         if (itemWrapper == null) {
             if (MinecraftVersion.CURRENT_VERSION.ordinal() <= MinecraftVersion.v1_10.ordinal()) {
                 itemWrapper = new ItemWrapper_1_8();
-            } else if (MinecraftVersion.CURRENT_VERSION.ordinal() <= MinecraftVersion.v1_13.ordinal()) {
-                itemWrapper = new ItemWrapper_1_11_2();
             } else if (MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_13_2.ordinal()) {
                 itemWrapper = new ItemWrapper_1_13_2();
             } else {

@@ -3,16 +3,11 @@ package com.stardevllc.starcore.v1_13.itembuilder;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starmclib.XMaterial;
 import org.bukkit.DyeColor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 
-public class FishBucketBuilder extends ItemBuilder {
-    
-    static {
-        ItemBuilder.META_TO_BUILDERS.put(TropicalFishBucketMeta.class, FishBucketBuilder.class);
-    }
+public class FishBucketBuilder extends ItemBuilder<FishBucketBuilder, TropicalFishBucketMeta> {
     
     private DyeColor bodyColor = DyeColor.BLACK;
     private TropicalFish.Pattern pattern = TropicalFish.Pattern.BLOCKFISH;
@@ -21,32 +16,27 @@ public class FishBucketBuilder extends ItemBuilder {
     public FishBucketBuilder() {
         super(XMaterial.TROPICAL_FISH_BUCKET);
     }
-
-    public FishBucketBuilder(DyeColor bodyColor, TropicalFish.Pattern pattern, DyeColor patternColor) {
-        bodyColor(bodyColor).pattern(pattern).patternColor(patternColor);
+    
+    public FishBucketBuilder(ItemStack itemStack) {
+        super(itemStack);
+        
+        TropicalFishBucketMeta itemMeta = (TropicalFishBucketMeta) itemStack.getItemMeta();
+        if (itemMeta != null) {
+            this.bodyColor = itemMeta.getBodyColor();
+            this.pattern = itemMeta.getPattern();
+            this.patternColor = itemMeta.getPatternColor();
+        }
     }
     
-    protected static FishBucketBuilder createFromItemStack(ItemStack itemStack) {
-        FishBucketBuilder builder = new FishBucketBuilder();
-        TropicalFishBucketMeta meta = (TropicalFishBucketMeta) itemStack.getItemMeta();
-        builder.bodyColor(meta.getBodyColor()).pattern(meta.getPattern()).patternColor(meta.getPatternColor());
-        return builder;
+    public FishBucketBuilder(FishBucketBuilder builder) {
+        super(builder);
+        this.bodyColor = builder.bodyColor;
+        this.pattern = builder.pattern;
+        this.patternColor = builder.patternColor;
     }
-
-    protected static FishBucketBuilder createFromConfig(ConfigurationSection section) {
-        FishBucketBuilder builder = new FishBucketBuilder();
-        builder.bodyColor(DyeColor.valueOf(section.getString("bodycolor")));
-        builder.pattern(TropicalFish.Pattern.valueOf("pattern"));
-        builder.patternColor(DyeColor.valueOf("patterncolor"));
-        return builder;
-    }
-
-    @Override
-    public void saveToConfig(ConfigurationSection section) {
-        super.saveToConfig(section);
-        section.set("bodycolor", this.bodyColor.name());
-        section.set("pattern", this.pattern.name());
-        section.set("patterncolor", this.patternColor.name());
+    
+    public FishBucketBuilder(DyeColor bodyColor, TropicalFish.Pattern pattern, DyeColor patternColor) {
+        bodyColor(bodyColor).pattern(pattern).patternColor(patternColor);
     }
     
     public FishBucketBuilder bodyColor(DyeColor color) {
@@ -66,7 +56,7 @@ public class FishBucketBuilder extends ItemBuilder {
 
     @Override
     protected TropicalFishBucketMeta createItemMeta() {
-        TropicalFishBucketMeta itemMeta = (TropicalFishBucketMeta) super.createItemMeta();
+        TropicalFishBucketMeta itemMeta = super.createItemMeta();
         itemMeta.setBodyColor(this.bodyColor);
         itemMeta.setPattern(this.pattern);
         itemMeta.setPatternColor(this.patternColor);
@@ -75,10 +65,6 @@ public class FishBucketBuilder extends ItemBuilder {
 
     @Override
     public FishBucketBuilder clone() {
-        FishBucketBuilder clone = (FishBucketBuilder) super.clone();
-        clone.bodyColor = this.bodyColor;
-        clone.pattern = this.pattern;
-        clone.patternColor = this.patternColor;
-        return clone;
+        return new FishBucketBuilder(this);
     }
 }
