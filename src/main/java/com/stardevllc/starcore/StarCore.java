@@ -27,7 +27,7 @@ import com.stardevllc.starcore.v1_20_1.Module_1_20_1;
 import com.stardevllc.starcore.v1_21_1.Module_1_21_1;
 import com.stardevllc.starcore.v1_21_3.events.Module_1_21_3;
 import com.stardevllc.starcore.v1_8.Module_1_8;
-import com.stardevllc.starcore.v1_8_3.events.Module_1_8_3;
+import com.stardevllc.starcore.v1_8_3.Module_1_8_3;
 import com.stardevllc.starcore.v1_8_8.events.Module_1_8_8;
 import com.stardevllc.starcore.v1_9_4.events.Module_1_9_4;
 import com.stardevllc.starmclib.MinecraftVersion;
