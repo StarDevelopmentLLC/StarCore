@@ -7,6 +7,8 @@ import com.stardevllc.starlib.dependency.Inject;
 import com.stardevllc.starlib.mojang.MojangAPI;
 import com.stardevllc.starlib.mojang.MojangProfile;
 import com.stardevllc.starlib.registry.UUIDRegistry;
+import com.stardevllc.starsql.statements.SqlInsertUpdate;
+import com.stardevllc.starsql.statements.SqlSelect;
 import org.bukkit.Bukkit;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -14,11 +16,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.*;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.*;
 
 public class PlayerManager implements Listener {
     private final UUIDRegistry<StarPlayer> playerRegistry = new UUIDRegistry.Builder<StarPlayer>().keyRetriever(StarPlayer::getUniqueId).build();
-
+    
     private Configuration playersConfig;
     
     @Inject
@@ -27,9 +30,9 @@ public class PlayerManager implements Listener {
     private PluginManager pluginManager;
     @Inject
     private ServicesManager servicesManager;
-
+    
     public PlayerManager init() {
-        if (plugin.getMainConfig().getBoolean("save-player-info")) {
+        if (plugin.isSavePlayerInfo() && plugin.getDatabase() == null) {
             playersConfig = new Configuration(new File(plugin.getDataFolder(), "players.yml"));
         }
         
@@ -37,7 +40,7 @@ public class PlayerManager implements Listener {
         this.servicesManager.register(PlayerManager.class, this, plugin, ServicePriority.Normal);
         return this;
     }
-
+    
     public void addPlayer(StarPlayer player) {
         playerRegistry.put(player.getUniqueId(), player);
     }
@@ -45,7 +48,7 @@ public class PlayerManager implements Listener {
     public StarPlayer getPlayer(UUID uuid) {
         if (this.playerRegistry.contains(uuid)) {
             StarPlayer starPlayer = playerRegistry.get(uuid);
-            if (plugin.getMainConfig().getBoolean("use-mojang-api")) {
+            if (plugin.isUseMojangAPI()) {
                 if (starPlayer.getMojangProfile() == null) {
                     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                         MojangProfile profile = MojangAPI.getProfile(uuid);
@@ -62,51 +65,88 @@ public class PlayerManager implements Listener {
         
         return null;
     }
-
+    
     public void save() {
-        if (this.playersConfig == null) {
-            return;
+        if (plugin.getDatabase() == null) {
+            if (this.playersConfig == null) {
+                return;
+            }
+            
+            for (Map.Entry<UUID, StarPlayer> entry : this.playerRegistry.entrySet()) {
+                this.playersConfig.set("players." + entry.getKey().toString(), entry.getValue().serialize());
+            }
+            
+            this.playersConfig.save();
+        } else {
+            for (StarPlayer player : this.playerRegistry.values()) {
+                SqlInsertUpdate insert = new SqlInsertUpdate(plugin.getMainConfig().getString("mysql.table-prefix") + "players").primaryKeyColumn("uniqueid")
+                        .columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout")
+                        .row(player.getUniqueId().toString(), player.getName(), player.getPlaytime(), player.getFirstLogin(), player.getLastLogin(), player.getLastLogout());
+                plugin.getDatabase().executeUpdate(insert.build());
+            }
         }
-
-        for (Map.Entry<UUID, StarPlayer> entry : this.playerRegistry.entrySet()) {
-            this.playersConfig.set("players." + entry.getKey().toString(), entry.getValue().serialize());
-        }
-
-        this.playersConfig.save();
     }
-
+    
     public void load() {
-        if (this.playersConfig == null) {
-            return;
-        }
-
-        if (!this.playersConfig.contains("players")) {
-            return;
-        }
-        
-        Section playersSection = this.playersConfig.getConfigurationSection("players");
-        if (playersSection != null) {
-            for (Object key : playersSection.getKeys()) {
-                Section dataSection = playersSection.getSection(key.toString());
-                if (dataSection != null) {
-                    Map<String, Object> serialized = new HashMap<>();
-                    for (Object dataKey : dataSection.getKeys()) {
-                        serialized.put(dataKey.toString(), dataSection.get(dataKey.toString()));    
+        if (plugin.getDatabase() == null) {
+            if (this.playersConfig == null) {
+                return;
+            }
+            
+            if (!this.playersConfig.contains("players")) {
+                return;
+            }
+            
+            Section playersSection = this.playersConfig.getConfigurationSection("players");
+            if (playersSection != null) {
+                for (Object key : playersSection.getKeys()) {
+                    Section dataSection = playersSection.getSection(key.toString());
+                    if (dataSection != null) {
+                        Map<String, Object> serialized = new HashMap<>();
+                        for (Object dataKey : dataSection.getKeys()) {
+                            serialized.put(dataKey.toString(), dataSection.get(dataKey.toString()));
+                        }
+                        
+                        this.addPlayer(new StarPlayer(serialized));
                     }
-
-                    this.addPlayer(new StarPlayer(serialized));
                 }
             }
+        } else {
+            SqlSelect select = plugin.getPlayersTable().select().columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout");
+            plugin.getDatabase().executeQuery(select.build(), rs -> {
+                try {
+                    while (rs.next()) {
+                        UUID uuid = UUID.fromString(rs.getString("uniqueid"));
+                        String name = rs.getString("name");
+                        long playtime = rs.getLong("playtime");
+                        long firstlogin = rs.getLong("firstlogin");
+                        long lastlogin = rs.getLong("lastlogin");
+                        long lastlogout = rs.getLong("lastlogout");
+                        
+                        StarPlayer starPlayer = new StarPlayer(uuid, name);
+                        starPlayer.setPlaytime(playtime);
+                        starPlayer.setFirstLogin(firstlogin);
+                        starPlayer.setLastLogin(lastlogin);
+                        starPlayer.setLastLogout(lastlogout);
+                        addPlayer(starPlayer);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (!this.playerRegistry.contains(e.getPlayer().getUniqueId())) {
-            this.playerRegistry.register(new StarPlayer(e.getPlayer()));        
+            this.playerRegistry.register(new StarPlayer(e.getPlayer()));
         }
-
+        
         StarPlayer starPlayer = getPlayer(e.getPlayer().getUniqueId());
+        if (starPlayer.getFirstLogin() == 0) {
+            starPlayer.setFirstLogin(System.currentTimeMillis());
+        }
         starPlayer.setLastLogin(System.currentTimeMillis());
     }
     

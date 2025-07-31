@@ -48,11 +48,13 @@ tasks.named('shadowJar', ShadowJar) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     relocate('com.google', 'com.stardevllc.google')
     relocate('net.kyori', 'com.stardevllc.adventure')
+    relocate('com.mysql', 'com.stardevllc.mysql')
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.7-R0.1-SNAPSHOT'
     api 'com.stardevllc:config:0.1.4'
+    api 'com.stardevllc:StarSQL:0.1.0'
     
     //Project ones
     implementation project(':api')
