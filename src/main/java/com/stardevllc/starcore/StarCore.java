@@ -173,15 +173,15 @@ public class StarCore extends ExtendedJavaPlugin {
                 }
                 
                 if (playersTable.getColumn("firstlogin") == null) {
-                    playersTable.addColumn(new Column(playersTable, "firstlogin", "bigint", 0, 4, false, false, false, false, null));
+                    playersTable.addColumn(new Column(playersTable, "firstlogin", "timestamp", 0, 4, false, false, false, false, null));
                 }
                 
                 if (playersTable.getColumn("lastlogin") == null) {
-                    playersTable.addColumn(new Column(playersTable, "lastlogin", "bigint", 0, 5, false, false, false, false, null));
+                    playersTable.addColumn(new Column(playersTable, "lastlogin", "timestamp", 0, 5, false, false, false, false, null));
                 }
                 
                 if (playersTable.getColumn("lastlogout") == null) {
-                    playersTable.addColumn(new Column(playersTable, "lastlogout", "bigint", 0, 6, false, false, false, false, null));
+                    playersTable.addColumn(new Column(playersTable, "lastlogout", "timestamp", 0, 6, false, false, false, false, null));
                 }
                 
                 this.database.execute(new CreateTable(playersTable.getName(), new HashSet<>(playersTable.getColumns().values())).build());

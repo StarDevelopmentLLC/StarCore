@@ -17,6 +17,7 @@ import org.bukkit.plugin.*;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 
 public class PlayerManager implements Listener {
@@ -81,7 +82,7 @@ public class PlayerManager implements Listener {
             for (StarPlayer player : this.playerRegistry.values()) {
                 SqlInsertUpdate insert = new SqlInsertUpdate(plugin.getMainConfig().getString("mysql.table-prefix") + "players").primaryKeyColumn("uniqueid")
                         .columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout")
-                        .row(player.getUniqueId().toString(), player.getName(), player.getPlaytime(), player.getFirstLogin(), player.getLastLogin(), player.getLastLogout());
+                        .row(player.getUniqueId().toString(), player.getName(), player.getPlaytime(), new Timestamp(player.getFirstLogin()), new Timestamp(player.getLastLogin()), new Timestamp(player.getLastLogout()));
                 plugin.getDatabase().executeUpdate(insert.build());
             }
         }
@@ -119,9 +120,9 @@ public class PlayerManager implements Listener {
                         UUID uuid = UUID.fromString(rs.getString("uniqueid"));
                         String name = rs.getString("name");
                         long playtime = rs.getLong("playtime");
-                        long firstlogin = rs.getLong("firstlogin");
-                        long lastlogin = rs.getLong("lastlogin");
-                        long lastlogout = rs.getLong("lastlogout");
+                        long firstlogin = rs.getTimestamp("firstlogin").getTime();
+                        long lastlogin = rs.getTimestamp("lastlogin").getTime();
+                        long lastlogout = rs.getTimestamp("lastlogout").getTime();
                         
                         StarPlayer starPlayer = new StarPlayer(uuid, name);
                         starPlayer.setPlaytime(playtime);
