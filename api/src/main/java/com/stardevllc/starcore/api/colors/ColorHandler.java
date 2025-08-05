@@ -170,6 +170,10 @@ public abstract class ColorHandler {
     }
 
     public static String stripColor(String text) {
+        if (text == null || text.isBlank()) {
+            return "";
+        }
+        
         text = ChatColor.stripColor(text);
         text = HEX_VALUE_PATTERN.matcher(text).replaceAll("");
         return COLOR_CODE_PATTERN.matcher(text).replaceAll("");
