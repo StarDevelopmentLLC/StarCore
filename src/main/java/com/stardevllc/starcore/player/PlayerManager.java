@@ -1,12 +1,10 @@
 package com.stardevllc.starcore.player;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.starcore.StarCore;
-import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starlib.dependency.Inject;
+import com.stardevllc.starlib.registry.UUIDRegistry;
 import com.stardevllc.starmclib.mojang.MojangAPI;
 import com.stardevllc.starmclib.mojang.MojangProfile;
-import com.stardevllc.starlib.registry.UUIDRegistry;
 import com.stardevllc.starsql.statements.SqlInsertUpdate;
 import com.stardevllc.starsql.statements.SqlSelect;
 import org.bukkit.Bukkit;
@@ -15,15 +13,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.*;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.UUID;
 
 public class PlayerManager implements Listener {
     private final UUIDRegistry<StarPlayer> playerRegistry = new UUIDRegistry.Builder<StarPlayer>().keyRetriever(StarPlayer::getUniqueId).build();
     
-    private Configuration playersConfig;
+//    private Configuration playersConfig;
     
     @Inject
     private StarCore plugin;
@@ -34,7 +31,7 @@ public class PlayerManager implements Listener {
     
     public PlayerManager init() {
         if (plugin.isSavePlayerInfo() && plugin.getDatabase() == null) {
-            playersConfig = new Configuration(new File(plugin.getDataFolder(), "players.yml"));
+//            playersConfig = new Configuration(new File(plugin.getDataFolder(), "players.yml"));
         }
         
         this.pluginManager.registerEvents(this, plugin);
@@ -69,18 +66,18 @@ public class PlayerManager implements Listener {
     
     public void save() {
         if (plugin.getDatabase() == null) {
-            if (this.playersConfig == null) {
-                return;
-            }
-            
-            for (Map.Entry<UUID, StarPlayer> entry : this.playerRegistry.entrySet()) {
-                this.playersConfig.set("players." + entry.getKey().toString(), entry.getValue().serialize());
-            }
-            
-            this.playersConfig.save();
+//            if (this.playersConfig == null) {
+//                return;
+//            }
+//            
+//            for (Map.Entry<UUID, StarPlayer> entry : this.playerRegistry.entrySet()) {
+//                this.playersConfig.set("players." + entry.getKey().toString(), entry.getValue().serialize());
+//            }
+//            
+//            this.playersConfig.save();
         } else {
             for (StarPlayer player : this.playerRegistry.values()) {
-                SqlInsertUpdate insert = new SqlInsertUpdate(plugin.getMainConfig().getString("mysql.table-prefix") + "players").primaryKeyColumn("uniqueid")
+                SqlInsertUpdate insert = new SqlInsertUpdate(plugin.getMainConfig().get("mysql.table-prefix") + "players").primaryKeyColumn("uniqueid")
                         .columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout")
                         .row(player.getUniqueId().toString(), player.getName(), player.getPlaytime(), new Timestamp(player.getFirstLogin()), new Timestamp(player.getLastLogin()), new Timestamp(player.getLastLogout()));
                 plugin.getDatabase().executeUpdate(insert.build());
@@ -90,28 +87,28 @@ public class PlayerManager implements Listener {
     
     public void load() {
         if (plugin.getDatabase() == null) {
-            if (this.playersConfig == null) {
-                return;
-            }
-            
-            if (!this.playersConfig.contains("players")) {
-                return;
-            }
-            
-            Section playersSection = this.playersConfig.getConfigurationSection("players");
-            if (playersSection != null) {
-                for (Object key : playersSection.getKeys()) {
-                    Section dataSection = playersSection.getSection(key.toString());
-                    if (dataSection != null) {
-                        Map<String, Object> serialized = new HashMap<>();
-                        for (Object dataKey : dataSection.getKeys()) {
-                            serialized.put(dataKey.toString(), dataSection.get(dataKey.toString()));
-                        }
-                        
-                        this.addPlayer(new StarPlayer(serialized));
-                    }
-                }
-            }
+//            if (this.playersConfig == null) {
+//                return;
+//            }
+//            
+//            if (!this.playersConfig.contains("players")) {
+//                return;
+//            }
+//            
+//            Section playersSection = this.playersConfig.getConfigurationSection("players");
+//            if (playersSection != null) {
+//                for (Object key : playersSection.getKeys()) {
+//                    Section dataSection = playersSection.getSection(key.toString());
+//                    if (dataSection != null) {
+//                        Map<String, Object> serialized = new HashMap<>();
+//                        for (Object dataKey : dataSection.getKeys()) {
+//                            serialized.put(dataKey.toString(), dataSection.get(dataKey.toString()));
+//                        }
+//                        
+//                        this.addPlayer(new StarPlayer(serialized));
+//                    }
+//                }
+//            }
         } else {
             SqlSelect select = plugin.getPlayersTable().select().columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout");
             plugin.getDatabase().executeQuery(select.build(), rs -> {

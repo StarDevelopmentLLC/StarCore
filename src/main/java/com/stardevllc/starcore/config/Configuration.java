@@ -1,296 +1,457 @@
 package com.stardevllc.starcore.config;
 
-import com.stardevllc.config.Config;
-import com.stardevllc.config.Section;
-import com.stardevllc.config.file.yaml.YamlConfig;
-import com.stardevllc.config.serialization.ConfigSerializable;
+import com.electronwill.nightconfig.core.*;
+import com.electronwill.nightconfig.core.Config.Entry;
+import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig.CommentNode;
+import com.electronwill.nightconfig.core.file.FileConfig;
+import com.stardevllc.starlib.helper.StringHelper;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.*;
 
 public class Configuration {
-
-    protected YamlConfig config;
-    protected File file;
-
-    public Configuration(File file) {
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
-        }
-        
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        this.file = file;
-        this.config = YamlConfig.loadConfiguration(file);
+    protected FileConfig fileConfig;
+    protected ConfigSpec configSpec;
+    
+    public Configuration(FileConfig fileConfig) {
+        this.fileConfig = fileConfig;
+        this.configSpec = new ConfigSpec();
     }
     
-    public void delete() {
-        this.file.delete();
-    }
-    
-    public void renameFile(String newName) {
-        save();
-        File oldFile = file;
-        File newFile = new File(oldFile.getParentFile(), newName + ".yml");
-        if (newFile.exists()) {
-            newFile.delete();
-        }
-        
-        oldFile.renameTo(newFile);
-        this.file = newFile;
-        this.config = YamlConfig.loadConfiguration(this.file);
-    }
-    
-    public void reload() {
-        this.config = YamlConfig.loadConfiguration(file);
-    }
-    
-    public void addDefault(String path, Object value, String... comments) {
-        if (!config.contains(path)) {
-            config.set(path, value);
-            config.setComments(path, comments);
-        }
+    public void load() {
+        this.fileConfig.load();
     }
     
     public void save() {
-        try {
-            config.save(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        fileConfig.save();
+    }
+    
+    public void addDefault(String path, Object value, String... commentLines) {
+        String comment = StringHelper.join(commentLines, "\n");
+        set(path, value);
+        setComment(path, comment);
+    }
+    
+    public String setComment(String path, String comment) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.setComment(path, comment);
+        }
+        
+        return "";
+    }
+    
+    public String setComment(List<String> path, String comment) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.setComment(path, comment);
+        }
+        
+        return "";
+    }
+    
+    public String removeComment(String path) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.removeComment(path);
+        }
+        
+        return "";
+    }
+    
+    public String removeComment(List<String> path) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.removeComment(path);
+        }
+        
+        return "";
+    }
+    
+    public void clearComments() {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            commentedConfig.clearComments();
         }
     }
     
-    public Set<String> getKeys() {
-        return this.getKeys(false);
+    public void putAllComments(Map<String, CommentNode> comments) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            commentedConfig.putAllComments(comments);
+        }
     }
-
-    public Set<String> getKeys(boolean deep) {
-        return config.getKeys(deep);
+    
+    public void putAllComments(UnmodifiableCommentedConfig commentedConfig) {
+        if (fileConfig instanceof CommentedConfig cc) {
+            cc.putAllComments(commentedConfig);
+        }
     }
-
-    public Map<String, Object> getValues(boolean deep) {
-        return config.getValues(deep);
+    
+    public UnmodifiableConfig unmodifiable() {
+        return fileConfig.unmodifiable();
     }
-
-    public boolean contains(String path) {
-        return config.contains(path);
+    
+    public Config checked() {
+        return fileConfig.checked();
     }
-
-    public boolean contains(String path, boolean ignoreDefault) {
-        return config.contains(path, ignoreDefault);
+    
+    public String getComment(String path) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.getComment(path);
+        }
+        
+        return "";
     }
-
-    public boolean isSet(String path) {
-        return config.isSet(path);
+    
+    public String getComment(List<String> path) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.getComment(path);
+        }
+        
+        return "";
     }
-
-    public String getCurrentPath() {
-        return config.getCurrentPath();
+    
+    public Optional<String> getOptionalComment(String path) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.getOptionalComment(path);
+        }
+        return Optional.empty();
     }
-
-    public String getName() {
-        return config.getName();
+    
+    public Optional<String> getOptionalComment(List<String> path) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.getOptionalComment(path);
+        }
+        return Optional.empty();
     }
-
-    public Config getRoot() {
-        return config.getRoot();
+    
+    public boolean containsComment(String path) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.containsComment(path);
+        }
+        return false;
     }
-
-    public Section getDefaultSection() {
-        return config.getDefaultSection();
+    
+    public boolean containsComment(List<String> path) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.containsComment(path);            
+        }
+        return false;
     }
-
-    public void set(String path, Object value) {
-        config.set(path, value);
+    
+    public Map<String, CommentNode> getComments() {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            return commentedConfig.getComments();
+        }
+        return Map.of();
     }
-
-    public Object get(String path) {
-        return config.get(path);
+    
+    public void getComments(Map<String, CommentNode> destination) {
+        if (fileConfig instanceof CommentedConfig commentedConfig) {
+            commentedConfig.getComments(destination);
+        }
     }
-
-    public Object get(String path, Object def) {
-        return config.get(path, def);
+    
+    public <T> T set(String path, Object value) {
+        return fileConfig.set(path, value);
     }
-
-    public Section createSection(String path) {
-        return config.createSection(path);
+    
+    public <T> T set(List<String> path, Object value) {
+        return fileConfig.set(path, value);
     }
-
-    public Section createSection(String path, Map<?, ?> map) {
-        return config.createSection(path, map);
+    
+    public boolean add(List<String> path, Object value) {
+        return fileConfig.add(path, value);
     }
-
-    public String getString(String path) {
-        return config.getString(path);
+    
+    public boolean add(String path, Object value) {
+        return fileConfig.add(path, value);
     }
-
-    public String getString(String path, String def) {
-        return config.getString(path, def);
+    
+    public void addAll(UnmodifiableConfig config) {
+        fileConfig.addAll(config);
     }
-
-    public boolean isString(String path) {
-        return config.isString(path);
+    
+    public void putAll(UnmodifiableConfig config) {
+        fileConfig.addAll(config);
     }
-
+    
+    public <T> T remove(String path) {
+        return fileConfig.remove(path);
+    }
+    
+    public <T> T remove(List<String> path) {
+        return fileConfig.remove(path);
+    }
+    
+    public void removeAll(UnmodifiableConfig config) {
+        fileConfig.removeAll(config);
+    }
+    
+    public void clear() {
+        fileConfig.clear();
+    }
+    
+    public <T> T get(String path) {
+        return fileConfig.get(path);
+    }
+    
+    public <T> T get(List<String> path) {
+        return fileConfig.get(path);
+    }
+    
+    public <T> T getRaw(String path) {
+        return fileConfig.getRaw(path);
+    }
+    
+    public <T> T getRaw(List<String> path) {
+        return fileConfig.getRaw(path);
+    }
+    
+    public <T> Optional<T> getOptional(String path) {
+        return fileConfig.getOptional(path);
+    }
+    
+    public <T> Optional<T> getOptional(List<String> path) {
+        return fileConfig.getOptional(path);
+    }
+    
+    public <T> T getOrElse(String path, T defaultValue) {
+        return fileConfig.getOrElse(path, defaultValue);
+    }
+    
+    public <T> T getOrElse(List<String> path, T defaultValue) {
+        return fileConfig.getOrElse(path, defaultValue);
+    }
+    
+    public <T> T getOrElse(List<String> path, Supplier<T> defaultValueSupplier) {
+        return fileConfig.getOrElse(path, defaultValueSupplier);
+    }
+    
+    public <T> T getOrElse(String path, Supplier<T> defaultValueSupplier) {
+        return fileConfig.getOrElse(path, defaultValueSupplier);
+    }
+    
+    public <T extends Enum<T>> T getEnum(String path, Class<T> enumType, EnumGetMethod method) {
+        return fileConfig.getEnum(path, enumType, method);
+    }
+    
+    public <T extends Enum<T>> T getEnum(String path, Class<T> enumType) {
+        return fileConfig.getEnum(path, enumType);
+    }
+    
+    public <T extends Enum<T>> T getEnum(List<String> path, Class<T> enumType, EnumGetMethod method) {
+        return fileConfig.getEnum(path, enumType, method);
+    }
+    
+    public <T extends Enum<T>> T getEnum(List<String> path, Class<T> enumType) {
+        return fileConfig.getEnum(path, enumType);
+    }
+    
+    public <T extends Enum<T>> Optional<T> getOptionalEnum(String path, Class<T> enumType, EnumGetMethod method) {
+        return fileConfig.getOptionalEnum(path, enumType, method);
+    }
+    
+    public <T extends Enum<T>> Optional<T> getOptionalEnum(String path, Class<T> enumType) {
+        return fileConfig.getOptionalEnum(path, enumType);
+    }
+    
+    public <T extends Enum<T>> Optional<T> getOptionalEnum(List<String> path, Class<T> enumType, EnumGetMethod method) {
+        return fileConfig.getOptionalEnum(path, enumType, method);
+    }
+    
+    public <T extends Enum<T>> Optional<T> getOptionalEnum(List<String> path, Class<T> enumType) {
+        return fileConfig.getOptionalEnum(path, enumType);
+    }
+    
+    public <T extends Enum<T>> T getEnumOrElse(String path, T defaultValue, EnumGetMethod method) {
+        return fileConfig.getEnumOrElse(path, defaultValue, method);
+    }
+    
+    public <T extends Enum<T>> T getEnumOrElse(String path, T defaultValue) {
+        return fileConfig.getEnumOrElse(path, defaultValue);
+    }
+    
+    public <T extends Enum<T>> T getEnumOrElse(List<String> path, T defaultValue, EnumGetMethod method) {
+        return fileConfig.getEnumOrElse(path, defaultValue, method);
+    }
+    
+    public <T extends Enum<T>> T getEnumOrElse(List<String> path, T defaultValue) {
+        return fileConfig.getEnumOrElse(path, defaultValue);
+    }
+    
+    public <T extends Enum<T>> T getEnumOrElse(String path, Class<T> enumType, EnumGetMethod method, Supplier<T> defaultValueSupplier) {
+        return fileConfig.getEnumOrElse(path, enumType, method, defaultValueSupplier);
+    }
+    
+    public <T extends Enum<T>> T getEnumOrElse(String path, Class<T> enumType, Supplier<T> defaultValueSupplier) {
+        return fileConfig.getEnumOrElse(path, enumType, defaultValueSupplier);
+    }
+    
+    public <T extends Enum<T>> T getEnumOrElse(List<String> path, Class<T> enumType, EnumGetMethod method, Supplier<T> defaultValueSupplier) {
+        return fileConfig.getEnumOrElse(path, enumType, method, defaultValueSupplier);
+    }
+    
+    public <T extends Enum<T>> T getEnumOrElse(List<String> path, Class<T> enumType, Supplier<T> defaultValueSupplier) {
+        return fileConfig.getEnumOrElse(path, enumType, defaultValueSupplier);
+    }
+    
     public int getInt(String path) {
-        return config.getInt(path);
+        return fileConfig.getInt(path);
     }
-
-    public int getInt(String path, int def) {
-        return config.getInt(path, def);
+    
+    public int getInt(List<String> path) {
+        return fileConfig.getInt(path);
     }
-
-    public boolean isInt(String path) {
-        return config.isInt(path);
+    
+    public OptionalInt getOptionalInt(String path) {
+        return fileConfig.getOptionalInt(path);
     }
-
-    public boolean getBoolean(String path) {
-        return config.getBoolean(path);
+    
+    public OptionalInt getOptionalInt(List<String> path) {
+        return fileConfig.getOptionalInt(path);
     }
-
-    public boolean getBoolean(String path, boolean def) {
-        return config.getBoolean(path, def);
+    
+    public int getIntOrElse(String path, int defaultValue) {
+        return fileConfig.getIntOrElse(path, defaultValue);
     }
-
-    public boolean isBoolean(String path) {
-        return config.isBoolean(path);
+    
+    public int getIntOrElse(List<String> path, int defaultValue) {
+        return fileConfig.getIntOrElse(path, defaultValue);
     }
-
-    public double getDouble(String path) {
-        return config.getDouble(path);
+    
+    public int getIntOrElse(String path, IntSupplier defaultValueSupplier) {
+        return fileConfig.getIntOrElse(path, defaultValueSupplier);
     }
-
-    public double getDouble(String path, double def) {
-        return config.getDouble(path, def);
+    
+    public int getIntOrElse(List<String> path, IntSupplier defaultValueSupplier) {
+        return fileConfig.getIntOrElse(path, defaultValueSupplier);
     }
-
-    public boolean isDouble(String path) {
-        return config.isDouble(path);
-    }
-
-
+    
     public long getLong(String path) {
-        return config.getLong(path);
+        return fileConfig.getLong(path);
     }
-
-    public long getLong(String path, long def) {
-        return config.getLong(path, def);
+    
+    public long getLong(List<String> path) {
+        return fileConfig.getLong(path);
     }
-
-    public boolean isLong(String path) {
-        return config.isLong(path);
+    
+    public OptionalLong getOptionalLong(String path) {
+        return fileConfig.getOptionalLong(path);
     }
-
-    public List<?> getList(String path) {
-        return config.getList(path);
+    
+    public OptionalLong getOptionalLong(List<String> path) {
+        return fileConfig.getOptionalLong(path);
     }
-
-    public List<?> getList(String path, List<?> def) {
-        return config.getList(path, def);
+    
+    public long getLongOrElse(String path, long defaultValue) {
+        return fileConfig.getLongOrElse(path, defaultValue);
     }
-
-    public boolean isList(String path) {
-        return config.isList(path);
+    
+    public long getLongOrElse(List<String> path, long defaultValue) {
+        return fileConfig.getLongOrElse(path, defaultValue);
     }
-
-    public List<String> getStringList(String path) {
-        return config.getStringList(path);
+    
+    public long getLongOrElse(String path, LongSupplier defaultValueSupplier) {
+        return fileConfig.getLongOrElse(path, defaultValueSupplier);
     }
-
-    public List<Integer> getIntegerList(String path) {
-        return config.getIntegerList(path);
+    
+    public long getLongOrElse(List<String> path, LongSupplier defaultValueSupplier) {
+        return fileConfig.getLongOrElse(path, defaultValueSupplier);
     }
-
-    public List<Boolean> getBooleanList(String path) {
-        return config.getBooleanList(path);
+    
+    public byte getByte(String path) {
+        return fileConfig.getByte(path);
     }
-
-    public List<Double> getDoubleList(String path) {
-        return config.getDoubleList(path);
+    
+    public byte getByte(List<String> path) {
+        return fileConfig.getByte(path);
     }
-
-    public List<Float> getFloatList(String path) {
-        return config.getFloatList(path);
+    
+    public byte getByteOrElse(String path, byte defaultValue) {
+        return fileConfig.getByteOrElse(path, defaultValue);
     }
-
-    public List<Long> getLongList(String path) {
-        return config.getLongList(path);
+    
+    public byte getByteOrElse(List<String> path, byte defaultValue) {
+        return fileConfig.getByteOrElse(path, defaultValue);
     }
-
-    public List<Byte> getByteList(String path) {
-        return config.getByteList(path);
+    
+    public short getShort(String path) {
+        return fileConfig.getShort(path);
     }
-
-    public List<Character> getCharacterList(String path) {
-        return config.getCharacterList(path);
+    
+    public short getShort(List<String> path) {
+        return fileConfig.getShort(path);
     }
-
-    public List<Short> getShortList(String path) {
-        return config.getShortList(path);
+    
+    public short getShortOrElse(String path, short defaultValue) {
+        return fileConfig.getShortOrElse(path, defaultValue);
     }
-
-    public List<Map<?, ?>> getMapList(String path) {
-        return config.getMapList(path);
+    
+    public short getShortOrElse(List<String> path, short defaultValue) {
+        return fileConfig.getShortOrElse(path, defaultValue);
     }
-
-    public <T> T getObject(String path, Class<T> clazz) {
-        return config.getObject(path, clazz);
+    
+    public char getChar(String path) {
+        return fileConfig.getChar(path);
     }
-
-    public <T> T getObject(String path, Class<T> clazz, T def) {
-        return config.getObject(path, clazz, def);
+    
+    public char getChar(List<String> path) {
+        return fileConfig.getChar(path);
     }
-
-    public <T extends ConfigSerializable> T getSerializable(String path, Class<T> clazz) {
-        return config.getSerializable(path, clazz);
+    
+    public char getCharOrElse(String path, char defaultValue) {
+        return fileConfig.getCharOrElse(path, defaultValue);
     }
-
-    public <T extends ConfigSerializable> T getSerializable(String path, Class<T> clazz, T def) {
-        return config.getSerializable(path, clazz, def);
+    
+    public char getCharOrElse(List<String> path, char defaultValue) {
+        return fileConfig.getCharOrElse(path, defaultValue);
     }
-
-    public Section getConfigurationSection(String path) {
-        return config.getConfigurationSection(path);
+    
+    public boolean contains(String path) {
+        return fileConfig.contains(path);
     }
-
-    public boolean isConfigurationSection(String path) {
-        return config.isConfigurationSection(path);
+    
+    public boolean contains(List<String> path) {
+        return fileConfig.contains(path);
     }
-
-    public List<String> getComments(String path) {
-        return config.getComments(path);
+    
+    public boolean isNull(String path) {
+        return fileConfig.isNull(path);
     }
-
-    public List<String> getInlineComments(String path) {
-        return config.getInlineComments(path);
+    
+    public boolean isNull(List<String> path) {
+        return fileConfig.isNull(path);
     }
-
-    public void setComments(String path, List<String> comments) {
-        config.setComments(path, comments);
+    
+    public int size() {
+        return fileConfig.size();
     }
-
-    public void setComments(String path, String... comments) {
-        config.setComments(path, comments);
+    
+    public boolean isEmpty() {
+        return fileConfig.isEmpty();
     }
-
-    public void setInlineComments(String path, List<String> comments) {
-        config.setInlineComments(path, comments);
+    
+    public Set<? extends Entry> entrySet() {
+        return fileConfig.entrySet();
     }
-
-    public void setInlineComments(String path, String... comments) {
-        config.setInlineComments(path, comments);
+    
+    public ConfigFormat<?> configFormat() {
+        return fileConfig.configFormat();
     }
-
-    public String toString() {
-        return config.toString();
+    
+    public <T> T apply(String path) {
+        return fileConfig.apply(path);
+    }
+    
+    public <T> T apply(List<String> path) {
+        return fileConfig.apply(path);
+    }
+    
+    public Config createSubConfig() {
+        return fileConfig.createSubConfig();
+    }
+    
+    public void update(String path, Object value) {
+        fileConfig.update(path, value);
+    }
+    
+    public void update(List<String> path, Object value) {
+        fileConfig.update(path, value);
     }
 }
