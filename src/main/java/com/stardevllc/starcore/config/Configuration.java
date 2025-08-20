@@ -49,6 +49,14 @@ public class Configuration {
         return get(path);
     }
     
+    public boolean getBoolean(String path) {
+        return get(path);
+    }
+    
+    public boolean getBoolean(List<String> path) {
+        return get(path);
+    }
+    
     public void addDefault(String path, Object value, String... commentLines) {
         String comment = StringHelper.join(commentLines, "\n");
         set(path, value);
