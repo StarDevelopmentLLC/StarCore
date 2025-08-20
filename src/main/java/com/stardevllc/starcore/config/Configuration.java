@@ -6,6 +6,7 @@ import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig.CommentNode
 import com.electronwill.nightconfig.core.file.FileConfig;
 import com.stardevllc.starlib.helper.StringHelper;
 
+import java.io.File;
 import java.util.*;
 import java.util.function.*;
 
@@ -24,6 +25,28 @@ public class Configuration {
     
     public void save() {
         fileConfig.save();
+    }
+    
+    public void reload() {
+        this.fileConfig.load();
+    }
+    
+    public void delete() {
+        this.fileConfig.getFile().delete();
+    }
+    
+    public void renameFile(String newName) {
+        File file = this.fileConfig.getFile();
+        File newFile = new File(file.getParentFile(), newName);
+        file.renameTo(newFile);
+    }
+    
+    public String getString(String path) {
+        return get(path);
+    }
+    
+    public String getString(List<String> path) {
+        return get(path);
     }
     
     public void addDefault(String path, Object value, String... commentLines) {
