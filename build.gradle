@@ -49,7 +49,7 @@ tasks.named('shadowJar', ShadowJar) {
     relocate('com.google', 'com.stardevllc.google')
     relocate('net.kyori', 'com.stardevllc.adventure')
     relocate('com.mysql', 'com.stardevllc.mysql')
-//    relocate('com.electronwill.nightconfig', 'com.stardevllc.nightconfig')
+//    relocate('com.stardevllc.nightconfig', 'com.stardevllc.nightconfig')
     relocate('org.yaml.snakeyaml', 'com.stardevllc.snakeyaml')
 }
 
@@ -58,7 +58,7 @@ dependencies {
 //    api 'com.stardevllc:config:0.1.4'
     api 'com.stardevllc:StarSQL:0.1.0'
 
-    api 'com.electronwill.night-config:toml:3.8.2'
+    api 'com.stardevllc.night-config:toml:3.8.2'
     
     //Project ones
     implementation project(':api')

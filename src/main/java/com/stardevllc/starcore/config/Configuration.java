@@ -1,9 +1,9 @@
 package com.stardevllc.starcore.config;
 
-import com.electronwill.nightconfig.core.*;
-import com.electronwill.nightconfig.core.Config.Entry;
-import com.electronwill.nightconfig.core.UnmodifiableCommentedConfig.CommentNode;
-import com.electronwill.nightconfig.core.file.FileConfig;
+import com.stardevllc.nightconfig.core.*;
+import com.stardevllc.nightconfig.core.Config.Entry;
+import com.stardevllc.nightconfig.core.UnmodifiableCommentedConfig.CommentNode;
+import com.stardevllc.nightconfig.core.file.FileConfig;
 import com.stardevllc.starlib.helper.StringHelper;
 
 import java.io.File;

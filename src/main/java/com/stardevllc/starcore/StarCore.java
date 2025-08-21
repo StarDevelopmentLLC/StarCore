@@ -1,6 +1,6 @@
 package com.stardevllc.starcore;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.stardevllc.nightconfig.core.file.CommentedFileConfig;
 import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.StarEvents;
 import com.stardevllc.starcore.api.colors.CustomColor;
