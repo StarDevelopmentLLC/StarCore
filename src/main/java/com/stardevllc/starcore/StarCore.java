@@ -1,6 +1,9 @@
 package com.stardevllc.starcore;
 
-import com.stardevllc.nightconfig.core.file.CommentedFileConfig;
+import com.stardevllc.config.Config;
+import com.stardevllc.config.Section;
+import com.stardevllc.config.file.FileConfig;
+import com.stardevllc.config.file.yaml.YamlConfig;
 import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.StarEvents;
 import com.stardevllc.starcore.api.colors.CustomColor;
@@ -8,7 +11,6 @@ import com.stardevllc.starcore.api.events.*;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
 import com.stardevllc.starcore.api.wrappers.*;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
-import com.stardevllc.starcore.config.Configuration;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.v1_10_2.events.Module_1_10_2;
 import com.stardevllc.starcore.v1_11_2.events.Module_1_11_2;
@@ -39,14 +41,10 @@ import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
 import com.stardevllc.starsql.model.*;
 import com.stardevllc.starsql.statements.*;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.UUID;
@@ -58,9 +56,9 @@ public class StarCore extends ExtendedJavaPlugin {
         ItemBuilder.colorFunction = StarColors::color;
     }
     
-    private Configuration mainConfig;
-    private FileConfiguration colorsConfig;
-    private Configuration messagesConfig;
+    private FileConfig mainConfig;
+    private FileConfig colorsConfig;
+    private FileConfig messagesConfig;
     
     private PlayerManager playerManager;
     
@@ -101,7 +99,7 @@ public class StarCore extends ExtendedJavaPlugin {
             oldMessages.delete();
         }
         
-        this.mainConfig = new Configuration(CommentedFileConfig.builder(new File(getDataFolder(), "config.toml")).sync().build());
+        this.mainConfig = new YamlConfig(new File(getDataFolder(), "config.yml"));
         this.mainConfig.load();
         getLogger().info("Initialized the main config");
         
@@ -114,10 +112,10 @@ public class StarCore extends ExtendedJavaPlugin {
         mainConfig.addDefault("mysql.config.name", "main");
         mainConfig.addDefault("mysql.port", 3306);
         
-        if (mainConfig.get("mysql.enabled")) {
-            String databaseName = mainConfig.get("mysql.database");
+        if (mainConfig.getBoolean("mysql.enabled")) {
+            String databaseName = mainConfig.getString("mysql.database");
             String url = "jdbc:mysql://" + mainConfig.get("mysql.host") + ":" + mainConfig.getInt("mysql.port") + "/" + databaseName;
-            this.database = new Database(databaseName, url, mainConfig.get("mysql.username"), mainConfig.get("mysql.password"));
+            this.database = new Database(databaseName, url, mainConfig.getString("mysql.username"), mainConfig.getString("mysql.password"));
             
             try {
                 this.database.connect().close();
@@ -136,7 +134,7 @@ public class StarCore extends ExtendedJavaPlugin {
                     getLogger().warning("The changes between versions will be documented in changelogs, however you must know how to modify a MySQL database");
                 }
                 
-                String tablePrefix = mainConfig.get("mysql.table-prefix");
+                String tablePrefix = mainConfig.getString("mysql.table-prefix");
                 configTable = this.database.getOrCreateTable(tablePrefix + "config");
                 if (configTable.getColumn("name") == null) {
                     configTable.addColumn(new Column(configTable, "name", "varchar", 25, 1, false, false, true, false, null));
@@ -172,7 +170,8 @@ public class StarCore extends ExtendedJavaPlugin {
                             savePlayerInfo.set(Boolean.parseBoolean(rs.getString("saveplayerinfo")));
                             useMojangAPI.set(Boolean.parseBoolean(rs.getString("usemojangapi")));
                         }
-                    } catch (SQLException e) {}
+                    } catch (SQLException e) {
+                    }
                 });
                 
                 playersTable = this.database.getOrCreateTable(tablePrefix + "players");
@@ -206,7 +205,7 @@ public class StarCore extends ExtendedJavaPlugin {
         
         mainConfig.addDefault("console-uuid", this.consoleUnqiueId.get().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
         if (this.database == null) {
-            this.consoleUnqiueId.set(UUID.fromString(mainConfig.get("console-uuid")));
+            this.consoleUnqiueId.set(UUID.fromString(mainConfig.getString("console-uuid")));
         }
         ServerActor.serverUUID = this.consoleUnqiueId.get();
         Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
@@ -215,7 +214,7 @@ public class StarCore extends ExtendedJavaPlugin {
         
         mainConfig.addDefault("save-colors", this.saveColors.get(), " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (this.database == null) {
-            this.saveColors.set(mainConfig.get("save-colors"));
+            this.saveColors.set(mainConfig.getBoolean("save-colors"));
         }
         
         if (saveColors.get()) {
@@ -229,7 +228,7 @@ public class StarCore extends ExtendedJavaPlugin {
         mainConfig.addDefault("save-player-info", this.savePlayerInfo.get(), " This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         
         if (this.database == null) {
-            this.savePlayerInfo.set(mainConfig.get("save-player-info"));
+            this.savePlayerInfo.set(mainConfig.getBoolean("save-player-info"));
         }
         
         if (savePlayerInfo.get()) {
@@ -240,12 +239,12 @@ public class StarCore extends ExtendedJavaPlugin {
         mainConfig.addDefault("use-mojang-api", this.useMojangAPI.get(), "Use the Mojang API to get Skin Info for players.", "This is retrieved when a player joins, and done async to prevent lag.", "Disabling this could break plugins that rely on this.");
         
         if (this.database == null) {
-            this.useMojangAPI.set(mainConfig.get("use-mojang-api"));
+            this.useMojangAPI.set(mainConfig.getBoolean("use-mojang-api"));
         }
         
         mainConfig.save();
         
-        messagesConfig = new Configuration(CommentedFileConfig.builder(new File(getDataFolder(), "messages.toml")).sync().build());
+        messagesConfig = new YamlConfig(new File(getDataFolder(), "messages.toml"));
         this.messagesConfig.load();
         getLogger().info("Initialized the messages.toml file");
         
@@ -356,14 +355,14 @@ public class StarCore extends ExtendedJavaPlugin {
         }
         
         this.mainConfig.load();
-        this.consoleUnqiueId.set(UUID.fromString(mainConfig.get("console-uuid")));
+        this.consoleUnqiueId.set(UUID.fromString(mainConfig.getString("console-uuid")));
         ServerActor.serverUUID = this.consoleUnqiueId.get();
     }
     
     public void loadColors() {
-        this.colorsConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "colors.yml"));
+        this.colorsConfig = new YamlConfig(new File(getDataFolder(), "colors.yml"));
         if (this.colorsConfig.contains("colors")) {
-            ConfigurationSection colorsSection = this.colorsConfig.getConfigurationSection("colors");
+            Section colorsSection = this.colorsConfig.getSection("colors");
             if (colorsSection != null) {
                 for (String key : colorsSection.getKeys(false)) {
                     CustomColor customColor = new CustomColor(this);
@@ -389,11 +388,8 @@ public class StarCore extends ExtendedJavaPlugin {
                     }
                 }
             }
-            try {
-                this.colorsConfig.save(new File(getDataFolder(), "colors.yml"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            
+            this.colorsConfig.save();
         }
     }
     
@@ -420,11 +416,11 @@ public class StarCore extends ExtendedJavaPlugin {
         return consoleUnqiueId.get();
     }
     
-    public Configuration getMainConfig() {
+    public Config getMainConfig() {
         return mainConfig;
     }
     
-    public Configuration getMessagesConfig() {
+    public Config getMessagesConfig() {
         return messagesConfig;
     }
     

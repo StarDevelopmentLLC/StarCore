@@ -55,10 +55,9 @@ tasks.named('shadowJar', ShadowJar) {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.7-R0.1-SNAPSHOT'
-//    api 'com.stardevllc:config:0.1.4'
     api 'com.stardevllc:StarSQL:0.1.0'
 
-    api 'com.stardevllc.night-config:toml:3.8.2'
+    api 'com.stardevllc:config:0.2.0'
     
     //Project ones
     implementation project(':api')
