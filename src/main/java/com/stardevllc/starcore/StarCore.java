@@ -103,22 +103,25 @@ public class StarCore extends ExtendedJavaPlugin {
         this.mainConfig.load();
         getLogger().info("Initialized the main config");
         
-        mainConfig.addDefault("mysql.enabled", false);
-        mainConfig.addDefault("mysql.host", "127.0.0.1");
-        mainConfig.addDefault("mysql.username", "username");
-        mainConfig.addDefault("mysql.password", "password");
-        mainConfig.addDefault("mysql.database", "database");
-        mainConfig.addDefault("mysql.table-prefix", "starcore_");
-        mainConfig.addDefault("mysql.config.name", "main");
-        mainConfig.addDefault("mysql.port", 3306);
+        mainConfig.addDefault("mysql.enabled", false, "If true, mysql saving is enabled, if false, it is not enabled");
+        mainConfig.addDefault("mysql.host", "127.0.0.1", "The host for the MySQL Database");
+        mainConfig.addDefault("mysql.username", "username", "The username for the MySQL Database");
+        mainConfig.addDefault("mysql.password", "password", "The password for the MySQL Database");
+        mainConfig.addDefault("mysql.database", "database", "The database name for the MySQL Connection");
+        mainConfig.addDefault("mysql.table-prefix", "starcore_", "The prefix used for the tables in the database");
+        mainConfig.addDefault("mysql.config.name", "main", "The name of this MySQL Config.", "This allows switching between different loadouts and stores the same config as the standard config.yml", "This information is stored in the table {mysql.table-prefix}config");
+        mainConfig.addDefault("mysql.port", 3306, "The port for the MySQL Connection");
         
         if (mainConfig.getBoolean("mysql.enabled")) {
+            getLogger().info("Found that MySQL is enabled, running MySQL Set Up");
             String databaseName = mainConfig.getString("mysql.database");
             String url = "jdbc:mysql://" + mainConfig.get("mysql.host") + ":" + mainConfig.getInt("mysql.port") + "/" + databaseName;
             this.database = new Database(databaseName, url, mainConfig.getString("mysql.username"), mainConfig.getString("mysql.password"));
+            getLogger().info("Attempting to connect to " + url);
             
             try {
                 this.database.connect().close();
+                getLogger().info("Connection successful");
             } catch (Throwable t) {
                 getLogger().log(Level.SEVERE, "Error while trying to test the connection to the configured database", t);
                 this.database = null;
@@ -201,6 +204,7 @@ public class StarCore extends ExtendedJavaPlugin {
                 
                 this.database.execute(new CreateTable(playersTable.getName(), new HashSet<>(playersTable.getColumns().values())).build());
             }
+            getLogger().info("MySQL Set Up Finished (check for errors above)");
         }
         
         mainConfig.addDefault("console-uuid", this.consoleUnqiueId.get().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
