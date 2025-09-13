@@ -5,7 +5,7 @@ import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.colors.ColorHandler;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starlib.dependency.Inject;
-import com.stardevllc.starmclib.StarColorsAdventure;
+import com.stardevllc.starmclib.StarColorsV2;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,7 +21,7 @@ public class StarCoreCmd implements TabExecutor {
     private StarCore plugin;
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        StarColorsAdventure colors = plugin.getColors();
+        StarColorsV2 colors = plugin.getColors();
         if (!sender.hasPermission("starcore.admin")) {
             colors.coloredLegacy(sender, plugin.getMessagesConfig().getString("command.nopermission"));
             return true;
