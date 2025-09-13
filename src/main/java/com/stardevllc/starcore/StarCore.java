@@ -89,16 +89,6 @@ public class StarCore extends ExtendedJavaPlugin {
         StarMCLib.registerPluginInjector(this, getInjector());
         StarEvents.addChildBus(getEventBus());
         
-        File oldConfig = new File(getDataFolder(), "config.yml");
-        if (oldConfig.exists()) {
-            oldConfig.delete();
-        }
-        
-        File oldMessages = new File(getDataFolder(), "messages.yml");
-        if (oldMessages.exists()) {
-            oldMessages.delete();
-        }
-        
         this.mainConfig = new YamlConfig(new File(getDataFolder(), "config.yml"));
         this.mainConfig.load();
         getLogger().info("Initialized the main config");
@@ -207,7 +197,7 @@ public class StarCore extends ExtendedJavaPlugin {
             getLogger().info("MySQL Set Up Finished (check for errors above)");
         }
         
-        mainConfig.addDefault("console-uuid", this.consoleUnqiueId.get().toString(), " This is the unique id that is assigned to the console.", " Please do not change this manually.");
+        mainConfig.addDefault("console-uuid", this.consoleUnqiueId.get().toString(), "This is the unique id that is assigned to the console.", "Please do not change this manually.");
         if (this.database == null) {
             this.consoleUnqiueId.set(UUID.fromString(mainConfig.getString("console-uuid")));
         }
@@ -216,7 +206,7 @@ public class StarCore extends ExtendedJavaPlugin {
         StarMCLib.GLOBAL_INJECTOR.setInstance(ServerActor.class, ServerActor.getServerActor());
         getLogger().info("Set the Console UUID to " + this.consoleUnqiueId.get());
         
-        mainConfig.addDefault("save-colors", this.saveColors.get(), " This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
+        mainConfig.addDefault("save-colors", this.saveColors.get(), "This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
         if (this.database == null) {
             this.saveColors.set(mainConfig.getBoolean("save-colors"));
         }
@@ -229,7 +219,7 @@ public class StarCore extends ExtendedJavaPlugin {
         this.playerManager = injector.inject(new PlayerManager()).init();
         StarMCLib.GLOBAL_INJECTOR.setInstance(PlayerManager.class, this.playerManager);
         
-        mainConfig.addDefault("save-player-info", this.savePlayerInfo.get(), " This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
+        mainConfig.addDefault("save-player-info", this.savePlayerInfo.get(), "This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         
         if (this.database == null) {
             this.savePlayerInfo.set(mainConfig.getBoolean("save-player-info"));
@@ -248,9 +238,9 @@ public class StarCore extends ExtendedJavaPlugin {
         
         mainConfig.save();
         
-        messagesConfig = new YamlConfig(new File(getDataFolder(), "messages.toml"));
+        messagesConfig = new YamlConfig(new File(getDataFolder(), "messages.yml"));
         this.messagesConfig.load();
-        getLogger().info("Initialized the messages.toml file");
+        getLogger().info("Initialized the messages.yml file");
         
         messagesConfig.addDefault("command.reload", "&aSuccessfully reloaded configs.", " The message sent when /starcore reload is a success");
         messagesConfig.addDefault("command.invalidsubcommand", "&cInvalid subcommand.", " The message sent when an invalid sub-command is provided to /starcore");
