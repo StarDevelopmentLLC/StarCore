@@ -161,6 +161,6 @@ public class PlayerManager implements Listener {
         StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
         starPlayer.setLastLogout(System.currentTimeMillis());
         starPlayer.setPlaytime(starPlayer.getPlaytime() + starPlayer.getLastLogout() - starPlayer.getLastLogin());
-        savePlayer(starPlayer);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> savePlayer(starPlayer));
     }
 }
