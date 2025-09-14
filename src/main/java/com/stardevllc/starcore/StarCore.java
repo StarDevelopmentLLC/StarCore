@@ -40,6 +40,8 @@ import com.stardevllc.starmclib.actors.Actors;
 import com.stardevllc.starmclib.actors.ServerActor;
 import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
 import com.stardevllc.starsql.model.*;
+import com.stardevllc.starsql.model.Column.Option;
+import com.stardevllc.starsql.model.Column.Type;
 import com.stardevllc.starsql.statements.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -130,25 +132,11 @@ public class StarCore extends ExtendedJavaPlugin {
                 
                 String tablePrefix = mainConfig.getString("mysql.table-prefix");
                 configTable = this.database.getOrCreateTable(tablePrefix + "config");
-                if (configTable.getColumn("name") == null) {
-                    configTable.addColumn(new Column(configTable, "name", "varchar", 25, 1, false, false, true, false, null));
-                }
-                
-                if (configTable.getColumn("consoleuuid") == null) {
-                    configTable.addColumn(new Column(configTable, "consoleuuid", "varchar", 36, 2, true, false, false, false, null));
-                }
-                
-                if (configTable.getColumn("savecolors") == null) {
-                    configTable.addColumn(new Column(configTable, "savecolors", "varchar", 5, 3, false, false, false, false, null));
-                }
-                
-                if (configTable.getColumn("saveplayerinfo") == null) {
-                    configTable.addColumn(new Column(configTable, "saveplayerinfo", "varchar", 5, 4, false, false, false, false, null));
-                }
-                
-                if (configTable.getColumn("usemojangapi") == null) {
-                    configTable.addColumn(new Column(configTable, "usemojangapi", "varchar", 5, 5, false, false, false, false, null));
-                }
+                configTable.getOrCreateColumn("name", new Type("varchar", 25), 1, Option.PRIMARY_KEY);
+                configTable.getOrCreateColumn("consoleuuid", new Type("varchar", 36), 2, Option.NULLABLE);
+                configTable.getOrCreateColumn("savecolors", new Type("varchar", 5), 3);
+                configTable.getOrCreateColumn("saveplayerinfo", new Type("varchar", 5), 4);
+                configTable.getOrCreateColumn("usemojangapi", new Type("varchar", 5), 5);
                 
                 this.database.execute(new CreateTable(configTable.getName(), new HashSet<>(configTable.getColumns().values())).build());
                 
@@ -169,29 +157,12 @@ public class StarCore extends ExtendedJavaPlugin {
                 });
                 
                 playersTable = this.database.getOrCreateTable(tablePrefix + "players");
-                if (playersTable.getColumn("uniqueid") == null) {
-                    playersTable.addColumn(new Column(playersTable, "uniqueid", "varchar", 36, 1, false, false, true, false, null));
-                }
-                
-                if (playersTable.getColumn("name") == null) {
-                    playersTable.addColumn(new Column(playersTable, "name", "varchar", 16, 2, true, false, false, false, null));
-                }
-                
-                if (playersTable.getColumn("playtime") == null) {
-                    playersTable.addColumn(new Column(playersTable, "playtime", "bigint", 0, 3, false, false, false, false, null));
-                }
-                
-                if (playersTable.getColumn("firstlogin") == null) {
-                    playersTable.addColumn(new Column(playersTable, "firstlogin", "timestamp", 0, 4, false, false, false, false, null));
-                }
-                
-                if (playersTable.getColumn("lastlogin") == null) {
-                    playersTable.addColumn(new Column(playersTable, "lastlogin", "timestamp", 0, 5, false, false, false, false, null));
-                }
-                
-                if (playersTable.getColumn("lastlogout") == null) {
-                    playersTable.addColumn(new Column(playersTable, "lastlogout", "timestamp", 0, 6, false, false, false, false, null));
-                }
+                playersTable.getOrCreateColumn("uniqueid", new Type("varchar", 36), 1, Option.PRIMARY_KEY);
+                playersTable.getOrCreateColumn("name", new Type("varchar", 16), 2, Option.NULLABLE);
+                playersTable.getOrCreateColumn("playtime", new Type("bigint"), 3);
+                playersTable.getOrCreateColumn("firstlogin", new Type("timestamp"), 4);
+                playersTable.getOrCreateColumn("lastlogin", new Type("timestamp"), 5);
+                playersTable.getOrCreateColumn("lastlogout", new Type("timestamp"), 6);
                 
                 this.database.execute(new CreateTable(playersTable.getName(), new HashSet<>(playersTable.getColumns().values())).build());
             }
