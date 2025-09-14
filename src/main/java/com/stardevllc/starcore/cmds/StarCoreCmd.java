@@ -29,7 +29,9 @@ public class StarCoreCmd implements TabExecutor {
         }
 
         if (args.length == 0) {
-            colors.coloredLegacy(sender, "&cUsage: /" + label + " <subcommand> <args>");
+            colors.coloredLegacy(sender, "&cUsage: /" + label + " reload");
+            colors.coloredLegacy(sender, "&cUsage: /" + label + " color <args>");
+            colors.coloredLegacy(sender, "&cUsage: /" + label + " modules <args>");
             return true;
         }
 
