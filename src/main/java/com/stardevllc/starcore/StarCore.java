@@ -36,6 +36,7 @@ import com.stardevllc.starlib.observable.property.readwrite.ReadWriteBooleanProp
 import com.stardevllc.starlib.observable.property.readwrite.ReadWriteUUIDProperty;
 import com.stardevllc.starmclib.MinecraftVersion;
 import com.stardevllc.starmclib.StarMCLib;
+import com.stardevllc.starmclib.actors.Actors;
 import com.stardevllc.starmclib.actors.ServerActor;
 import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
 import com.stardevllc.starsql.model.*;
@@ -202,8 +203,8 @@ public class StarCore extends ExtendedJavaPlugin {
             this.consoleUnqiueId.set(UUID.fromString(mainConfig.getString("console-uuid")));
         }
         ServerActor.serverUUID = this.consoleUnqiueId.get();
-        Bukkit.getServer().getServicesManager().register(ServerActor.class, ServerActor.getServerActor(), this, ServicePriority.Highest);
-        StarMCLib.GLOBAL_INJECTOR.setInstance(ServerActor.class, ServerActor.getServerActor());
+        Bukkit.getServer().getServicesManager().register(ServerActor.class, Actors.getServerActor(), this, ServicePriority.Highest);
+        StarMCLib.GLOBAL_INJECTOR.setInstance(ServerActor.class, Actors.getServerActor());
         getLogger().info("Set the Console UUID to " + this.consoleUnqiueId.get());
         
         mainConfig.addDefault("save-colors", this.saveColors.get(), "This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
