@@ -81,12 +81,16 @@ public class PlayerManager implements Listener {
             this.playersConfig.save();
         } else {
             for (StarPlayer player : this.playerRegistry.values()) {
-                SqlInsertUpdate insert = new SqlInsertUpdate(plugin.getMainConfig().get("mysql.table-prefix") + "players").primaryKeyColumn("uniqueid")
-                        .columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout")
-                        .row(player.getUniqueId().toString(), player.getName(), player.getPlaytime(), new Timestamp(player.getFirstLogin()), new Timestamp(player.getLastLogin()), new Timestamp(player.getLastLogout()));
-                plugin.getDatabase().executeUpdate(insert.build());
+                savePlayer(player);
             }
         }
+    }
+    
+    public void savePlayer(StarPlayer player) {
+        SqlInsertUpdate insert = new SqlInsertUpdate(plugin.getMainConfig().get("mysql.table-prefix") + "players").primaryKeyColumn("uniqueid")
+                .columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout")
+                .row(player.getUniqueId().toString(), player.getName(), player.getPlaytime(), new Timestamp(player.getFirstLogin()), new Timestamp(player.getLastLogin()), new Timestamp(player.getLastLogout()));
+        plugin.getDatabase().executeUpdate(insert.build());
     }
     
     public void load() {
@@ -157,5 +161,6 @@ public class PlayerManager implements Listener {
         StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
         starPlayer.setLastLogout(System.currentTimeMillis());
         starPlayer.setPlaytime(starPlayer.getPlaytime() + starPlayer.getLastLogout() - starPlayer.getLastLogin());
+        savePlayer(starPlayer);
     }
 }
