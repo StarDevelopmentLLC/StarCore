@@ -2,6 +2,7 @@ package com.stardevllc.starcore.cmds;
 
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starcore.api.StarColors;
+import com.stardevllc.starcore.api.VersionModule;
 import com.stardevllc.starcore.api.colors.ColorHandler;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starlib.dependency.Inject;
@@ -140,7 +141,24 @@ public class StarCoreCmd implements TabExecutor {
             } else {
                 colors.coloredLegacy(sender, plugin.getMessagesConfig().getString("command.invalidsubcommand"));
             }
-        } else {
+        } else if (args[0].equalsIgnoreCase("modules") || args[0].equalsIgnoreCase("module")) {
+            if (!(args.length > 1)) {
+                colors.coloredLegacy(sender, "&cUsage: /" + label + " " + args[0] + " listversions");
+                return true;
+            }
+            
+            if (args[1].equalsIgnoreCase("listversions")) {
+                colors.coloredLegacy(sender, "&eList of Version Modules. &cRed &emeans not loaded &aGreen &emeans loaded.");
+                for (VersionModule versionModule : plugin.getVersionModules()) {
+                    String color = versionModule.isLoaded() ? "&a" : "&c";
+                    colors.coloredLegacy(sender, "  &8- " + color + versionModule.getVersion().name());
+                }
+            }
+            
+            else {
+                colors.coloredLegacy(sender, plugin.getMessagesConfig().getString("command.invalidsubcommand"));
+            }
+        }  else {
             colors.coloredLegacy(sender, plugin.getMessagesConfig().getString("command.invalidsubcommand"));
         }
 

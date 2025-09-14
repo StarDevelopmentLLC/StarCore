@@ -4,8 +4,7 @@ import com.stardevllc.config.Config;
 import com.stardevllc.config.Section;
 import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
-import com.stardevllc.starcore.api.StarColors;
-import com.stardevllc.starcore.api.StarEvents;
+import com.stardevllc.starcore.api.*;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.api.events.*;
 import com.stardevllc.starcore.api.itembuilder.ItemBuilder;
@@ -49,8 +48,7 @@ import org.bukkit.plugin.ServicePriority;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class StarCore extends ExtendedJavaPlugin {
@@ -77,6 +75,8 @@ public class StarCore extends ExtendedJavaPlugin {
     
     private Table configTable;
     private Table playersTable;
+    
+    private final List<VersionModule> versionModules = new LinkedList<>();
     
     public StarCore() {
         this.consoleUnqiueId = new ReadWriteUUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
@@ -249,26 +249,28 @@ public class StarCore extends ExtendedJavaPlugin {
         
         MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
         
-        new Module_1_8(this);
-        new Module_1_8_3(this);
-        new Module_1_8_8(this);
-        new Module_1_9_4(this);
-        new Module_1_10_2(this);
-        new Module_1_11_2(this);
-        new Module_1_12_2(this);
-        new Module_1_13(this);
-        new Module_1_13_2(this);
-        new Module_1_14_4(this);
-        new Module_1_15_2(this);
-        new Module_1_16_1(this);
-        new Module_1_16_3(this);
-        new Module_1_16_5(this);
-        new Module_1_17_1(this);
-        new Module_1_18_1(this);
-        new Module_1_19_3(this);
-        new Module_1_20_1(this);
-        new Module_1_21_1(this);
-        new Module_1_21_3(this);
+        this.versionModules.addAll(List.of(
+                new Module_1_8(this),
+                new Module_1_8_3(this),
+                new Module_1_8_8(this),
+                new Module_1_9_4(this),
+                new Module_1_10_2(this),
+                new Module_1_11_2(this),
+                new Module_1_12_2(this),
+                new Module_1_13(this),
+                new Module_1_13_2(this),
+                new Module_1_14_4(this),
+                new Module_1_15_2(this),
+                new Module_1_16_1(this),
+                new Module_1_16_3(this),
+                new Module_1_16_5(this),
+                new Module_1_17_1(this),
+                new Module_1_18_1(this),
+                new Module_1_19_3(this),
+                new Module_1_20_1(this),
+                new Module_1_21_1(this),
+                new Module_1_21_3(this)
+        ));
         
         registerListeners(new BlockEvents(), new EnchantEvents(), new EntityEvents(), new HangingEvents(), new InventoryEvents(),
                 new PlayerEvents(), new ServerEvents(), new VehicleEvents(), new WeatherEvents(), new WorldEvents());
@@ -298,6 +300,10 @@ public class StarCore extends ExtendedJavaPlugin {
     
     public Table getPlayersTable() {
         return playersTable;
+    }
+    
+    public List<VersionModule> getVersionModules() {
+        return new LinkedList<>(versionModules);
     }
     
     public void reload(boolean save) {
