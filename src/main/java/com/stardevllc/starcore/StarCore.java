@@ -32,8 +32,8 @@ import com.stardevllc.starcore.v1_8.Module_1_8;
 import com.stardevllc.starcore.v1_8_3.Module_1_8_3;
 import com.stardevllc.starcore.v1_8_8.events.Module_1_8_8;
 import com.stardevllc.starcore.v1_9_4.events.Module_1_9_4;
-import com.stardevllc.starlib.observable.property.BooleanProperty;
-import com.stardevllc.starlib.observable.property.UUIDProperty;
+import com.stardevllc.starlib.observable.property.readwrite.ReadWriteBooleanProperty;
+import com.stardevllc.starlib.observable.property.readwrite.ReadWriteUUIDProperty;
 import com.stardevllc.starmclib.MinecraftVersion;
 import com.stardevllc.starmclib.StarMCLib;
 import com.stardevllc.starmclib.actors.ServerActor;
@@ -67,19 +67,19 @@ public class StarCore extends ExtendedJavaPlugin {
     private Database database;
     
     //Default Settings
-    private final UUIDProperty consoleUnqiueId;
-    private final BooleanProperty saveColors;
-    private final BooleanProperty savePlayerInfo;
-    private final BooleanProperty useMojangAPI;
+    private final ReadWriteUUIDProperty consoleUnqiueId;
+    private final ReadWriteBooleanProperty saveColors;
+    private final ReadWriteBooleanProperty savePlayerInfo;
+    private final ReadWriteBooleanProperty useMojangAPI;
     
     private Table configTable;
     private Table playersTable;
     
     public StarCore() {
-        this.consoleUnqiueId = new UUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
-        this.saveColors = new BooleanProperty(this, "saveColors", false);
-        this.savePlayerInfo = new BooleanProperty(this, "savePlayerInfo", true);
-        this.useMojangAPI = new BooleanProperty(this, "useMojangAPI", true);
+        this.consoleUnqiueId = new ReadWriteUUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
+        this.saveColors = new ReadWriteBooleanProperty(this, "saveColors", false);
+        this.savePlayerInfo = new ReadWriteBooleanProperty(this, "savePlayerInfo", true);
+        this.useMojangAPI = new ReadWriteBooleanProperty(this, "useMojangAPI", true);
     }
     
     public void onEnable() {
