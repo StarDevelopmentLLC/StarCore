@@ -8,19 +8,15 @@ import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starlib.dependency.Inject;
 import com.stardevllc.starmclib.StarColorsV2;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
+import org.bukkit.command.*;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class StarCoreCmd implements TabExecutor {
 
     @Inject
     private StarCore plugin;
-
+    
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         StarColorsV2 colors = plugin.getColors();
         if (!sender.hasPermission("starcore.admin")) {
@@ -160,7 +156,7 @@ public class StarCoreCmd implements TabExecutor {
             else {
                 colors.coloredLegacy(sender, plugin.getMessagesConfig().getString("command.invalidsubcommand"));
             }
-        }  else {
+        } else {
             colors.coloredLegacy(sender, plugin.getMessagesConfig().getString("command.invalidsubcommand"));
         }
 
