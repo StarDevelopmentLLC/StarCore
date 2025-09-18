@@ -18,13 +18,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.13.1'
-    implementation 'com.stardevllc:StarMCLib:0.6.0'
-    implementation 'com.stardevllc:StarLib:0.14.0'
-    implementation 'net.kyori:adventure-api:4.22.0'
-    implementation 'net.kyori:adventure-platform-bukkit:4.4.0'
-    implementation 'net.kyori:adventure-text-minimessage:4.22.0'
-    compileOnly 'de.tr7zw:item-nbt-api-plugin:2.15.1'
+    implementation "com.stardevllc:StarLib:${starlibVersion}"
+    implementation "com.stardevllc:StarMCLib:${starmclibVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "net.kyori:adventure-api:${adventureVersion}"
+    implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
+    implementation "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
+    implementation "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 }
 
 java {
