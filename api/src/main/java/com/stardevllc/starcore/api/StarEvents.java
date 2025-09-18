@@ -18,7 +18,7 @@ public final class StarEvents {
         
         StarMCLib.GLOBAL_BUKKIT_EVENT_BUS.post(event);
         recentEvents.put(event, System.currentTimeMillis());
-        //Remove the event instance after 5 seconds
+        //Remove the event instance after 1 second
         recentEvents.entrySet().removeIf(entry -> System.currentTimeMillis() >= entry.getValue() + 1000L);
     }
     
