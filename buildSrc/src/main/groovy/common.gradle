@@ -9,7 +9,7 @@ repositories {
         url = 'https://repo.stardevllc.com/releases'
     }
     
-    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
 
     maven {
@@ -18,13 +18,13 @@ repositories {
 }
 
 dependencies {
-    implementation "com.stardevllc:StarLib:${starlibVersion}"
-    implementation "com.stardevllc:StarMCLib:${starmclibVersion}"
-    implementation "com.google.code.gson:gson:${gsonVersion}"
-    implementation "net.kyori:adventure-api:${adventureVersion}"
-    implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
-    implementation "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
-    implementation "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
+    compileOnly "com.stardevllc:StarLib:${starlibVersion}"
+    compileOnly "com.stardevllc:StarMCLib:${starmclibVersion}"
+    compileOnly "com.google.code.gson:gson:${gsonVersion}"
+    compileOnly "net.kyori:adventure-api:${adventureVersion}"
+    compileOnly "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
+    compileOnly "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
+    compileOnly "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 }
 
 java {

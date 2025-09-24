@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.stardevllc'
-version = '0.10.1'
+version = '0.10.2'
 
 publishing {
     repositories {
@@ -23,7 +23,7 @@ publishing {
     
     publications {
         shadow(MavenPublication) {
-            from components.java
+            from components.shadow
         }
     }
 }
@@ -53,10 +53,18 @@ tasks.named('shadowJar', ShadowJar) {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.21.7-R0.1-SNAPSHOT'
-    api "com.stardevllc:StarSQL:${starsqlVersion}"
+    compileOnly 'org.spigotmc:spigot-api:1.21.8-R0.1-SNAPSHOT'
 
-    api "com.stardevllc:config:${starconfigVersion}"
+    implementation "com.stardevllc:StarLib:${starlibVersion}"
+    implementation "com.stardevllc:StarMCLib:${starmclibVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "net.kyori:adventure-api:${adventureVersion}"
+    implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
+    implementation "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
+    implementation "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
+
+    implementation "com.stardevllc:StarSQL:${starsqlVersion}"
+    implementation "com.stardevllc:config:${starconfigVersion}"
     
     //Project ones
     implementation project(':api')
@@ -85,6 +93,8 @@ dependencies {
 
 tasks.compileJava.dependsOn(clean)
 tasks.jar.finalizedBy(shadowJar)
+tasks.javadoc.dependsOn(shadowJar)
+tasks.sourcesJar.dependsOn(shadowJar)
 tasks.publishToMavenLocal.dependsOn(shadowJar)
 tasks.build.finalizedBy(publishToMavenLocal)
 //tasks.build.finalizedBy(publish)
