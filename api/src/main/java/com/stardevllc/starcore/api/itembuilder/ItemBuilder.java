@@ -72,8 +72,14 @@ public abstract class ItemBuilder<I extends ItemBuilder<I, M>, M extends ItemMet
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
-            this.itemFlags.addAll(itemMeta.getItemFlags());
-            this.lore.addAll(itemMeta.getLore());
+            if (itemMeta.getItemFlags() != null) {
+                this.itemFlags.addAll(itemMeta.getItemFlags());
+            }
+            
+            if (itemMeta.getLore() != null) {
+                this.lore.addAll(itemMeta.getLore());
+            }
+            
             this.displayName = itemMeta.getDisplayName();
             
             if (itemMeta instanceof Repairable repairable) {
