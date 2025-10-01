@@ -49,11 +49,12 @@ tasks.named('shadowJar', ShadowJar) {
     relocate('com.google', 'com.stardevllc.google')
     relocate('net.kyori', 'com.stardevllc.adventure')
     relocate('com.mysql', 'com.stardevllc.mysql')
-    relocate('org.yaml.snakeyaml', 'com.stardevllc.snakeyaml')
+    relocate('org.yaml.snakeyaml', 'com.stardevllc.config.snakeyaml')
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.8-R0.1-SNAPSHOT'
+    compileOnly "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 
     implementation "com.stardevllc:StarLib:${starlibVersion}"
     implementation "com.stardevllc:StarMCLib:${starmclibVersion}"
@@ -61,7 +62,6 @@ dependencies {
     implementation "net.kyori:adventure-api:${adventureVersion}"
     implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
     implementation "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
-    implementation "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 
     implementation "com.stardevllc:StarSQL:${starsqlVersion}"
     implementation "com.stardevllc:config:${starconfigVersion}"
