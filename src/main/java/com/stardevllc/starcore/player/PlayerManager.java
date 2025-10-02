@@ -69,28 +69,25 @@ public class PlayerManager implements Listener {
     }
     
     public void save() {
-        if (plugin.getDatabase() == null) {
-            if (this.playersConfig == null) {
-                return;
-            }
-
-            for (Map.Entry<UUID, StarPlayer> entry : this.playerRegistry.entrySet()) {
-                this.playersConfig.set("players." + entry.getKey().toString(), entry.getValue().serialize());
-            }
-
-            this.playersConfig.save();
-        } else {
-            for (StarPlayer player : this.playerRegistry.values()) {
-                savePlayer(player);
-            }
+        for (StarPlayer player : this.playerRegistry) {
+            savePlayer(player, false);
         }
     }
     
-    public void savePlayer(StarPlayer player) {
-        SqlInsertUpdate insert = new SqlInsertUpdate(plugin.getMainConfig().get("mysql.table-prefix") + "players").primaryKeyColumn("uniqueid")
-                .columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout")
-                .row(player.getUniqueId().toString(), player.getName(), player.getPlaytime(), new Timestamp(player.getFirstLogin()), new Timestamp(player.getLastLogin()), new Timestamp(player.getLastLogout()));
-        plugin.getDatabase().executeUpdate(insert.build());
+    public void savePlayer(StarPlayer player, boolean saveFile) {
+        if (plugin.getDatabase() == null) {
+            if (this.playersConfig != null) {
+                this.playersConfig.set("players." + player.getUniqueId().toString(), player.serialize());
+                if (saveFile) {
+                    this.playersConfig.save();
+                }
+            }
+        } else {
+            SqlInsertUpdate insert = new SqlInsertUpdate(plugin.getMainConfig().get("mysql.table-prefix") + "players").primaryKeyColumn("uniqueid")
+                    .columns("uniqueid", "name", "playtime", "firstlogin", "lastlogin", "lastlogout")
+                    .row(player.getUniqueId().toString(), player.getName(), player.getPlaytime(), new Timestamp(player.getFirstLogin()), new Timestamp(player.getLastLogin()), new Timestamp(player.getLastLogout()));
+            plugin.getDatabase().executeUpdate(insert.build());
+        }
     }
     
     public void load() {
@@ -161,6 +158,6 @@ public class PlayerManager implements Listener {
         StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
         starPlayer.setLastLogout(System.currentTimeMillis());
         starPlayer.setPlaytime(starPlayer.getPlaytime() + starPlayer.getLastLogout() - starPlayer.getLastLogin());
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> savePlayer(starPlayer));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> savePlayer(starPlayer, true));
     }
 }
