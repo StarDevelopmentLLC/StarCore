@@ -24,6 +24,13 @@ publishing {
     publications {
         shadow(MavenPublication) {
             from components.shadow
+            
+            artifact ("build/libs/${project.name}-${project.version}-javadoc.jar") {
+                classifier = "javadoc"
+            }
+            artifact ("build/libs/${project.name}-${project.version}-sources.jar") {
+                classifier = "sources"
+            }
         }
     }
 }
@@ -95,6 +102,18 @@ tasks.compileJava.dependsOn(clean)
 tasks.jar.finalizedBy(shadowJar)
 tasks.javadoc.dependsOn(shadowJar)
 tasks.sourcesJar.dependsOn(shadowJar)
-tasks.publishToMavenLocal.dependsOn(shadowJar)
+
+tasks.withType(PublishToMavenLocal).configureEach {
+    dependsOn(shadowJar)
+    dependsOn(javadocJar)
+    dependsOn(sourcesJar)
+}
+
+tasks.withType(PublishToMavenRepository).configureEach {
+    dependsOn(shadowJar)
+    dependsOn(javadocJar)
+    dependsOn(sourcesJar)
+}
+
 tasks.build.finalizedBy(publishToMavenLocal)
 //tasks.build.finalizedBy(publish)
