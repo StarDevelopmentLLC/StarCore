@@ -53,10 +53,15 @@ java {
 tasks.named('shadowJar', ShadowJar) {
     archiveClassifier = ''
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    dependencies {
+        exclude(dependency("org.yaml:snakeyaml:.*"))
+    }
+    
     relocate('com.google', 'com.stardevllc.google')
     relocate('net.kyori', 'com.stardevllc.adventure')
     relocate('com.mysql', 'com.stardevllc.mysql')
-    relocate('org.yaml.snakeyaml', 'com.stardevllc.config.snakeyaml')
+//    relocate('org.yaml.snakeyaml', 'com.stardevllc.config.snakeyaml')
     relocate('org.intellij', 'com.stardevllc.intellij')
     relocate('org.jetbrains', 'com.stardevllc.jetbrains')
 }
