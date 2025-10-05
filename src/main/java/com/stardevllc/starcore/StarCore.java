@@ -27,7 +27,7 @@ import com.stardevllc.starcore.v1_19_3.Module_1_19_3;
 import com.stardevllc.starcore.v1_20_1.Module_1_20_1;
 import com.stardevllc.starcore.v1_21_1.Module_1_21_1;
 import com.stardevllc.starcore.v1_21_3.events.Module_1_21_3;
-import com.stardevllc.starcore.v1_21_6.events.Module_1_21_6;
+import com.stardevllc.starcore.v1_21_7.events.Module_1_21_7;
 import com.stardevllc.starcore.v1_8.Module_1_8;
 import com.stardevllc.starcore.v1_8_3.Module_1_8_3;
 import com.stardevllc.starcore.v1_8_8.events.Module_1_8_8;
@@ -271,7 +271,7 @@ public class StarCore extends ExtendedJavaPlugin {
                 new Module_1_20_1(this),
                 new Module_1_21_1(this),
                 new Module_1_21_3(this), 
-                new Module_1_21_6(this)
+                new Module_1_21_7(this)
         ));
         
         registerListeners(new BlockEvents(), new EnchantEvents(), new EntityEvents(), new HangingEvents(), new InventoryEvents(),
