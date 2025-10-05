@@ -3,7 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id 'common'
     id 'maven-publish'
-    id 'com.gradleup.shadow' version '9.1.0'
+    id 'com.gradleup.shadow' version '9.2.2'
 }
 
 group = 'com.stardevllc'
@@ -60,7 +60,7 @@ tasks.named('shadowJar', ShadowJar) {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.21.8-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.21.9-R0.1-SNAPSHOT'
     compileOnly "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 
     implementation "com.stardevllc:StarLib:${starlibVersion}"
@@ -96,6 +96,7 @@ dependencies {
     implementation project(':v1_20_1')
     implementation project(':v1_21_1')
     implementation project(':v1_21_3')
+    implementation project(':v1_21_6')
 }
 
 tasks.compileJava.dependsOn(clean)
