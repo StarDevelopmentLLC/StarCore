@@ -311,7 +311,7 @@ public class StarCore extends ExtendedJavaPlugin {
     public void reload(boolean save) {
         if (save) {
             saveColors();
-            this.playerManager.save();
+            this.playerManager.save(false);
         }
         
         StarColors.getCustomColors().forEach((code, color) -> {
@@ -375,7 +375,7 @@ public class StarCore extends ExtendedJavaPlugin {
         }
         
         saveColors();
-        this.playerManager.save();
+        this.playerManager.save(true);
     }
     
     public MCWrappers getMcWrappers() {
