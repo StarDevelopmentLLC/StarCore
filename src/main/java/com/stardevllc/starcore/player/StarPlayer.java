@@ -13,7 +13,7 @@ public class StarPlayer {
     private MojangProfile mojangProfile;
     
     private long playtime;
-    private long firstLogin, lastLogin, lastLogout;
+    private long firstLogin = 1, lastLogin = 1, lastLogout = 1;
     
     public StarPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;

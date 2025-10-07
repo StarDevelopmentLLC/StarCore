@@ -68,8 +68,11 @@ public class PlayerManager implements Listener {
         return null;
     }
     
-    public void save() {
+    public void save(boolean updateLogout) {
         for (StarPlayer player : this.playerRegistry) {
+            if (updateLogout) {
+                player.setLastLogout(System.currentTimeMillis());
+            }
             savePlayer(player, false);
         }
     }
@@ -147,7 +150,7 @@ public class PlayerManager implements Listener {
         }
         
         StarPlayer starPlayer = getPlayer(e.getPlayer().getUniqueId());
-        if (starPlayer.getFirstLogin() == 0) {
+        if (starPlayer.getFirstLogin() == 1) {
             starPlayer.setFirstLogin(System.currentTimeMillis());
         }
         starPlayer.setLastLogin(System.currentTimeMillis());
