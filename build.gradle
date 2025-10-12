@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.stardevllc'
-version = '0.10.4'
+version = '0.11.0'
 
 publishing {
     repositories {
@@ -71,6 +71,8 @@ dependencies {
 
     implementation "com.stardevllc:StarLib:${starlibVersion}"
     implementation "com.stardevllc:StarMCLib:${starmclibVersion}"
+    implementation "com.stardevllc:SMaterial:${smaterialVersion}"
+    implementation "com.stardevllc:ItemBuilder:${staritembuilderVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "net.kyori:adventure-api:${adventureVersion}"
     implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
