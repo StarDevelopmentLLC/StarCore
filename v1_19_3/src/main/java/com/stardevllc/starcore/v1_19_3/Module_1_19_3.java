@@ -13,6 +13,5 @@ public class Module_1_19_3 extends VersionModule {
     @Override
     public void init() {
         registerListeners(new InventoryEvents_1_19_3());
-//        ItemBuilders.mapMetaToBuilder(MusicInstrumentMeta.class, GoatHornBuilder.class);
     }
 }

@@ -13,6 +13,5 @@ public class Module_1_13 extends VersionModule {
     @Override
     public void init() {
         registerListeners(new BlockEvents_1_13(), new EntityEvents_1_13(), new PlayerEvents_1_13());
-//        ItemBuilders.mapMetaToBuilder(TropicalFishBucketMeta.class, FishBucketBuilder.class);
     }
 }

@@ -13,6 +13,5 @@ public class Module_1_20_1 extends VersionModule {
     @Override
     public void init() {
         registerListeners(new EntityEvents_1_20_1());
-//        ItemBuilders.mapMetaToBuilder(ArmorMeta.class, ArmorItemBuilder.class);
     }
 }

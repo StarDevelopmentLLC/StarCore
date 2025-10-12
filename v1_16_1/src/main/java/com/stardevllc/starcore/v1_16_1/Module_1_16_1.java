@@ -15,7 +15,5 @@ public class Module_1_16_1 extends VersionModule {
     public void init() {
         StarColors.setColorHandler(new ColorHandler_1_16_1());
         registerListeners(new EntityEvents_1_16_1(), new InventoryEvents_1_16_1(), new PlayerEvents_1_16_1());
-//        ItemBuilders.mapMetaToBuilder(BookMeta.class, BookItemBuilder.class);
-//        ItemBuilders.mapMetaToBuilder(CompassMeta.class, CompassItemBuilder.class);
     }
 }

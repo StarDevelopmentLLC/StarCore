@@ -13,6 +13,5 @@ public class Module_1_21_1 extends VersionModule {
     @Override
     public void init() {
         registerListeners(new BlockEvents_1_21_1(), new EntityEvents_1_21_1(), new PlayerEvents_1_21_1());
-//        ItemBuilders.mapMetaToBuilder(OminousBottleMeta.class, OminousBottleBuilder.class);
     }
 }

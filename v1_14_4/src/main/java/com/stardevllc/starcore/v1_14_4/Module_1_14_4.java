@@ -13,8 +13,5 @@ public class Module_1_14_4 extends VersionModule {
     @Override
     public void init() {
         registerListeners(new BlockEvents_1_14_4(), new EntityEvents_1_14_4(), new InventoryEvents_1_14_4(), new PlayerEvents_1_14_4(), new RaidEvents_1_14_4(), new WorldEvents_1_14_4());
-//        ItemBuilders.mapMetaToBuilder(CrossbowMeta.class, CrossbowItemBuilder.class);
-//        ItemBuilders.mapMetaToBuilder(SuspiciousStewMeta.class, StewItemBuilder.class);
-//        ItemBuilders.mapMetaToBuilder(BlockDataMeta.class, BlockDataItemBuilder.class);
     }
 }

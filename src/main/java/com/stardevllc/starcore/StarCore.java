@@ -5,6 +5,7 @@ import com.stardevllc.config.Section;
 import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
 import com.stardevllc.itembuilder.ItemBuilder;
+import com.stardevllc.itembuilder.ItemBuilders;
 import com.stardevllc.starcore.api.*;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.api.events.*;
@@ -92,6 +93,8 @@ public class StarCore extends ExtendedJavaPlugin {
         StarMCLib.registerPluginEventBus(getEventBus());
         StarMCLib.registerPluginInjector(this, getInjector());
         StarEvents.addChildBus(getEventBus());
+        
+        ItemBuilders.init();
         
         this.mainConfig = new YamlConfig(new File(getDataFolder(), "config.yml"));
         this.mainConfig.load();

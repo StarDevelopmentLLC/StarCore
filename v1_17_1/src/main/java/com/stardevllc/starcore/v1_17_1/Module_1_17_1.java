@@ -13,6 +13,5 @@ public class Module_1_17_1 extends VersionModule {
     @Override
     public void init() {
         registerListeners(new BlockEvents_1_17_1(), new InventoryEvents_1_17_1(), new WorldEvents_1_17_1());
-//        ItemBuilders.mapMetaToBuilder(AxolotlBucketMeta.class, AxolotlItemBuilder.class);
     }
 }

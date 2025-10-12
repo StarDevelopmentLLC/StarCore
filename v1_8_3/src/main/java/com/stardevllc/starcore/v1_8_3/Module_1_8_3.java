@@ -13,6 +13,5 @@ public class Module_1_8_3 extends VersionModule {
     @Override
     public void init() {
         registerListeners(new BlockEvents_1_8_3());
-//        ItemBuilders.mapMetaToBuilder(BlockStateMeta.class, BlockStateItemBuilder.class);
     }
 }

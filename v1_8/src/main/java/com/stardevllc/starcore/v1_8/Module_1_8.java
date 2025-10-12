@@ -12,11 +12,6 @@ public class Module_1_8 extends VersionModule {
     
     @Override
     public void init() {
-//        ItemBuilders.mapMetaToBuilder(BannerMeta.class, BannerItemBuilder.class);
-//        ItemBuilders.mapMetaToBuilder(EnchantmentStorageMeta.class, EnchantedBookBuilder.class);
-//        ItemBuilders.mapMetaToBuilder(FireworkMeta.class, FireworkItemBuilder.class);
-//        ItemBuilders.mapMetaToBuilder(FireworkEffectMeta.class, FireworkStarBuilder.class);
-//        ItemBuilders.mapMetaToBuilder(SkullMeta.class, SkullItemBuilder.class);
         StarColors.setColorHandler(new ColorHandler_1_8());
     }
 }
