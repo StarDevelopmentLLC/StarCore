@@ -20,8 +20,6 @@ repositories {
 dependencies {
     compileOnly "com.stardevllc:StarLib:${starlibVersion}"
     compileOnly "com.stardevllc:StarMCLib:${starmclibVersion}"
-    compileOnly "com.stardevllc:SMaterial:${smaterialVersion}"
-    compileOnly "com.stardevllc:ItemBuilder:${staritembuilderVersion}"
     compileOnly "com.google.code.gson:gson:${gsonVersion}"
     compileOnly "net.kyori:adventure-api:${adventureVersion}"
     compileOnly "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"

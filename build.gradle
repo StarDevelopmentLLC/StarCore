@@ -65,13 +65,29 @@ tasks.named('shadowJar', ShadowJar) {
     relocate('org.jetbrains', 'com.stardevllc.jetbrains')
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url = 'https://repo.stardevllc.com/releases'
+    }
+
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+
+    maven {
+        url = 'https://repo.codemc.org/repository/maven-public/'
+    }
+}
+
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.21.9-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.21.10-R0.1-SNAPSHOT'
     compileOnly "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 
     implementation "com.stardevllc:StarLib:${starlibVersion}"
     implementation "com.stardevllc:StarMCLib:${starmclibVersion}"
     implementation "com.stardevllc:SMaterial:${smaterialVersion}"
+    implementation "com.stardevllc:SMCVersion:${smcvVersion}"
     implementation "com.stardevllc:ItemBuilder:${staritembuilderVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "net.kyori:adventure-api:${adventureVersion}"
@@ -86,7 +102,6 @@ dependencies {
     implementation project(':v1_8')
     implementation project(':v1_8_3')
     implementation project(':v1_8_8')
-    implementation project(':v1_9_2')
     implementation project(':v1_9_4')
     implementation project(':v1_10_2')
     implementation project(':v1_11_2')

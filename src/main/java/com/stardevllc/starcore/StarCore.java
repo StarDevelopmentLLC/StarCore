@@ -4,12 +4,11 @@ import com.stardevllc.config.Config;
 import com.stardevllc.config.Section;
 import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
-import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.ItemBuilders;
+import com.stardevllc.itembuilder.common.ItemBuilder;
 import com.stardevllc.starcore.api.*;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.api.events.*;
-import com.stardevllc.starcore.api.wrappers.*;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.v1_10_2.events.Module_1_10_2;
@@ -40,9 +39,10 @@ import com.stardevllc.starmclib.StarMCLib;
 import com.stardevllc.starmclib.actors.Actors;
 import com.stardevllc.starmclib.actors.ServerActor;
 import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
-import com.stardevllc.starsql.model.*;
 import com.stardevllc.starsql.model.Column.Option;
 import com.stardevllc.starsql.model.Column.Type;
+import com.stardevllc.starsql.model.Database;
+import com.stardevllc.starsql.model.Table;
 import com.stardevllc.starsql.statements.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -64,8 +64,6 @@ public class StarCore extends ExtendedJavaPlugin {
     private FileConfig messagesConfig;
     
     private PlayerManager playerManager;
-    
-    private MCWrappers mcWrappers;
     
     private Database database;
     
@@ -239,14 +237,6 @@ public class StarCore extends ExtendedJavaPlugin {
         
         messagesConfig.save();
         
-        this.mcWrappers = new MCWrappersImpl();
-        getServer().getServicesManager().register(MCWrappers.class, this.mcWrappers, this, ServicePriority.Highest);
-        
-        StarMCLib.GLOBAL_INJECTOR.setInstance(MCWrappers.class, this.mcWrappers);
-        StarMCLib.GLOBAL_INJECTOR.setInstance(ItemWrapper.class, this.mcWrappers.getItemWrapper());
-        StarMCLib.GLOBAL_INJECTOR.setInstance(EnchantWrapper.class, this.mcWrappers.getEnchantWrapper());
-        StarMCLib.GLOBAL_INJECTOR.setInstance(PlayerHandWrapper.class, this.mcWrappers.getPlayerHandWrapper());
-        
         getLogger().info("Initialized the MCWrapper utility");
         
         registerCommand("starcore", new StarCoreCmd());
@@ -379,10 +369,6 @@ public class StarCore extends ExtendedJavaPlugin {
         
         saveColors();
         this.playerManager.save(true);
-    }
-    
-    public MCWrappers getMcWrappers() {
-        return mcWrappers;
     }
     
     public PlayerManager getPlayerManager() {
