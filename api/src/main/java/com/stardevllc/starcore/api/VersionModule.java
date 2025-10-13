@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.api;
 
-import com.stardevllc.starmclib.MinecraftVersion;
+import com.stardevllc.smcversion.MinecraftVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;

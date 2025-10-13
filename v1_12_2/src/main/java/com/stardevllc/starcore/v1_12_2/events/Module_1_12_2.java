@@ -1,7 +1,7 @@
 package com.stardevllc.starcore.v1_12_2.events;
 
 import com.stardevllc.starcore.api.VersionModule;
-import com.stardevllc.starmclib.MinecraftVersion;
+import com.stardevllc.smcversion.MinecraftVersion;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Module_1_12_2 extends VersionModule {

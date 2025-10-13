@@ -2,7 +2,7 @@ package com.stardevllc.starcore.v1_8_3;
 
 import com.stardevllc.starcore.api.VersionModule;
 import com.stardevllc.starcore.v1_8_3.events.BlockEvents_1_8_3;
-import com.stardevllc.starmclib.MinecraftVersion;
+import com.stardevllc.smcversion.MinecraftVersion;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Module_1_8_3 extends VersionModule {

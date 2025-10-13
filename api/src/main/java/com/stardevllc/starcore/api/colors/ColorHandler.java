@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.api.colors;
 
-import com.stardevllc.starmclib.MinecraftVersion;
+import com.stardevllc.smcversion.MinecraftVersion;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 
