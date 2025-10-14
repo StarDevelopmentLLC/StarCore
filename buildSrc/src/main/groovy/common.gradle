@@ -18,13 +18,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly "com.stardevllc:StarLib:${starlibVersion}"
     compileOnly "com.stardevllc:StarMCLib:${starmclibVersion}"
-    compileOnly "com.stardevllc:SMCVersion:${smcvVersion}"
-    compileOnly "com.google.code.gson:gson:${gsonVersion}"
-    compileOnly "net.kyori:adventure-api:${adventureVersion}"
-    compileOnly "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
-    compileOnly "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
     compileOnly "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 }
 

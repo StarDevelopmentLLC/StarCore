@@ -75,7 +75,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     public void onEnable() {
         super.onEnable();
         
-        StarMCLib.init();
+        StarMCLib.init(this);
         StarMCLib.registerPluginEventBus(getEventBus());
         StarMCLib.registerPluginInjector(this, getInjector());
         

@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.stardevllc'
-version = '0.12.1'
+version = '0.13.0'
 
 publishing {
     repositories {
@@ -58,11 +58,6 @@ tasks.named('shadowJar', ShadowJar) {
         exclude(dependency("org.yaml:snakeyaml:.*"))
         exclude(dependency("com.mysql:mysql-connector-j:.*"))
     }
-    
-    relocate('com.google', 'com.stardevllc.google')
-    relocate('net.kyori', 'com.stardevllc.adventure')
-    relocate('org.intellij', 'com.stardevllc.intellij')
-    relocate('org.jetbrains', 'com.stardevllc.jetbrains')
 }
 
 repositories {
@@ -84,16 +79,9 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.10-R0.1-SNAPSHOT'
     compileOnly "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 
-    implementation "com.stardevllc:StarLib:${starlibVersion}"
     implementation "com.stardevllc:StarMCLib:${starmclibVersion}"
-    implementation "com.stardevllc:SMaterial:${smaterialVersion}"
-    implementation "com.stardevllc:SMCVersion:${smcvVersion}"
     implementation "com.stardevllc:ItemBuilder:${staritembuilderVersion}"
     implementation "com.stardevllc:StarEvents:${stareventsVersion}"
-    implementation "com.google.code.gson:gson:${gsonVersion}"
-    implementation "net.kyori:adventure-api:${adventureVersion}"
-    implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
-    implementation "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
 
     implementation "com.stardevllc:StarSQL:${starsqlVersion}"
     implementation "com.stardevllc:config:${starconfigVersion}"
