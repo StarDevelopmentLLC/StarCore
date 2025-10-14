@@ -4,7 +4,6 @@ import com.stardevllc.config.Config;
 import com.stardevllc.config.Section;
 import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
-import com.stardevllc.itembuilder.ItemBuilders;
 import com.stardevllc.itembuilder.common.ItemBuilder;
 import com.stardevllc.smcversion.MinecraftVersion;
 import com.stardevllc.starcore.api.StarColors;
@@ -15,6 +14,8 @@ import com.stardevllc.starcore.player.PlayerManager;
 import com.stardevllc.starcore.v1_16_1.Module_1_16_1;
 import com.stardevllc.starcore.v1_8.Module_1_8;
 import com.stardevllc.starevents.StarEvents;
+import com.stardevllc.staritems.StarItems;
+import com.stardevllc.staritems.cmd.StarItemsCommand;
 import com.stardevllc.starlib.observable.property.readwrite.ReadWriteBooleanProperty;
 import com.stardevllc.starlib.observable.property.readwrite.ReadWriteUUIDProperty;
 import com.stardevllc.starmclib.StarMCLib;
@@ -87,8 +88,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         }
         
         StarEvents.init(this);
-        
-        ItemBuilders.init();
+        StarItems.init(this);
         
         this.mainConfig = new YamlConfig(new File(getDataFolder(), "config.yml"));
         this.mainConfig.load();
@@ -236,6 +236,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         getLogger().info("Initialized the MCWrapper utility");
         
         registerCommand("starcore", new StarCoreCmd());
+        registerCommand("staritems", new StarItemsCommand(this));
         
         MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
         

@@ -80,8 +80,8 @@ dependencies {
     compileOnly "de.tr7zw:item-nbt-api-plugin:${nbtapiVersion}"
 
     implementation "com.stardevllc:StarMCLib:${starmclibVersion}"
-    implementation "com.stardevllc:ItemBuilder:${staritembuilderVersion}"
     implementation "com.stardevllc:StarEvents:${stareventsVersion}"
+    implementation "com.stardevllc:StarItems:${staritemsVersion}"
 
     implementation "com.stardevllc:StarSQL:${starsqlVersion}"
     implementation "com.stardevllc:config:${starconfigVersion}"

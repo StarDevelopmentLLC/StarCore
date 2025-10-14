@@ -6,3 +6,4 @@ author: Firestar311
 depend: [NBTAPI]
 commands: 
   starcore: 
+  staritems: 
