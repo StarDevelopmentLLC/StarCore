@@ -7,32 +7,14 @@ import com.stardevllc.config.file.yaml.YamlConfig;
 import com.stardevllc.itembuilder.ItemBuilders;
 import com.stardevllc.itembuilder.common.ItemBuilder;
 import com.stardevllc.smcversion.MinecraftVersion;
-import com.stardevllc.starcore.api.*;
+import com.stardevllc.starcore.api.StarColors;
+import com.stardevllc.starcore.api.VersionModule;
 import com.stardevllc.starcore.api.colors.CustomColor;
-import com.stardevllc.starcore.api.events.*;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.player.PlayerManager;
-import com.stardevllc.starcore.v1_10_2.events.Module_1_10_2;
-import com.stardevllc.starcore.v1_11_2.events.Module_1_11_2;
-import com.stardevllc.starcore.v1_12_2.events.Module_1_12_2;
-import com.stardevllc.starcore.v1_13.Module_1_13;
-import com.stardevllc.starcore.v1_13_2.Module_1_13_2;
-import com.stardevllc.starcore.v1_14_4.Module_1_14_4;
-import com.stardevllc.starcore.v1_15_2.events.Module_1_15_2;
 import com.stardevllc.starcore.v1_16_1.Module_1_16_1;
-import com.stardevllc.starcore.v1_16_3.events.Module_1_16_3;
-import com.stardevllc.starcore.v1_16_5.events.Module_1_16_5;
-import com.stardevllc.starcore.v1_17_1.Module_1_17_1;
-import com.stardevllc.starcore.v1_18_1.events.Module_1_18_1;
-import com.stardevllc.starcore.v1_19_3.Module_1_19_3;
-import com.stardevllc.starcore.v1_20_1.Module_1_20_1;
-import com.stardevllc.starcore.v1_21_1.Module_1_21_1;
-import com.stardevllc.starcore.v1_21_4.events.Module_1_21_4;
-import com.stardevllc.starcore.v1_21_7.events.Module_1_21_7;
 import com.stardevllc.starcore.v1_8.Module_1_8;
-import com.stardevllc.starcore.v1_8_3.Module_1_8_3;
-import com.stardevllc.starcore.v1_8_8.events.Module_1_8_8;
-import com.stardevllc.starcore.v1_9_4.events.Module_1_9_4;
+import com.stardevllc.starevents.StarEvents;
 import com.stardevllc.starlib.observable.property.readwrite.ReadWriteBooleanProperty;
 import com.stardevllc.starlib.observable.property.readwrite.ReadWriteUUIDProperty;
 import com.stardevllc.starmclib.StarMCLib;
@@ -45,7 +27,7 @@ import com.stardevllc.starsql.model.Database;
 import com.stardevllc.starsql.model.Table;
 import com.stardevllc.starsql.statements.*;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 
 import java.io.File;
@@ -87,11 +69,18 @@ public class StarCore extends ExtendedJavaPlugin {
     
     public void onEnable() {
         super.onEnable();
+        
+        Plugin starEventsPlugin = Bukkit.getPluginManager().getPlugin("StarEvents");
+        if (starEventsPlugin != null) {
+            getLogger().severe("StarEvents Plugin detected. StarCore already provides StarEvents.");
+            getLogger().severe("There will be problems if one of them are not removed.");
+        }
+        
         StarMCLib.init();
         StarMCLib.registerPluginEventBus(getEventBus());
         StarMCLib.registerPluginInjector(this, getInjector());
-        StarEvents.addChildBus(getEventBus());
         
+        StarEvents.init(this);
         ItemBuilders.init();
         
         this.mainConfig = new YamlConfig(new File(getDataFolder(), "config.yml"));
@@ -245,43 +234,9 @@ public class StarCore extends ExtendedJavaPlugin {
         
         this.versionModules.addAll(List.of(
                 new Module_1_8(this),
-                new Module_1_8_3(this),
-                new Module_1_8_8(this),
-                new Module_1_9_4(this),
-                new Module_1_10_2(this),
-                new Module_1_11_2(this),
-                new Module_1_12_2(this),
-                new Module_1_13(this),
-                new Module_1_13_2(this),
-                new Module_1_14_4(this),
-                new Module_1_15_2(this),
-                new Module_1_16_1(this),
-                new Module_1_16_3(this),
-                new Module_1_16_5(this),
-                new Module_1_17_1(this),
-                new Module_1_18_1(this),
-                new Module_1_19_3(this),
-                new Module_1_20_1(this),
-                new Module_1_21_1(this),
-                new Module_1_21_4(this),
-                new Module_1_21_7(this)
+                new Module_1_16_1(this)
         ));
         
-        registerListeners(new BlockEvents(), new EnchantEvents(), new EntityEvents(), new HangingEvents(), new InventoryEvents(),
-                new PlayerEvents(), new ServerEvents(), new VehicleEvents(), new WeatherEvents(), new WorldEvents());
-        
-        PluginManager pluginManager = getServer().getPluginManager();
-        
-        //The pickup item event was deprecated and replaced in 1.12
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() < MinecraftVersion.v1_12.ordinal()) {
-            registerListeners(new PlayerItemPickupListener_1_8_1_11(), new PlayerAchievmentListener_1_8_1_11());
-        }
-        
-        if (MinecraftVersion.CURRENT_VERSION.ordinal() < MinecraftVersion.v1_14_4.ordinal()) {
-            registerListeners(new EntityCreatePortalListener_1_8_1_14_4());
-        }
-        
-        getLogger().info("Initialized the Event Passing listeners");
         getLogger().info("StarCore finished loading");
     }
     

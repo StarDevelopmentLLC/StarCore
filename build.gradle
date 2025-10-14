@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.stardevllc'
-version = '0.11.0'
+version = '0.12.0'
 
 publishing {
     repositories {
@@ -89,6 +89,7 @@ dependencies {
     implementation "com.stardevllc:SMaterial:${smaterialVersion}"
     implementation "com.stardevllc:SMCVersion:${smcvVersion}"
     implementation "com.stardevllc:ItemBuilder:${staritembuilderVersion}"
+    implementation "com.stardevllc:StarEvents:${stareventsVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "net.kyori:adventure-api:${adventureVersion}"
     implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
@@ -100,26 +101,7 @@ dependencies {
     //Project ones
     implementation project(':api')
     implementation project(':v1_8')
-    implementation project(':v1_8_3')
-    implementation project(':v1_8_8')
-    implementation project(':v1_9_4')
-    implementation project(':v1_10_2')
-    implementation project(':v1_11_2')
-    implementation project(':v1_12_2')
-    implementation project(':v1_13')
-    implementation project(':v1_13_2')
-    implementation project(':v1_14_4')
-    implementation project(':v1_15_2')
     implementation project(':v1_16_1')
-    implementation project(':v1_16_3')
-    implementation project(':v1_16_5')
-    implementation project(':v1_17_1')
-    implementation project(':v1_18_1')
-    implementation project(':v1_19_3')
-    implementation project(':v1_20_1')
-    implementation project(':v1_21_1')
-    implementation project(':v1_21_4')
-    implementation project(':v1_21_7')
 }
 
 tasks.compileJava.dependsOn(clean)
