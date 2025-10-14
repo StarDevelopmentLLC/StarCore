@@ -27,6 +27,9 @@ import com.stardevllc.starsql.model.Database;
 import com.stardevllc.starsql.model.Table;
 import com.stardevllc.starsql.statements.*;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 
@@ -35,7 +38,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
 
-public class StarCore extends ExtendedJavaPlugin {
+public class StarCore extends ExtendedJavaPlugin implements Listener {
     
     static {
         ItemBuilder.colorFunction = StarColors::color;
@@ -60,6 +63,8 @@ public class StarCore extends ExtendedJavaPlugin {
     
     private final List<VersionModule> versionModules = new LinkedList<>();
     
+    private boolean starEventsPluginDetected;
+    
     public StarCore() {
         this.consoleUnqiueId = new ReadWriteUUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
         this.saveColors = new ReadWriteBooleanProperty(this, "saveColors", false);
@@ -70,17 +75,19 @@ public class StarCore extends ExtendedJavaPlugin {
     public void onEnable() {
         super.onEnable();
         
-        Plugin starEventsPlugin = Bukkit.getPluginManager().getPlugin("StarEvents");
-        if (starEventsPlugin != null) {
-            getLogger().severe("StarEvents Plugin detected. StarCore already provides StarEvents.");
-            getLogger().severe("There will be problems if one of them are not removed.");
-        }
-        
         StarMCLib.init();
         StarMCLib.registerPluginEventBus(getEventBus());
         StarMCLib.registerPluginInjector(this, getInjector());
         
+        Plugin starEventsPlugin = Bukkit.getPluginManager().getPlugin("StarEvents");
+        if (starEventsPlugin != null) {
+            getLogger().severe("StarEvents Plugin detected. StarCore already provides StarEvents.");
+            getLogger().severe("There will be problems if one of them are not removed.");
+            starEventsPluginDetected = true;
+        }
+        
         StarEvents.init(this);
+        
         ItemBuilders.init();
         
         this.mainConfig = new YamlConfig(new File(getDataFolder(), "config.yml"));
@@ -237,7 +244,20 @@ public class StarCore extends ExtendedJavaPlugin {
                 new Module_1_16_1(this)
         ));
         
+        registerListeners(this);
+        
         getLogger().info("StarCore finished loading");
+    }
+    
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        if (e.getPlayer().hasPermission("starcore.alerts.join")) {
+            if (starEventsPluginDetected) {
+                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] The StarEvents plugin was detected.");
+                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] Please remove the StarEvents plugin or StarCore.");
+                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] There will be problems if this issue is not resolved");
+            }
+        }
     }
     
     public Database getDatabase() {
