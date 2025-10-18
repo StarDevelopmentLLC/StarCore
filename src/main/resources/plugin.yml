@@ -7,3 +7,4 @@ depend: [NBTAPI]
 commands: 
   starcore: 
   staritems: 
+  starmclib:

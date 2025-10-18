@@ -21,6 +21,7 @@ import com.stardevllc.starlib.observable.property.readwrite.ReadWriteUUIDPropert
 import com.stardevllc.starmclib.StarMCLib;
 import com.stardevllc.starmclib.actors.Actors;
 import com.stardevllc.starmclib.actors.ServerActor;
+import com.stardevllc.starmclib.cmd.StarMCLibCmd;
 import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
 import com.stardevllc.starsql.model.Column.Option;
 import com.stardevllc.starsql.model.Column.Type;
@@ -237,6 +238,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         
         registerCommand("starcore", new StarCoreCmd());
         registerCommand("staritems", new StarItemsCommand(this));
+        registerCommand("starmclib", new StarMCLibCmd(this));
         
         MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
         
