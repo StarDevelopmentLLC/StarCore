@@ -5,7 +5,7 @@ import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.VersionModule;
 import com.stardevllc.starcore.api.colors.ColorHandler;
 import com.stardevllc.starcore.api.colors.CustomColor;
-import com.stardevllc.starlib.dependency.Inject;
+import com.stardevllc.starlib.injector.Inject;
 import com.stardevllc.starmclib.StarColorsV2;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
