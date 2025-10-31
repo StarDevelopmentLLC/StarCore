@@ -46,7 +46,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         ItemBuilder.colorFunction = StarColors::color;
     }
     
-    private FileConfig mainConfig;
     private FileConfig colorsConfig;
     private FileConfig messagesConfig;
     
@@ -65,8 +64,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     
     private final List<VersionModule> versionModules = new LinkedList<>();
     
-    private boolean starEventsPluginDetected;
-    
     public StarCore() {
         this.consoleUnqiueId = new ReadWriteUUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
         this.saveColors = new ReadWriteBooleanProperty(this, "saveColors", false);
@@ -74,19 +71,24 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         this.useMojangAPI = new ReadWriteBooleanProperty(this, "useMojangAPI", true);
     }
     
+    private final Set<String> incompatiblePluginsDetected = new HashSet<>();
+    
+    private void checkIncompatiblePlugin(String pluginName) {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        if (plugin != null) {
+            getLogger().severe(pluginName + " Plugin detected. StarCore already provides " + pluginName + ".");
+            getLogger().severe("There will be problems if one of them are not removed.");
+            incompatiblePluginsDetected.add(pluginName);
+        }
+    }
+    
     public void onEnable() {
+        StarMCLib.init(this);
         super.onEnable();
         
-        StarMCLib.init(this);
-        StarMCLib.registerPluginEventBus(getEventBus());
-        StarMCLib.registerPluginInjector(this, getInjector());
-        
-        Plugin starEventsPlugin = Bukkit.getPluginManager().getPlugin("StarEvents");
-        if (starEventsPlugin != null) {
-            getLogger().severe("StarEvents Plugin detected. StarCore already provides StarEvents.");
-            getLogger().severe("There will be problems if one of them are not removed.");
-            starEventsPluginDetected = true;
-        }
+        checkIncompatiblePlugin("StarMCLib");
+        checkIncompatiblePlugin("StarEvents");
+        checkIncompatiblePlugin("StarItems");
         
         StarEvents.init(this);
         StarItems.init(this);
@@ -174,7 +176,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         }
         ServerActor.serverUUID = this.consoleUnqiueId.get();
         Bukkit.getServer().getServicesManager().register(ServerActor.class, Actors.getServerActor(), this, ServicePriority.Highest);
-        StarMCLib.GLOBAL_INJECTOR.setInstance(ServerActor.class, Actors.getServerActor());
+        StarMCLib.GLOBAL_INJECTOR.set(ServerActor.class, Actors.getServerActor());
         getLogger().info("Set the Console UUID to " + this.consoleUnqiueId.get());
         
         mainConfig.addDefault("save-colors", this.saveColors.get(), "This allows the plugin to save colors to colors.yml.", "Colors are defined using the command or by plugins.", "Only colors created by StarCore are saved to the file.");
@@ -188,7 +190,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         }
         
         this.playerManager = injector.inject(new PlayerManager()).init();
-        StarMCLib.GLOBAL_INJECTOR.setInstance(PlayerManager.class, this.playerManager);
+        StarMCLib.GLOBAL_INJECTOR.set(PlayerManager.class, this.playerManager);
         
         mainConfig.addDefault("save-player-info", this.savePlayerInfo.get(), "This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         
@@ -255,9 +257,13 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (e.getPlayer().hasPermission("starcore.alerts.join")) {
-            if (starEventsPluginDetected) {
-                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] The StarEvents plugin was detected.");
-                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] Please remove the StarEvents plugin or StarCore.");
+            if (!this.incompatiblePluginsDetected.isEmpty()) {
+                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] The following incompatible plugins were found");
+                for (String plugin : this.incompatiblePluginsDetected) {
+                    getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] - " + plugin);
+                }
+                
+                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] Please remove the these plugins.");
                 getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] There will be problems if this issue is not resolved");
             }
         }
@@ -355,10 +361,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     
     public UUID getConsoleUnqiueId() {
         return consoleUnqiueId.get();
-    }
-    
-    public Config getMainConfig() {
-        return mainConfig;
     }
     
     public Config getMessagesConfig() {
