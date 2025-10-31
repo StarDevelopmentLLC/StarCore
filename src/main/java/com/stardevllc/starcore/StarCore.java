@@ -71,15 +71,30 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         this.useMojangAPI = new ReadWriteBooleanProperty(this, "useMojangAPI", true);
     }
     
-    private final Set<String> incompatiblePluginsDetected = new HashSet<>();
+    private final Set<String> incompatiblePlugins = new HashSet<>();
+    private final Set<String> incompatibleStandalonePlugins = new HashSet<>();
     
     private void checkIncompatiblePlugin(String pluginName) {
         Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
         if (plugin != null) {
             getLogger().severe(pluginName + " Plugin detected. StarCore already provides " + pluginName + ".");
-            getLogger().severe("There will be problems if one of them are not removed.");
-            incompatiblePluginsDetected.add(pluginName);
+            getLogger().severe("There will be problems if not removed.");
+            incompatiblePlugins.add(pluginName);
         }
+    }
+    
+    @SuppressWarnings("SameParameterValue")
+    private void checkIncompatibleStandalonePlugin(String pluginName, String className) {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        try {
+            Class<?> clazz = Class.forName(className);
+            if (clazz.isInstance(plugin)) {
+                getLogger().severe(pluginName + " Standalone Plugin detected. StarCore already provides the necessary dependencies.");
+                getLogger().severe("Pleasea download the non-standalone version of the plugin");
+                getLogger().severe("There will be problems if this is not resolved");
+                incompatibleStandalonePlugins.add(pluginName);
+            }
+        } catch (Throwable t) {}
     }
     
     public void onEnable() {
@@ -89,6 +104,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         checkIncompatiblePlugin("StarMCLib");
         checkIncompatiblePlugin("StarEvents");
         checkIncompatiblePlugin("StarItems");
+        checkIncompatibleStandalonePlugin("StarSpawners", "com.stardevllc.starspawners.plugin.StandaloneStarItemsPlugin");
         
         StarEvents.init(this);
         StarItems.init(this);
@@ -257,14 +273,24 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (e.getPlayer().hasPermission("starcore.alerts.join")) {
-            if (!this.incompatiblePluginsDetected.isEmpty()) {
+            if (!this.incompatiblePlugins.isEmpty()) {
                 getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] The following incompatible plugins were found");
-                for (String plugin : this.incompatiblePluginsDetected) {
+                for (String plugin : this.incompatiblePlugins) {
                     getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] - " + plugin);
                 }
                 
                 getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] Please remove the these plugins.");
                 getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] There will be problems if this issue is not resolved");
+            }
+            
+            if (!this.incompatibleStandalonePlugins.isEmpty()) {
+                getColors().coloredLegacy(e.getPlayer(), "&c[StarCore] The following plugins were found to be in standalone form");
+                for (String plugin : this.incompatibleStandalonePlugins) {
+                    getColors().coloredLegacy(e.getPlayer(), "&c[StarCore] - " + plugin);
+                }
+                
+                getColors().coloredLegacy(e.getPlayer(), "&c[StarCore] Please remove these plugins and download the non-standalone variant");
+                getColors().coloredLegacy(e.getPlayer(), "&c[StarCore] There will be problems if this is issue is not resolved");
             }
         }
     }
