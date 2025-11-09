@@ -21,8 +21,8 @@ import com.stardevllc.starlib.observable.property.readwrite.ReadWriteUUIDPropert
 import com.stardevllc.starmclib.StarMCLib;
 import com.stardevllc.starmclib.actors.Actors;
 import com.stardevllc.starmclib.actors.ServerActor;
-import com.stardevllc.starmclib.cmd.StarMCLibCmd;
 import com.stardevllc.starmclib.plugin.ExtendedJavaPlugin;
+import com.stardevllc.starmclib.smlplugin.cmd.StarMCLibCmd;
 import com.stardevllc.starsql.model.Column.Option;
 import com.stardevllc.starsql.model.Column.Type;
 import com.stardevllc.starsql.model.Database;
