@@ -28,6 +28,7 @@ import com.stardevllc.starsql.model.Column.Type;
 import com.stardevllc.starsql.model.Database;
 import com.stardevllc.starsql.model.Table;
 import com.stardevllc.starsql.statements.*;
+import net.byteflux.libby.BukkitLibraryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,10 +42,6 @@ import java.util.*;
 import java.util.logging.Level;
 
 public class StarCore extends ExtendedJavaPlugin implements Listener {
-    
-    static {
-        ItemBuilder.colorFunction = StarColors::color;
-    }
     
     private FileConfig colorsConfig;
     private FileConfig messagesConfig;
@@ -65,6 +62,11 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     private final List<VersionModule> versionModules = new LinkedList<>();
     
     public StarCore() {
+        BukkitLibraryManager bukkitLibraryManager = new BukkitLibraryManager(this, new File(".", "plugins").toPath(), "libraries");
+        bukkitLibraryManager.configureFromJSON();
+        
+        ItemBuilder.colorFunction = StarColors::color;
+        
         this.consoleUnqiueId = new ReadWriteUUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
         this.saveColors = new ReadWriteBooleanProperty(this, "saveColors", false);
         this.savePlayerInfo = new ReadWriteBooleanProperty(this, "savePlayerInfo", true);
@@ -95,6 +97,11 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
                 incompatibleStandalonePlugins.add(pluginName);
             }
         } catch (Throwable t) {}
+    }
+    
+    @Override
+    public void onLoad() {
+        StarMCLib.addPluginEventBusRegisterListener(StarEvents.BUS::addChildBus);
     }
     
     public void onEnable() {
@@ -205,7 +212,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
             getLogger().info("Loaded custom colors");
         }
         
-        this.playerManager = injector.inject(new PlayerManager()).init();
+        this.playerManager = getInjector().inject(new PlayerManager()).init();
         StarMCLib.GLOBAL_INJECTOR.set(PlayerManager.class, this.playerManager);
         
         mainConfig.addDefault("save-player-info", this.savePlayerInfo.get(), "This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
