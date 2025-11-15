@@ -4,6 +4,7 @@ api-version: 1.13
 name: ${name}
 author: Firestar311
 depend: [NBTAPI]
+softdepend: [mcMMO, PlaceholderAPI]
 commands: 
   starcore: 
   staritems: 
