@@ -113,7 +113,12 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         checkIncompatiblePlugin("StarItems");
         checkIncompatibleStandalonePlugin("StarSpawners", "com.stardevllc.starspawners.plugin.StandaloneStarItemsPlugin");
         
+        getLogger().info("Initializing StarEvents");
         StarEvents.init(this);
+        getLogger().info("[StarEvents] " + StarEvents.getSuccesfulListeners().size() + " listeners successfully registered");
+        getLogger().info("[StarEvents] " + StarEvents.getFailedListeners().size() + " listeners failed to load");
+        getLogger().info("[StarEvents] " + StarEvents.getEventsTracked().size() + " total events are tracked");
+        
         StarItems.init(this);
         
         this.mainConfig = new YamlConfig(new File(getDataFolder(), "config.yml"));
