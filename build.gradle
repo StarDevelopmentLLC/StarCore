@@ -77,17 +77,17 @@ dependencies {
     implementation "com.stardevllc:StarItems:${staritemsVersion}"
 
     implementation "com.stardevllc:StarSQL:${starsqlVersion}"
-    implementation "com.stardevllc:config:${starconfigVersion}"
+    compileOnly "com.stardevllc:config:${starconfigVersion}"
 
-    implementation "com.google.code.gson:gson:${gsonVersion}"
-    implementation "net.kyori:adventure-api:${adventureVersion}"
-    implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
-    implementation "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
+    compileOnly "com.google.code.gson:gson:${gsonVersion}"
+    compileOnly "net.kyori:adventure-api:${adventureVersion}"
+    compileOnly "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
+    compileOnly "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
 
     libby "com.mysql:mysql-connector-j:${mysqlVersion}"
     libby "org.xerial:sqlite-jdbc:${sqlliteVersion}"
 
-    implementation "org.yaml:snakeyaml:${snakeymlVersion}"
+    compileOnly "org.yaml:snakeyaml:${snakeymlVersion}"
 
     //Project ones
     implementation project(':api')
@@ -114,12 +114,9 @@ tasks.named('shadowJar', ShadowJar) {
     }
 
     relocate("net.byteflux.libby", "com.stardevllc.libby")
-    relocate("net.kyori", "com.stardevllc.kyori")
     relocate("org.sqlite", "com.stardevllc.sqlite")
-    relocate("com.google", "com.stardevllc.google")
     relocate("com.grack", "com.stardevllc.grack")
     relocate("com.mysql", "com.stardevllc.mysql")
-    relocate("org.yaml.snakeyaml", "com.stardevllc.snakeyaml")
 }
 
 tasks.named("javadoc", Javadoc) {

@@ -5,12 +5,12 @@ import com.stardevllc.config.Section;
 import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
 import com.stardevllc.itembuilder.common.ItemBuilder;
-import com.stardevllc.smcversion.MinecraftVersion;
 import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.VersionModule;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.player.PlayerManager;
+import com.stardevllc.starcore.player.PlayerRegistry;
 import com.stardevllc.starcore.v1_16_1.Module_1_16_1;
 import com.stardevllc.starcore.v1_8.Module_1_8;
 import com.stardevllc.starevents.StarEvents;
@@ -101,7 +101,11 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     
     @Override
     public void onLoad() {
-        StarMCLib.addPluginEventBusRegisterListener(StarEvents.BUS::addChildBus);
+        StarMCLib.getPluginEventBuses().addListener(c -> {
+            if (c.added() != null) {
+                StarEvents.BUS.addChildBus(c.added());
+            }
+        });
     }
     
     public void onEnable() {
@@ -219,6 +223,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         
         this.playerManager = getInjector().inject(new PlayerManager()).init();
         StarMCLib.GLOBAL_INJECTOR.set(PlayerManager.class, this.playerManager);
+        StarMCLib.GLOBAL_INJECTOR.set(PlayerRegistry.class, playerManager.getPlayerRegistry());
         
         mainConfig.addDefault("save-player-info", this.savePlayerInfo.get(), "This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         
@@ -269,8 +274,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         registerCommand("starcore", new StarCoreCmd());
         registerCommand("staritems", new StarItemsCommand(this));
         registerCommand("starmclib", new StarMCLibCmd(this));
-        
-        MinecraftVersion currentVersion = MinecraftVersion.CURRENT_VERSION;
         
         this.versionModules.addAll(List.of(
                 new Module_1_8(this),
