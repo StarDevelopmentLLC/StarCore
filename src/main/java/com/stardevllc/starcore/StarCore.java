@@ -4,7 +4,6 @@ import com.stardevllc.config.Config;
 import com.stardevllc.config.Section;
 import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
-import com.stardevllc.itembuilder.common.ItemBuilder;
 import com.stardevllc.starcore.api.StarColors;
 import com.stardevllc.starcore.api.VersionModule;
 import com.stardevllc.starcore.api.colors.CustomColor;
@@ -65,7 +64,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         BukkitLibraryManager bukkitLibraryManager = new BukkitLibraryManager(this, new File(".", "plugins").toPath(), "libraries");
         bukkitLibraryManager.configureFromJSON();
         
-        ItemBuilder.colorFunction = StarColors::color;
+//        ItemBuilder.colorFunction = StarColors::color;
         
         this.consoleUnqiueId = new ReadWriteUUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
         this.saveColors = new ReadWriteBooleanProperty(this, "saveColors", false);
@@ -119,9 +118,13 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         
         getLogger().info("Initializing StarEvents");
         StarEvents.init(this);
-        getLogger().info("[StarEvents] " + StarEvents.getSuccesfulListeners().size() + " listeners successfully registered");
-        getLogger().info("[StarEvents] " + StarEvents.getFailedListeners().size() + " listeners failed to load");
-        getLogger().info("[StarEvents] " + StarEvents.getEventsTracked().size() + " total events are tracked");
+        StarEvents.initComplete.addListener(c -> {
+            if (c.newValue()) {
+                getLogger().info("[StarEvents] " + StarEvents.getSuccesfulListeners().size() + " listeners successfully registered");
+                getLogger().info("[StarEvents] " + StarEvents.getFailedListeners().size() + " listeners failed to load");
+                getLogger().info("[StarEvents] " + StarEvents.getEventsTracked().size() + " total events are tracked");
+            }
+        });
         
         StarItems.init(this);
         
