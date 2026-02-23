@@ -5,7 +5,6 @@ import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starlib.injector.Inject;
-import com.stardevllc.starlib.objects.registry.RegistryObject;
 import com.stardevllc.starmclib.mojang.MojangAPI;
 import com.stardevllc.starmclib.mojang.MojangProfile;
 import com.stardevllc.starsql.statements.SqlInsertUpdate;
@@ -151,15 +150,7 @@ public class PlayerManager implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        RegistryObject<UUID, StarPlayer> playerObject = this.playerRegistry.getObject(e.getPlayer().getUniqueId());
-        if (playerObject == null) {
-            playerObject = this.playerRegistry.register(new StarPlayer(e.getPlayer()));
-            if (playerObject == null) {
-                plugin.getLogger().severe("Failed to register the player " + e.getPlayer().getName());
-            }
-        }
-        
-        StarPlayer starPlayer = playerObject.get();
+        StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
         if (starPlayer == null) {
             plugin.getLogger().severe("There was no player found for " + e.getPlayer().getName() + " in the PlayerRegistry");
             return;
@@ -172,13 +163,13 @@ public class PlayerManager implements Listener {
     
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        RegistryObject<UUID, StarPlayer> playerObject = this.playerRegistry.getObject(e.getPlayer().getUniqueId());
-        if (playerObject == null) {
-            plugin.getLogger().severe("There was no player by the name of " + e.getPlayer().getName() + " registered to the PlayerRegistry. THIS IS A BUG, PLEASE REPORT");
+        StarPlayer starPlayer = this.playerRegistry.get(e.getPlayer().getUniqueId());
+        
+        if (starPlayer == null) {
+            plugin.getLogger().severe("There was no player found for " + e.getPlayer().getName() + " in the PlayerRegistry");
             return;
         }
         
-        StarPlayer starPlayer = playerObject.get();
         starPlayer.setLastLogout(System.currentTimeMillis());
         starPlayer.setPlaytime(starPlayer.getPlaytime() + starPlayer.getLastLogout() - starPlayer.getLastLogin());
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> savePlayer(starPlayer, true));
