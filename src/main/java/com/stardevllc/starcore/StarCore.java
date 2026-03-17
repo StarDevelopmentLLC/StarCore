@@ -9,14 +9,14 @@ import com.stardevllc.starcore.api.VersionModule;
 import com.stardevllc.starcore.api.colors.CustomColor;
 import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.player.PlayerManager;
-import com.stardevllc.starcore.player.PlayerRegistry;
+import com.stardevllc.starcore.player.PlayerRepository;
 import com.stardevllc.starcore.v1_16_1.Module_1_16_1;
 import com.stardevllc.starcore.v1_8.Module_1_8;
 import com.stardevllc.starevents.StarEvents;
 import com.stardevllc.staritems.StarItems;
 import com.stardevllc.staritems.cmd.StarItemsCommand;
-import com.stardevllc.starlib.observable.property.readwrite.ReadWriteBooleanProperty;
-import com.stardevllc.starlib.observable.property.readwrite.ReadWriteUUIDProperty;
+import com.stardevllc.starlib.values.property.BooleanProperty;
+import com.stardevllc.starlib.values.property.UUIDProperty;
 import com.stardevllc.starmclib.StarMCLib;
 import com.stardevllc.starmclib.actors.Actors;
 import com.stardevllc.starmclib.actors.ServerActor;
@@ -50,10 +50,10 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     private Database database;
     
     //Default Settings
-    private final ReadWriteUUIDProperty consoleUnqiueId;
-    private final ReadWriteBooleanProperty saveColors;
-    private final ReadWriteBooleanProperty savePlayerInfo;
-    private final ReadWriteBooleanProperty useMojangAPI;
+    private final UUIDProperty consoleUnqiueId;
+    private final BooleanProperty saveColors;
+    private final BooleanProperty savePlayerInfo;
+    private final BooleanProperty useMojangAPI;
     
     private Table configTable;
     private Table playersTable;
@@ -66,10 +66,10 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         
 //        ItemBuilder.colorFunction = StarColors::color;
         
-        this.consoleUnqiueId = new ReadWriteUUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
-        this.saveColors = new ReadWriteBooleanProperty(this, "saveColors", false);
-        this.savePlayerInfo = new ReadWriteBooleanProperty(this, "savePlayerInfo", true);
-        this.useMojangAPI = new ReadWriteBooleanProperty(this, "useMojangAPI", true);
+        this.consoleUnqiueId = new UUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
+        this.saveColors = new BooleanProperty(this, "saveColors", false);
+        this.savePlayerInfo = new BooleanProperty(this, "savePlayerInfo", true);
+        this.useMojangAPI = new BooleanProperty(this, "useMojangAPI", true);
     }
     
     private final Set<String> incompatiblePlugins = new HashSet<>();
@@ -118,8 +118,8 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         
         getLogger().info("Initializing StarEvents");
         StarEvents.init(this);
-        StarEvents.initComplete.addListener(c -> {
-            if (c.newValue()) {
+        StarEvents.initComplete.addChangeListener((v, o, n) -> {
+            if (n) {
                 getLogger().info("[StarEvents] " + StarEvents.getSuccesfulListeners().size() + " listeners successfully registered");
                 getLogger().info("[StarEvents] " + StarEvents.getFailedListeners().size() + " listeners failed to load");
                 getLogger().info("[StarEvents] " + StarEvents.getEventsTracked().size() + " total events are tracked");
@@ -226,7 +226,7 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         
         this.playerManager = getInjector().inject(new PlayerManager()).init();
         StarMCLib.GLOBAL_INJECTOR.set(PlayerManager.class, this.playerManager);
-        StarMCLib.GLOBAL_INJECTOR.set(PlayerRegistry.class, playerManager.getPlayerRegistry());
+        StarMCLib.GLOBAL_INJECTOR.set(PlayerRepository.class, playerManager.getPlayerRepository());
         
         mainConfig.addDefault("save-player-info", this.savePlayerInfo.get(), "This allows the plugin to save a cache of player UUIDs to Names for offline fetching.", "Players must still join at least once though");
         
