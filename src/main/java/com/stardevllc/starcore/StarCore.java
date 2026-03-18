@@ -149,6 +149,12 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
             getLogger().info("Attempting to connect to " + url);
             
             try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            
+            try {
                 this.database.connect().close();
                 getLogger().info("Connection successful");
             } catch (Throwable t) {
