@@ -5,8 +5,6 @@ import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starlib.injector.Inject;
-import com.stardevllc.starmclib.mojang.MojangAPI;
-import com.stardevllc.starmclib.mojang.MojangProfile;
 import com.stardevllc.starsql.statements.SqlInsertUpdate;
 import com.stardevllc.starsql.statements.SqlSelect;
 import org.bukkit.Bukkit;
@@ -53,24 +51,7 @@ public class PlayerManager implements Listener {
     }
     
     public StarPlayer getPlayer(UUID uuid) {
-        if (this.playerRepository.containsKey(uuid)) {
-            StarPlayer starPlayer = playerRepository.get(uuid);
-            if (plugin.isUseMojangAPI()) {
-                if (starPlayer.getMojangProfile() == null) {
-                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                        MojangProfile profile = MojangAPI.getProfile(uuid);
-                        StarPlayer sp = playerRepository.get(uuid);
-                        if (sp != null) {
-                            sp.setMojangProfile(profile);
-                        }
-                    });
-                }
-            }
-            
-            return starPlayer;
-        }
-        
-        return null;
+        return playerRepository.get(uuid);
     }
     
     public void save(boolean updateLogout) {
