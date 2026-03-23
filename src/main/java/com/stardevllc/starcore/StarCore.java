@@ -13,8 +13,6 @@ import com.stardevllc.starcore.player.PlayerRepository;
 import com.stardevllc.starcore.v1_16_1.Module_1_16_1;
 import com.stardevllc.starcore.v1_8.Module_1_8;
 import com.stardevllc.starevents.StarEvents;
-import com.stardevllc.staritems.StarItems;
-import com.stardevllc.staritems.cmd.StarItemsCommand;
 import com.stardevllc.starlib.values.property.BooleanProperty;
 import com.stardevllc.starlib.values.property.UUIDProperty;
 import com.stardevllc.starmclib.StarMCLib;
@@ -61,9 +59,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     private final List<VersionModule> versionModules = new LinkedList<>();
     
     public StarCore() {
-        BukkitLibraryManager bukkitLibraryManager = new BukkitLibraryManager(this, new File(".", "plugins").toPath(), "libraries");
-        bukkitLibraryManager.configureFromJSON();
-        
 //        ItemBuilder.colorFunction = StarColors::color;
         
         this.consoleUnqiueId = new UUIDProperty(this, "consoleUniqueId", UUID.randomUUID());
@@ -100,6 +95,9 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     
     @Override
     public void onLoad() {
+        BukkitLibraryManager bukkitLibraryManager = new BukkitLibraryManager(this, getDataFolder().toPath(), "libraries");
+        bukkitLibraryManager.configureFromJSON();
+        
         StarMCLib.getPluginEventBuses().addListener(c -> {
             if (c.added() != null) {
                 StarEvents.BUS.addChildBus(c.added());
@@ -113,7 +111,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         
         checkIncompatiblePlugin("StarMCLib");
         checkIncompatiblePlugin("StarEvents");
-        checkIncompatiblePlugin("StarItems");
         checkIncompatibleStandalonePlugin("StarSpawners", "com.stardevllc.starspawners.plugin.StandaloneStarItemsPlugin");
         
         getLogger().info("Initializing StarEvents");
@@ -125,8 +122,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
                 getLogger().info("[StarEvents] " + StarEvents.getEventsTracked().size() + " total events are tracked");
             }
         });
-        
-        StarItems.init(this);
         
         this.mainConfig = new YamlConfig(new File(getDataFolder(), "config.yml"));
         this.mainConfig.load();
@@ -281,7 +276,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         getLogger().info("Initialized the MCWrapper utility");
         
         registerCommand("starcore", new StarCoreCmd());
-        registerCommand("staritems", new StarItemsCommand(this));
         registerCommand("starmclib", new StarMCLibCmd(this));
         
         this.versionModules.addAll(List.of(
