@@ -7,5 +7,4 @@ depend: [NBTAPI]
 softdepend: [mcMMO, PlaceholderAPI]
 commands: 
   starcore: 
-  staritems: 
   starmclib:
