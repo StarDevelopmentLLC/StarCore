@@ -69,11 +69,10 @@ repositories {
 dependencies {
     implementation "com.stardevllc:StarLib:${starlibVersion}"
     implementation "com.stardevllc:config:${starconfigVersion}"
-    implementation "com.stardevllc:SMCVersion:${smcvVersion}"
     implementation("com.stardevllc.libby:libby-bukkit:1.0.1")
     compileOnly 'org.spigotmc:spigot-api:1.21.11-R0.1-SNAPSHOT'
+    implementation "org.javassist:javassist:${javassistVersion}"
 
-    implementation "com.stardevllc:StarEvents:${stareventsVersion}"
     implementation "com.stardevllc:StarSQL:${starsqlVersion}"
 
     libby "com.google.code.gson:gson:${gsonVersion}"
@@ -119,6 +118,7 @@ tasks.named('shadowJar', ShadowJar) {
     relocate('org.yaml.snakeyaml', 'com.stardevllc.snakeyaml')
     relocate('net.kyori', 'com.stardevllc.kyori')
     relocate('com.google.gson', 'com.stardevllc.gson')
+    relocate('javassist', 'com.stardevllc.javassist')
 }
 
 tasks.named("javadoc", Javadoc) {
