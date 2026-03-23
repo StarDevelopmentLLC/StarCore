@@ -90,6 +90,8 @@ dependencies {
     implementation project(':common')
     implementation project(':api')
     implementation project(':v1_8')
+    implementation project(':v1_9_2')
+    implementation project(':v1_13_2')
     implementation project(':v1_16_1')
 }
 
