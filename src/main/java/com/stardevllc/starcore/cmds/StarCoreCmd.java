@@ -71,10 +71,10 @@ public class StarCoreCmd implements TabExecutor {
                     }
                     String charList = symbolBuilder.toString().trim();
                     charList = charList.substring(0, charList.length() - 2);
-                    sender.sendMessage(colors.colorLegacy(plugin.getMessagesConfig().getString("command.color.list.symbols")) + charList);
+                    colors.coloredLegacy(sender, plugin.getMessagesConfig().getString("command.color.list.symbols") + charList);
                 } else if (args[2].equalsIgnoreCase("codes")) {
-                    sender.sendMessage(StarColors.color(plugin.getMessagesConfig().getString("command.color.list.colors")));
-                    StarColors.getCustomColors().forEach((code, color) -> sender.sendMessage(colors.colorLegacy("  &8- &b") + code + "§8: §b" + color.getHex() + colors.colorLegacy(" &8[&e" + color.getOwner().getName() + "&8]" + (!color.getPermission().isEmpty() ? " &8<&d" + color.getPermission() + "&8>" : ""))));
+                    colors.coloredLegacy(sender, plugin.getMessagesConfig().getString("command.color.list.colors"));
+                    StarColors.getCustomColors().forEach((code, color) -> sender.sendMessage(StarColors.color("  &8- &b") + code + "§8: §b" + color.getHex() + colors.colorLegacy(" &8[&e" + color.getOwner().getName() + "&8]" + (!color.getPermission().isEmpty() ? " &8<&d" + color.getPermission() + "&8>" : ""))));
                 }
             } else if (args[1].equalsIgnoreCase("add")) {
                 if (!sender.hasPermission("starcore.admin.color.add")) {
