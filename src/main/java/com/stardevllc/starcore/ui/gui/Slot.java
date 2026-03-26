@@ -1,6 +1,6 @@
-package com.stardevllc.starcore.api.ui.gui;
+package com.stardevllc.starcore.ui.gui;
 
-import com.stardevllc.starcore.api.ui.element.Element;
+import com.stardevllc.starcore.ui.element.Element;
 
 public class Slot {
     

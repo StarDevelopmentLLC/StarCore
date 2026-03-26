@@ -1,8 +1,8 @@
-package com.stardevllc.starcore.api.ui;
+package com.stardevllc.starcore.ui;
 
-import com.stardevllc.starcore.api.ui.gui.InventoryGUI;
-import com.stardevllc.starcore.api.ui.gui.UpdatingGUI;
-import com.stardevllc.starcore.api.ui.handler.InventoryHandler;
+import com.stardevllc.starcore.ui.gui.InventoryGUI;
+import com.stardevllc.starcore.ui.gui.UpdatingGUI;
+import com.stardevllc.starcore.ui.handler.InventoryHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;

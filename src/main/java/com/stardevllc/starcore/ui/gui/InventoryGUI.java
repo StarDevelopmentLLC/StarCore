@@ -1,9 +1,9 @@
-package com.stardevllc.starcore.api.ui.gui;
+package com.stardevllc.starcore.ui.gui;
 
-import com.stardevllc.starcore.api.ui.element.DynamicElement;
-import com.stardevllc.starcore.api.ui.element.Element;
-import com.stardevllc.starcore.api.ui.element.button.Button;
-import com.stardevllc.starcore.api.ui.handler.InventoryHandler;
+import com.stardevllc.starcore.ui.element.DynamicElement;
+import com.stardevllc.starcore.ui.element.Element;
+import com.stardevllc.starcore.ui.element.button.Button;
+import com.stardevllc.starcore.ui.handler.InventoryHandler;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

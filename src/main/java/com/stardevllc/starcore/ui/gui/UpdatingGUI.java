@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.api.ui.gui;
+package com.stardevllc.starcore.ui.gui;
 
 public interface UpdatingGUI {
     void update();

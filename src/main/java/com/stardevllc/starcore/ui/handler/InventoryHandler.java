@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.api.ui.handler;
+package com.stardevllc.starcore.ui.handler;
 
 import org.bukkit.event.inventory.*;
 

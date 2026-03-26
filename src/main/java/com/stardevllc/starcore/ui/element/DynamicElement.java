@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.api.ui.element;
+package com.stardevllc.starcore.ui.element;
 
 public class DynamicElement extends Element {
     
