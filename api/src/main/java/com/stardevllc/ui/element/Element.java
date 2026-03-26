@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.ui.element;
+package com.stardevllc.ui.element;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

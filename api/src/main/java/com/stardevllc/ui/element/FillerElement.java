@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.ui.element;
+package com.stardevllc.ui.element;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;

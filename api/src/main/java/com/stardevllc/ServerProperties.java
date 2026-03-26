@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.utils;
+package com.stardevllc;
 
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;

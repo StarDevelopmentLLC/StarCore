@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.utils;
+package com.stardevllc;
 
 public final class ProgressBar {
     public static String of(int progress, int total, int barCount, String symbol, String completedColor, String notCompletedColor) {

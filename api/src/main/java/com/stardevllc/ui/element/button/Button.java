@@ -1,6 +1,6 @@
-package com.stardevllc.starcore.ui.element.button;
+package com.stardevllc.ui.element.button;
 
-import com.stardevllc.starcore.ui.element.Element;
+import com.stardevllc.ui.element.Element;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
