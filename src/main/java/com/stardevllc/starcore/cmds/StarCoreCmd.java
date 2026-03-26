@@ -1,12 +1,12 @@
 package com.stardevllc.starcore.cmds;
 
 import com.stardevllc.starcore.StarCore;
-import com.stardevllc.starcore.api.StarColors;
-import com.stardevllc.starcore.api.VersionModule;
-import com.stardevllc.starcore.api.colors.ColorHandler;
-import com.stardevllc.starcore.api.colors.CustomColor;
+import com.stardevllc.StarColors;
+import com.stardevllc.VersionModule;
+import com.stardevllc.colors.ColorHandler;
+import com.stardevllc.colors.CustomColor;
 import com.stardevllc.starlib.injector.Inject;
-import com.stardevllc.starmclib.StarColorsV2;
+import com.stardevllc.colors.StarColorsV2;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 

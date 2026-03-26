@@ -1,6 +1,6 @@
 package com.stardevllc.smcversion.v1_13_2;
 
-import com.stardevllc.smcversion.wrappers.EnchantWrapper;
+import com.stardevllc.wrappers.EnchantWrapper;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 

@@ -86,7 +86,6 @@ dependencies {
     libby "org.yaml:snakeyaml:${snakeymlVersion}"
 
     //Project ones
-    implementation project(':common')
     implementation project(':api')
     implementation project(':v1_8')
     implementation project(':v1_9_2')

@@ -1,6 +1,6 @@
 package com.stardevllc.smcversion.v1_8;
 
-import com.stardevllc.smcversion.wrappers.EnchantWrapper;
+import com.stardevllc.wrappers.EnchantWrapper;
 import org.bukkit.enchantments.Enchantment;
 
 public class EnchantWrapper_1_8 implements EnchantWrapper {

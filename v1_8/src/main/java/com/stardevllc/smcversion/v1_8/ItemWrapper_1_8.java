@@ -1,7 +1,7 @@
 package com.stardevllc.smcversion.v1_8;
 
-import com.stardevllc.smcversion.wrappers.AttributeModifierWrapper;
-import com.stardevllc.smcversion.wrappers.ItemWrapper;
+import com.stardevllc.wrappers.AttributeModifierWrapper;
+import com.stardevllc.wrappers.ItemWrapper;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;

@@ -1,7 +1,7 @@
 package com.stardevllc.smcversion.v1_13_2;
 
-import com.stardevllc.smcversion.wrappers.AttributeModifierWrapper;
-import com.stardevllc.smcversion.wrappers.ItemWrapper;
+import com.stardevllc.wrappers.AttributeModifierWrapper;
+import com.stardevllc.wrappers.ItemWrapper;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;

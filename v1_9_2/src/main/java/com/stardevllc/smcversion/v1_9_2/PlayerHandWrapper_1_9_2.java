@@ -1,6 +1,6 @@
 package com.stardevllc.smcversion.v1_9_2;
 
-import com.stardevllc.smcversion.wrappers.PlayerHandWrapper;
+import com.stardevllc.wrappers.PlayerHandWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
