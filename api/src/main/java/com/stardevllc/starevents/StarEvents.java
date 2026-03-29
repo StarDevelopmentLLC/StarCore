@@ -4,6 +4,8 @@ import com.stardevllc.starlib.event.bus.IEventBus;
 import com.stardevllc.starlib.event.bus.ReflectionEventBus;
 import com.stardevllc.starlib.reflection.ReflectionHelper;
 import com.stardevllc.starlib.reflection.URLClassLoaderAccess;
+import com.stardevllc.starlib.tuple.either.Either;
+import com.stardevllc.starlib.tuple.either.ImmutableEither;
 import com.stardevllc.starlib.tuple.pair.ImmutablePair;
 import com.stardevllc.starlib.values.observable.ObservableBoolean;
 import javassist.*;
@@ -131,8 +133,16 @@ public final class StarEvents {
         ClassLoader serverLoader = Bukkit.class.getClassLoader();
         try {
             Collection<CtClass> eventClasses = getEventClassesFromJar(new File(serverJarFile.toURI()));
-            BukkitEventListener listener = createListener(pluginClassLoader, "StarEventsSpigotEventListener", eventClasses);
+            Either<BukkitEventListener, Status> clReturn = createListener(pluginClassLoader, "StarEventsSpigotEventListener", eventClasses);
+            
+            if (clReturn.isRightPresent()) {
+                plugin.getLogger().severe("Server Event Listener creation returned: " + clReturn.getRight().name());
+                return;
+            }
+            
+            BukkitEventListener listener = clReturn.getLeft();
             Status status = addEventListener(listener);
+            plugin.getLogger().info("Server Event Listener Status: " + status.name());
             
             new BukkitRunnable() {
                 @Override
@@ -142,7 +152,8 @@ public final class StarEvents {
                             continue;
                         }
                         
-                        addFromPlugin(p);
+                        Status pluginStatus = addFromPlugin(p);
+                        plugin.getLogger().info("Plugin Event Listener Creation for " + p.getName() + " returned: " + pluginStatus.name());
                     }
                     initComplete.set(true);
                 }
@@ -155,13 +166,13 @@ public final class StarEvents {
      *
      * @param p The plugin
      */
-    public static void addFromPlugin(Plugin p) {
+    public static Status addFromPlugin(Plugin p) {
         if (p.getName().equalsIgnoreCase(plugin.getName())) {
-            return;
+            return Status.HOLDER_PLUGIN;
         }
         
         if (!(p.getClass().getClassLoader() instanceof URLClassLoader pluginClassLoader)) {
-            return;
+            return Status.NOT_URL_CLASS_LOADER;
         }
         
         List<URL> urls = getJarUrl(pluginClassLoader, url -> url.toString().endsWith(".jar"));
@@ -200,13 +211,26 @@ public final class StarEvents {
         } catch (Throwable throwable) {}
         
         if (jarFile == null) {
-            return;
+            return Status.JAR_FILE_NULL;
         }
         
         Collection<CtClass> eventClasses = getEventClassesFromJar(jarFile);
-        BukkitEventListener listener = createListener(pluginClassLoader, "StarEvents" + p.getName() + "Listener", eventClasses);
+        if (eventClasses.isEmpty()) {
+            return Status.NO_EVENT_CLASSES;
+        }
         
-        Status status = addEventListener(listener);
+        Either<BukkitEventListener, Status> clReturn = createListener(pluginClassLoader, "StarEvents" + p.getName() + "Listener", eventClasses);
+        
+        if (clReturn.isRightPresent()) {
+            return clReturn.getRight();
+        }
+        
+        if (!clReturn.isLeftPresent()) {
+            return Status.NULL;
+        }
+        
+        BukkitEventListener listener = clReturn.getLeft();
+        return addEventListener(listener);
     }
     
     /**
@@ -217,9 +241,9 @@ public final class StarEvents {
      * @param eventClasses      The Event classes themselves. These must be normally registerable in the plugin manager
      * @return The created event listener instance
      */
-    public static BukkitEventListener createListener(URLClassLoader classLoader, String listenerClassName, Collection<CtClass> eventClasses) {
+    public static Either<BukkitEventListener, Status> createListener(URLClassLoader classLoader, String listenerClassName, Collection<CtClass> eventClasses) {
         if (classLoader == null || listenerClassName == null || listenerClassName.isBlank() || eventClasses == null || eventClasses.isEmpty()) {
-            return null;
+            return ImmutableEither.right(Status.INVALID_PARAMETERS);
         }
         
         try {
@@ -255,13 +279,13 @@ public final class StarEvents {
                 
                 loaderAccess.addURL(outputDirectory.toURI().toURL());
                 Class<?> loadedClass = classLoader.loadClass(listenerClass.getName());
-                return (BukkitEventListener) loadedClass.getConstructor().newInstance();
+                return ImmutableEither.left((BukkitEventListener) loadedClass.getConstructor().newInstance());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
         } catch (Throwable throwable) {}
         
-        return null;
+        return ImmutableEither.right(Status.FAIL);
     }
     
     /**
@@ -278,15 +302,18 @@ public final class StarEvents {
         try {
             eventClass = classPool.get(Event.class.getName());
         } catch (NotFoundException e) {
+            plugin.getLogger().severe("Cannot find Bukkit Event Class");
             return List.of();
         }
         
         if (eventClass == null) {
+            plugin.getLogger().severe("Event class is null");
             return List.of();
         }
         
         if (jarFile != null) {
             try (JarFile jar = new JarFile(jarFile)) {
+                classPool.appendClassPath(jarFile.toPath().toAbsolutePath().toString());
                 Enumeration<JarEntry> entries = jar.entries();
                 while (entries.hasMoreElements()) {
                     JarEntry entry = entries.nextElement();
@@ -348,6 +375,11 @@ public final class StarEvents {
          */
         FAIL,
         
+        HOLDER_PLUGIN,
+        NOT_URL_CLASS_LOADER,
+        JAR_FILE_NULL,
+        INVALID_PARAMETERS,
+        NO_EVENT_CLASSES,
         /**
          * The null status if the provided listener was null
          */
