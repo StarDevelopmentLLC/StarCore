@@ -1,6 +1,6 @@
 package com.stardevllc.smaterial;
 
-import org.bukkit.Bukkit;
+import com.stardevllc.MinecraftVersion;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -8,8 +8,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"UnstableApiUsage", "ConstantExpression", "JavaReflectionInvocation"})
@@ -1709,10 +1707,6 @@ public enum SMaterial {
         return Optional.ofNullable(NAMES.get(name));
     }
     
-    public static int getVersion() {
-        return Data.VERSION;
-    }
-    
     private static SMaterial requestOldSMaterial(String name, byte data) {
         String holder = name + data;
         SMaterial cache = NAME_CACHE.get(holder);
@@ -1885,7 +1879,9 @@ public enum SMaterial {
     }
     
     public static boolean supports(int version) {
-        return Data.VERSION >= version;
+        int v = Integer.parseInt(MinecraftVersion.CURRENT_VERSION.name().split("_")[1]);
+        
+        return v >= version;
     }
 
     public String[] getLegacy() {
@@ -2006,19 +2002,6 @@ public enum SMaterial {
      * @since 9.0.0
      */
     private static final class Data {
-        private static final int VERSION;
-
-        static { // This needs to be right below VERSION because of initialization order.
-            String version = Bukkit.getVersion();
-            Matcher matcher = Pattern.compile("MC: \\d\\.(\\d+)").matcher(version);
-
-            if (matcher.find()) {
-                VERSION = Integer.parseInt(matcher.group(1));
-            } else {
-                throw new IllegalArgumentException("Failed to parse server version from: " + version);
-            }
-        }
-        
-        private static final boolean ISFLAT = supports(13);
+        private static final boolean ISFLAT = MinecraftVersion.CURRENT_VERSION.ordinal() >= MinecraftVersion.v1_13.ordinal();
     }
 }
