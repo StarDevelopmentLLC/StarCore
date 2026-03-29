@@ -76,9 +76,9 @@ dependencies {
     implementation "com.stardevllc:StarSQL:${starsqlVersion}"
 
     libby "com.google.code.gson:gson:${gsonVersion}"
-    libby "net.kyori:adventure-api:${adventureVersion}"
-    libby "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
-    libby "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
+    implementation "net.kyori:adventure-api:${adventureVersion}"
+    implementation "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}"
+    implementation "net.kyori:adventure-text-minimessage:${miniMessageVersion}"
 
     libby "com.mysql:mysql-connector-j:${mysqlVersion}"
     libby "org.xerial:sqlite-jdbc:${sqlliteVersion}"
