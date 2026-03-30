@@ -1,12 +1,13 @@
 package com.stardevllc.registry;
 
-import com.stardevllc.starlib.registry.RegistryKey;
+import com.stardevllc.starlib.objects.key.Key;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This represents a key that is owned by a plugin
  */
-public final class PluginKey extends RegistryKey {
+public final class PluginKey implements Key {
     
     public static PluginKey of(JavaPlugin plugin, String key) {
         return new PluginKey(plugin, key);
@@ -33,5 +34,10 @@ public final class PluginKey extends RegistryKey {
     @Override
     public String toString() {
         return value;
+    }
+    
+    @Override
+    public int compareTo(@NonNull Key o) {
+        return value.compareTo(o.toString());
     }
 }

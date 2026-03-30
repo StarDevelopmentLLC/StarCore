@@ -1,5 +1,6 @@
 package com.stardevllc.registry;
 
+import com.stardevllc.starlib.objects.key.Key;
 import com.stardevllc.starlib.registry.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,7 +20,7 @@ public class PluginDeferredRegisterer<V> extends DeferredRegisterer<V> {
     }
     
     @Override
-    public RegistryObject<V> register(RegistryKey key, Supplier<V> supplier) {
+    public RegistryObject<V> register(Key key, Supplier<V> supplier) {
         if (!(key instanceof PluginKey)) {
             throw new IllegalArgumentException("Key must be an instance of a PluginKey");
         }
@@ -27,7 +28,7 @@ public class PluginDeferredRegisterer<V> extends DeferredRegisterer<V> {
     }
     
     @Override
-    protected RegistryKey createKey(String key) {
+    protected Key createKey(String key) {
         return new PluginKey(plugin, key);
     }
 }
