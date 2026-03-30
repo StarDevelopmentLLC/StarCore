@@ -26,6 +26,10 @@ public class CmdParams {
         }
     }
     
+    public Set<Param<?>> getParams() {
+        return new HashSet<>(params);
+    }
+    
     public ParamResult parse(String[] args) {
         LinkedList<String> argsList = new LinkedList<>(List.of(args));
         ListIterator<String> iterator = argsList.listIterator();

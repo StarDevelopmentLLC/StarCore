@@ -22,6 +22,10 @@ public class CmdFlags {
         }
     }
     
+    public Set<Flag> getFlags() {
+        return new HashSet<>(flags);
+    }
+    
     public FlagResult parse(String[] args) {
         LinkedList<String> argsList = new LinkedList<>(List.of(args));
         ListIterator<String> iterator = argsList.listIterator();
