@@ -43,7 +43,7 @@ public class CmdParams {
             String arg = iterator.next().toLowerCase();
             
             for (Param<?> param : new HashSet<>(params)) {
-                if (arg.startsWith(param.id().toLowerCase() + ":")) {
+                if (matches(param, arg)) {
                     iterator.remove();
                     params.remove(param);
                     String[] split = arg.split(":");
@@ -63,4 +63,20 @@ public class CmdParams {
         
         return new ParamResult(argsList.toArray(new String[0]), paramValues);
     }
+    
+    private static boolean matches(Param<?> param, String arg) {
+        if (arg.startsWith(param.id().toLowerCase() + ":")) {
+            return true;
+        }
+        
+        if (param.aliases() != null) {
+            for (String alias : param.aliases()) {
+                if (arg.startsWith(alias.toLowerCase() + ":")) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    } 
 }
