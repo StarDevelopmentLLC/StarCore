@@ -1,9 +1,9 @@
 package com.stardevllc.command;
 
+import com.stardevllc.command.flags.*;
+import com.stardevllc.command.params.Param;
 import com.stardevllc.starlib.objects.builder.IBuilder;
 import com.stardevllc.colors.StarColorsV2;
-import com.stardevllc.command.flags.CmdFlags;
-import com.stardevllc.command.flags.FlagResult;
 import com.stardevllc.command.params.CmdParams;
 import com.stardevllc.plugin.ExtendedJavaPlugin;
 import net.kyori.adventure.text.Component;
@@ -42,12 +42,12 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
     
     protected List<SubCommand<T>> subCommands = new ArrayList<>();
     
-    protected CmdFlags cmdFlags = new CmdFlags();
+    protected final CmdFlags cmdFlags = new CmdFlags();
     
     /**
      * CmdParams should be parsed on an individual command basis in the handler method. Provided as a field for convenience
      */
-    protected CmdParams cmdParams = new CmdParams();
+    protected final CmdParams cmdParams = new CmdParams();
     
     protected Component playerOnlyMessage;
     protected Component consoleOnlyMessage;
@@ -275,6 +275,8 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
         protected String permission;
         protected Executor<T> executor;
         protected Completer<T> completer;
+        protected List<Flag> flags = new ArrayList<>();
+        protected List<Param<?>> params = new ArrayList<>();
         
         protected final List<SubCommand<T>> subCommands = new ArrayList<>();
         
@@ -300,6 +302,8 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
             this.consoleOnlyMessage = builder.consoleOnlyMessage;
             this.noPermissionMessage = builder.noPermissionMessage;
             this.invalidSubCommandMessage = builder.invalidSubCommandMessage;
+            this.flags.addAll(builder.flags);
+            this.params.addAll(builder.params);
         }
         
         @Override
@@ -314,6 +318,8 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
             cmd.consoleOnlyMessage = this.consoleOnlyMessage;
             cmd.noPermissionMessage = this.noPermissionMessage;
             cmd.invalidSubCommandMessage = this.invalidSubCommandMessage;
+            cmd.cmdFlags.addAll(flags);
+            cmd.cmdParams.addAll(params);
             return cmd;
         }
         
@@ -412,6 +418,22 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
         
         public Builder<T> invalidSubCommandMessage(Component invalidSubCommandMessage) {
             this.invalidSubCommandMessage = invalidSubCommandMessage;
+            return self();
+        }
+        
+        public Builder<T> flags(Flag... flags) {
+            if (flags != null) {
+                this.flags.addAll(List.of(flags));
+            }
+            
+            return self();
+        }
+        
+        public Builder<T> params(Param<?>... params) {
+            if (params != null) {
+                this.params.addAll(List.of(params));
+            }
+            
             return self();
         }
         

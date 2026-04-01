@@ -1,7 +1,7 @@
 package com.stardevllc.command;
 
-import com.stardevllc.command.flags.CmdFlags;
-import com.stardevllc.command.flags.FlagResult;
+import com.stardevllc.command.flags.*;
+import com.stardevllc.command.params.Param;
 import com.stardevllc.starlib.objects.builder.IBuilder;
 import com.stardevllc.colors.StarColorsV2;
 import com.stardevllc.command.params.CmdParams;
@@ -43,14 +43,14 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
     protected Executor<T> executor;
     protected Completer<T> completer;
     
-    protected List<SubCommand<T>> subCommands = new ArrayList<>();
+    protected final List<SubCommand<T>> subCommands = new ArrayList<>();
     
-    protected CmdFlags cmdFlags = new CmdFlags();
+    protected final CmdFlags cmdFlags = new CmdFlags();
     
     /**
      * CmdParams should be parsed on an individual command basis in the handler method. Provided as a field for convenience
      */
-    protected CmdParams cmdParams = new CmdParams();
+    protected final CmdParams cmdParams = new CmdParams();
     
     protected boolean playerOnly;
     protected boolean consoleOnly;
@@ -261,6 +261,8 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
         protected String permission;
         protected Executor<T> executor;
         protected Completer<T> completer;
+        protected List<Flag> flags = new ArrayList<>();
+        protected List<Param<?>> params = new ArrayList<>();
         
         protected final List<SubCommand<T>> subCommands = new ArrayList<>();
         
@@ -289,6 +291,8 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
             this.consoleOnlyMessage = builder.consoleOnlyMessage;
             this.noPermissionMessage = builder.noPermissionMessage;
             this.invalidSubCommandMessage = builder.invalidSubCommandMessage;
+            this.flags.addAll(builder.flags);
+            this.params.addAll(builder.params);
         }
         
         @Override
@@ -303,6 +307,8 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
             cmd.invalidSubCommandMessage = this.invalidSubCommandMessage;
             cmd.executor = this.executor;
             cmd.completer = this.completer;
+            cmd.cmdFlags.addAll(flags);
+            cmd.cmdParams.addAll(params);
             return cmd;
         }
         
@@ -401,6 +407,22 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
         
         public Builder<T> invalidSubCommandMessage(Component invalidSubCommandMessage) {
             this.invalidSubCommandMessage = invalidSubCommandMessage;
+            return self();
+        }
+        
+        public Builder<T> flags(Flag... flags) {
+            if (flags != null) {
+                this.flags.addAll(List.of(flags));
+            }
+            
+            return self();
+        }
+        
+        public Builder<T> params(Param<?>... params) {
+            if (params != null) {
+                this.params.addAll(List.of(params));
+            }
+            
             return self();
         }
         
