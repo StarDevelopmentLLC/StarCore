@@ -19,7 +19,7 @@ public class CmdParams {
         }
     }
     
-    public void addFlag(Param<?> param, Param<?>... moreParams) {
+    public void addParam(Param<?> param, Param<?>... moreParams) {
         this.params.add(param);
         if (moreParams != null) {
             this.params.addAll(Set.of(moreParams));
