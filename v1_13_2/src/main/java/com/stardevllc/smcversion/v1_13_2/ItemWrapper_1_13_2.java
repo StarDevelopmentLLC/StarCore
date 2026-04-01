@@ -20,7 +20,10 @@ public class ItemWrapper_1_13_2 implements ItemWrapper {
     @Override
     public Map<String, AttributeModifierWrapper> getAttributeModifiers(ItemStack itemStack) {
         Map<String, AttributeModifierWrapper> modifiers = new HashMap<>();
-        itemStack.getItemMeta().getAttributeModifiers().forEach((attribute, modifier) -> modifiers.put(attribute.name(), new AttributeModifierWrapper(modifier.getUniqueId(), modifier.getName(), modifier.getAmount(), modifier.getOperation().name(), modifier.getSlot())));
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.getAttributeModifiers() != null) {
+            itemMeta.getAttributeModifiers().forEach((attribute, modifier) -> modifiers.put(attribute.name(), new AttributeModifierWrapper(modifier.getUniqueId(), modifier.getName(), modifier.getAmount(), modifier.getOperation().name(), modifier.getSlot())));
+        }
         return modifiers;
     }
 }
