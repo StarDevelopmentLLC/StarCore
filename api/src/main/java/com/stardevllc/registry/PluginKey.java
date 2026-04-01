@@ -37,6 +37,16 @@ public final class PluginKey implements Key {
     }
     
     @Override
+    public boolean equals(Object object) {
+        return value.equals(object.toString());
+    }
+    
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+    
+    @Override
     public int compareTo(@NonNull Key o) {
         return value.compareTo(o.toString());
     }
