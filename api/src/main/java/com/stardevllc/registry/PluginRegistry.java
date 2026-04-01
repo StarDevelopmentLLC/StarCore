@@ -4,8 +4,7 @@ import com.stardevllc.starlib.event.EventDispatcher;
 import com.stardevllc.starlib.objects.key.Key;
 import com.stardevllc.starlib.registry.*;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PluginRegistry<V> extends AbstractRegistry<V> {
     
@@ -40,5 +39,24 @@ public class PluginRegistry<V> extends AbstractRegistry<V> {
         }
         
         return super.register(key, value);
+    }
+    
+    public static <V> Builder<V> builder(Class<V> type) {
+        return new Builder<>(type);
+    }
+    
+    public static class Builder<V> extends HashRegistry.Builder<V> {
+        protected Builder(Class<V> valueType) {
+            super(valueType);
+        }
+        
+        public Builder(Builder<V> builder) {
+            super(builder);
+        }
+        
+        @Override
+        public Builder<V> clone() {
+            return new Builder<>(this);
+        }
     }
 }
