@@ -83,4 +83,8 @@ public class CmdFlags {
         
         return new FlagResult(argsList.toArray(new String[0]), flagValues);
     }
+    
+    public void addAll(List<Flag> flags) {
+        this.flags.addAll(flags);
+    }
 }

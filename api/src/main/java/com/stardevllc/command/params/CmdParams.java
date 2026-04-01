@@ -78,5 +78,9 @@ public class CmdParams {
         }
         
         return false;
-    } 
+    }
+    
+    public void addAll(List<Param<?>> params) {
+        this.params.addAll(params);
+    }
 }
