@@ -1,5 +1,6 @@
 package com.stardevllc.command;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public interface ICommand<T extends JavaPlugin> {
@@ -20,4 +21,9 @@ public interface ICommand<T extends JavaPlugin> {
     default boolean isConsoleOnly() {
         return false;
     }
+    
+    Component getPlayerOnlyMessage();
+    Component getConsoleOnlyMessage();
+    Component getNoPermissionMessage();
+    Component getInvalidSubCommandMessage();
 }

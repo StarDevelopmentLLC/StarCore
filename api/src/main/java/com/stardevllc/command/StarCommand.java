@@ -261,6 +261,26 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
         return colors;
     }
     
+    @Override
+    public Component getPlayerOnlyMessage() {
+        return playerOnlyMessage;
+    }
+    
+    @Override
+    public Component getConsoleOnlyMessage() {
+        return consoleOnlyMessage;
+    }
+    
+    @Override
+    public Component getNoPermissionMessage() {
+        return noPermissionMessage;
+    }
+    
+    @Override
+    public Component getInvalidSubCommandMessage() {
+        return invalidSubCommandMessage;
+    }
+    
     public static <T extends JavaPlugin> Builder<T> builder(T plugin) {
         return new Builder<T>().plugin(plugin);
     }

@@ -244,6 +244,42 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
         return this.playerOnly;
     }
     
+    @Override
+    public Component getPlayerOnlyMessage() {
+        if (this.playerOnlyMessage == null) {
+            return this.playerOnlyMessage = this.parent.getPlayerOnlyMessage();
+        }
+        
+        return playerOnlyMessage;
+    }
+    
+    @Override
+    public Component getConsoleOnlyMessage() {
+        if (this.consoleOnlyMessage == null) {
+            return this.consoleOnlyMessage = this.parent.getConsoleOnlyMessage();
+        }
+        
+        return consoleOnlyMessage;
+    }
+    
+    @Override
+    public Component getNoPermissionMessage() {
+        if (this.noPermissionMessage == null) {
+            return this.noPermissionMessage = parent.getNoPermissionMessage();
+        }
+        
+        return noPermissionMessage;
+    }
+    
+    @Override
+    public Component getInvalidSubCommandMessage() {
+        if (this.invalidSubCommandMessage == null) {
+            return this.invalidSubCommandMessage = parent.getInvalidSubCommandMessage();
+        }
+        
+        return invalidSubCommandMessage;
+    }
+    
     public static <T extends JavaPlugin> Builder<T> builder(T plugin) {
         return new Builder<T>().plugin(plugin);
     }
