@@ -69,6 +69,7 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
             this.colors = ePlugin.getColors();
         } else {
             this.colors = new StarColorsV2(plugin);
+            this.colors.init();
         }
         
         this.parent = parent;

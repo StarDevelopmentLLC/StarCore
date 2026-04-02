@@ -61,6 +61,7 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
             this.colors = extendedPlugin.getColors();
         } else {
             this.colors = new StarColorsV2(plugin);
+            this.colors.init();
         }
         
         this.permission = permission;
