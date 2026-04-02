@@ -33,7 +33,7 @@ public class PluginRegistry<V> extends AbstractRegistry<V> {
     }
     
     @Override
-    public V register(Key key, V value) {
+    public RegisterResult<V> register(Key key, V value) {
         if (!(key instanceof PluginKey)) {
             throw new IllegalArgumentException("You must use a PluginKey to register objects to this Registry");
         }
