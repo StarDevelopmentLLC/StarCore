@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.v1_16_1;
 
-import com.stardevllc.colors.ColorHandler;
+import com.stardevllc.minecraft.colors.ColorHandler;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

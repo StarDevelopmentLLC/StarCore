@@ -1,11 +1,11 @@
 package com.stardevllc.starcore;
 
-import com.stardevllc.smcversion.v1_13_2.EnchantWrapper_1_13_2;
-import com.stardevllc.smcversion.v1_13_2.ItemWrapper_1_13_2;
-import com.stardevllc.smcversion.v1_8.*;
-import com.stardevllc.smcversion.v1_9_2.PlayerHandWrapper_1_9_2;
-import com.stardevllc.MinecraftVersion;
-import com.stardevllc.wrappers.*;
+import com.stardevllc.minecraft.v1_8.*;
+import com.stardevllc.minecraft.v1_13_2.EnchantWrapper_1_13_2;
+import com.stardevllc.minecraft.v1_13_2.ItemWrapper_1_13_2;
+import com.stardevllc.minecraft.v1_9_2.PlayerHandWrapper_1_9_2;
+import com.stardevllc.minecraft.MinecraftVersion;
+import com.stardevllc.minecraft.wrappers.*;
 
 public final class MCWrappers {
     private MCWrappers() {}

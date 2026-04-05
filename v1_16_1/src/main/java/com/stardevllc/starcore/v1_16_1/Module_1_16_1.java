@@ -1,8 +1,8 @@
 package com.stardevllc.starcore.v1_16_1;
 
-import com.stardevllc.StarColors;
-import com.stardevllc.VersionModule;
-import com.stardevllc.MinecraftVersion;
+import com.stardevllc.minecraft.StarColors;
+import com.stardevllc.minecraft.VersionModule;
+import com.stardevllc.minecraft.MinecraftVersion;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Module_1_16_1 extends VersionModule {

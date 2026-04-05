@@ -1,0 +1,17 @@
+package com.stardevllc.minecraft.v1_9_2;
+
+import com.stardevllc.minecraft.wrappers.PlayerHandWrapper;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+public class PlayerHandWrapper_1_9_2 implements PlayerHandWrapper {
+    @Override
+    public ItemStack getItemInMainHand(Player player) {
+        return player.getInventory().getItemInMainHand();
+    }
+
+    @Override
+    public ItemStack getItemInOffHand(Player player) {
+        return player.getInventory().getItemInOffHand();
+    }
+}

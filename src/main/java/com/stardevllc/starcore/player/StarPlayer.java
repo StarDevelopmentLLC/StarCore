@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.player;
 
-import com.stardevllc.mojang.MojangProfile;
+import com.stardevllc.minecraft.mojang.MojangProfile;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 

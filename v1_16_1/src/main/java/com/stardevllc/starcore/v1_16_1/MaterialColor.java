@@ -1,6 +1,6 @@
 package com.stardevllc.starcore.v1_16_1;
 
-import com.stardevllc.colors.CustomColor;
+import com.stardevllc.minecraft.colors.CustomColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

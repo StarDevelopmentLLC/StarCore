@@ -3,8 +3,8 @@ package com.stardevllc.starcore.player;
 import com.stardevllc.starcore.StarCore;
 import com.stardevllc.starlib.objects.key.impl.StringKey;
 import com.stardevllc.starlib.repository.AbstractRepository;
-import com.stardevllc.mojang.MojangAPI;
-import com.stardevllc.mojang.MojangProfile;
+import com.stardevllc.minecraft.mojang.MojangAPI;
+import com.stardevllc.minecraft.mojang.MojangProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
