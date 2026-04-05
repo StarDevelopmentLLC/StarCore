@@ -1,6 +1,7 @@
 package com.stardevllc.registry;
 
 import com.stardevllc.starlib.objects.key.Key;
+import com.stardevllc.starlib.objects.key.NamespacedKey;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,7 +13,7 @@ import java.util.Map;
 /**
  * This represents a key that is owned by a plugin
  */
-public final class PluginKey implements Key {
+public final class PluginKey implements NamespacedKey {
     
     private static final Map<String, JavaPlugin> CACHE = new HashMap<>();
     
@@ -89,5 +90,15 @@ public final class PluginKey implements Key {
     @Override
     public int compareTo(@NonNull Key o) {
         return value.compareTo(o.toString());
+    }
+    
+    @Override
+    public String getNamespace() {
+        return plugin.getName().toLowerCase();
+    }
+    
+    @Override
+    public String getValue() {
+        return this.key;
     }
 }
