@@ -3,7 +3,7 @@ version: ${version}
 api-version: 1.13
 name: ${name}
 author: Firestar311
-softdepend: [mcMMO, PlaceholderAPI]
+softdepend: [mcMMO, PlaceholderAPI, NBTAPI]
 commands: 
   starcore: 
   starmclib:
