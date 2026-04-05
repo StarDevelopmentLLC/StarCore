@@ -9,8 +9,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
-    implementation project(':api')
+    compileOnly 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
+    compileOnly project(':api')
     compileOnly "com.stardevllc:StarLib:${starlibVersion}"
 }
 

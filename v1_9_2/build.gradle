@@ -13,6 +13,11 @@ dependencies {
     compileOnly project(':api')
 }
 
+tasks.named("javadoc", Javadoc) {
+    options.addBooleanOption('public', true)
+    options.addBooleanOption('Xdoclint:none', true)
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)

@@ -1,4 +1,4 @@
-package com.stardevllc.starcore.v1_16_1;
+package com.stardevllc.minecraft.v1_16_1;
 
 import com.stardevllc.minecraft.colors.ColorHandler;
 import net.md_5.bungee.api.ChatColor;
