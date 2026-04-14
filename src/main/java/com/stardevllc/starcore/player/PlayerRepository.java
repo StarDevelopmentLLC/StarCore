@@ -14,7 +14,7 @@ import java.util.UUID;
 public class PlayerRepository extends AbstractRepository<UUID, StarPlayer> {
     public PlayerRepository() {
         super(UUID.class, StarPlayer.class, new HashMap<>(), new StringKey("starplayers"), "StarPlayers");
-        this.setValueFetcher(uuid -> {
+        this.setValueLoader(uuid -> {
             Player spigotPlayer = Bukkit.getPlayer(uuid);
             StarPlayer starPlayer;
             if (spigotPlayer != null) {
