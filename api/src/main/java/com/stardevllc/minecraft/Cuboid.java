@@ -1,9 +1,6 @@
 package com.stardevllc.minecraft;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 
@@ -21,10 +18,27 @@ public class Cuboid {
     public Cuboid(Location pos1, Location pos2) {
         setBounds(pos1, pos2);
     }
+    
+    public Cuboid(Position pos1, Position pos2) {
+        setBounds(pos1, pos2);
+    }
 
     public Cuboid(String worldName, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
         this.worldName = worldName;
-        setBounds(xMin, yMin, zMin, xMax, yMax, zMax);
+        setBounds(xMin, xMax, yMin, yMax, zMin, zMax);
+    }
+    
+    protected void setBounds(int x1, int x2, int y1, int y2, int z1, int z2) {
+        this.xMin = Math.min(x1, x2);
+        this.yMin = Math.min(y1, y2);
+        this.zMin = Math.min(z1, z2);
+        this.xMax = Math.max(x1, x2);
+        this.yMax = Math.max(y1, y2);
+        this.zMax = Math.max(z1, z2);
+    }
+    
+    protected void setBounds(Position pos1, Position pos2) {
+        setBounds(pos1.getBlockX(), pos2.getBlockX(), pos1.getBlockY(), pos2.getBlockY(), pos1.getBlockZ(), pos2.getBlockZ());
     }
 
     protected void setBounds(Location pos1, Location pos2) {
@@ -34,21 +48,7 @@ public class Cuboid {
         
         this.worldName = pos1.getWorld().getName();
         this.world = pos1.getWorld();
-        this.xMin = Math.min(pos1.getBlockX(), pos2.getBlockX());
-        this.yMin = Math.min(pos1.getBlockY(), pos2.getBlockY());
-        this.zMin = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
-        this.xMax = Math.max(pos1.getBlockX(), pos2.getBlockZ());
-        this.yMax = Math.max(pos1.getBlockY(), pos2.getBlockY());
-        this.zMax = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
-    }
-
-    protected void setBounds(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax) {
-        this.xMin = xMin;
-        this.yMin = yMin;
-        this.zMin = zMin;
-        this.xMax = xMax;
-        this.yMax = yMax;
-        this.zMax = zMax;
+        setBounds(pos1.getBlockX(), pos2.getBlockX(), pos1.getBlockY(), pos2.getBlockY(), pos1.getBlockZ(), pos2.getBlockZ());
     }
 
     public void createOutline(Material material) {
