@@ -39,6 +39,11 @@ public class LeatherArmorBuilder extends ItemBuilder<LeatherArmorBuilder, Leathe
         this.color = (Color) serialized.get("color");
     }
     
+    public LeatherArmorBuilder slot(ArmorSlot slot) {
+        this.material = SMaterial.valueOf("LEATHER_" + slot.name());
+        return this;
+    }
+    
     public LeatherArmorBuilder color(Color color) {
         this.color = color;
         return this;
