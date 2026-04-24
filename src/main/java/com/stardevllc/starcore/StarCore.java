@@ -4,22 +4,20 @@ import com.stardevllc.config.Config;
 import com.stardevllc.config.Section;
 import com.stardevllc.config.file.FileConfig;
 import com.stardevllc.config.file.yaml.YamlConfig;
-import com.stardevllc.minecraft.StarColors;
-import com.stardevllc.minecraft.VersionModule;
-import com.stardevllc.minecraft.colors.CustomColor;
-import com.stardevllc.starcore.cmds.StarCoreCmd;
-import com.stardevllc.starcore.player.PlayerManager;
-import com.stardevllc.starcore.player.PlayerRepository;
-import com.stardevllc.minecraft.v1_16_1.Module_1_16_1;
-import com.stardevllc.minecraft.v1_8.Module_1_8;
-import com.stardevllc.minecraft.starevents.StarEvents;
-import com.stardevllc.starlib.values.property.BooleanProperty;
-import com.stardevllc.starlib.values.property.UUIDProperty;
-import com.stardevllc.minecraft.StarMCLib;
+import com.stardevllc.minecraft.*;
 import com.stardevllc.minecraft.actors.Actors;
 import com.stardevllc.minecraft.actors.ServerActor;
+import com.stardevllc.minecraft.colors.CustomColor;
 import com.stardevllc.minecraft.plugin.ExtendedJavaPlugin;
+import com.stardevllc.minecraft.starevents.StarEvents;
+import com.stardevllc.minecraft.v1_16_1.Module_1_16_1;
+import com.stardevllc.minecraft.v1_8.Module_1_8;
+import com.stardevllc.starcore.cmds.StarCoreCmd;
 import com.stardevllc.starcore.cmds.StarMCLibCmd;
+import com.stardevllc.starcore.player.PlayerManager;
+import com.stardevllc.starcore.player.PlayerRepository;
+import com.stardevllc.starlib.values.property.BooleanProperty;
+import com.stardevllc.starlib.values.property.UUIDProperty;
 import com.stardevllc.starsql.model.Column.Option;
 import com.stardevllc.starsql.model.Column.Type;
 import com.stardevllc.starsql.model.Database;
@@ -27,10 +25,7 @@ import com.stardevllc.starsql.model.Table;
 import com.stardevllc.starsql.statements.*;
 import net.byteflux.libby.BukkitLibraryManager;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 
 import java.io.File;
@@ -67,32 +62,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         this.useMojangAPI = new BooleanProperty(this, "useMojangAPI", true);
     }
     
-    private final Set<String> incompatiblePlugins = new HashSet<>();
-    private final Set<String> incompatibleStandalonePlugins = new HashSet<>();
-    
-    private void checkIncompatiblePlugin(String pluginName) {
-        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-        if (plugin != null) {
-            getLogger().severe(pluginName + " Plugin detected. StarCore already provides " + pluginName + ".");
-            getLogger().severe("There will be problems if not removed.");
-            incompatiblePlugins.add(pluginName);
-        }
-    }
-    
-    @SuppressWarnings("SameParameterValue")
-    private void checkIncompatibleStandalonePlugin(String pluginName, String className) {
-        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-        try {
-            Class<?> clazz = Class.forName(className);
-            if (clazz.isInstance(plugin)) {
-                getLogger().severe(pluginName + " Standalone Plugin detected. StarCore already provides the necessary dependencies.");
-                getLogger().severe("Pleasea download the non-standalone version of the plugin");
-                getLogger().severe("There will be problems if this is not resolved");
-                incompatibleStandalonePlugins.add(pluginName);
-            }
-        } catch (Throwable t) {}
-    }
-    
     @Override
     public void onLoad() {
         BukkitLibraryManager bukkitLibraryManager = new BukkitLibraryManager(this, getDataFolder().toPath(), "libraries");
@@ -108,10 +77,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
     public void onEnable() {
         StarMCLib.init(this);
         super.onEnable();
-        
-        checkIncompatiblePlugin("StarMCLib");
-        checkIncompatiblePlugin("StarEvents");
-        checkIncompatibleStandalonePlugin("StarSpawners", "com.stardevllc.starspawners.plugin.StandaloneStarItemsPlugin");
         
         getLogger().info("Initializing StarEvents");
         StarEvents.initComplete.addChangeListener((v, o, n) -> {
@@ -286,31 +251,6 @@ public class StarCore extends ExtendedJavaPlugin implements Listener {
         registerListeners(this);
         
         getLogger().info("StarCore finished loading");
-    }
-    
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        if (e.getPlayer().hasPermission("starcore.alerts.join")) {
-            if (!this.incompatiblePlugins.isEmpty()) {
-                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] The following incompatible plugins were found");
-                for (String plugin : this.incompatiblePlugins) {
-                    getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] - " + plugin);
-                }
-                
-                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] Please remove the these plugins.");
-                getColors().coloredLegacy(e.getPlayer(), "&4[StarCore] There will be problems if this issue is not resolved");
-            }
-            
-            if (!this.incompatibleStandalonePlugins.isEmpty()) {
-                getColors().coloredLegacy(e.getPlayer(), "&c[StarCore] The following plugins were found to be in standalone form");
-                for (String plugin : this.incompatibleStandalonePlugins) {
-                    getColors().coloredLegacy(e.getPlayer(), "&c[StarCore] - " + plugin);
-                }
-                
-                getColors().coloredLegacy(e.getPlayer(), "&c[StarCore] Please remove these plugins and download the non-standalone variant");
-                getColors().coloredLegacy(e.getPlayer(), "&c[StarCore] There will be problems if this is issue is not resolved");
-            }
-        }
     }
     
     public Database getDatabase() {
