@@ -1,10 +1,9 @@
 package com.stardevllc.minecraft.command;
 
 import com.stardevllc.minecraft.command.flags.*;
-import com.stardevllc.minecraft.command.params.Param;
+import com.stardevllc.minecraft.command.params.*;
 import com.stardevllc.starlib.objects.builder.IBuilder;
 import com.stardevllc.minecraft.colors.StarColorsV2;
-import com.stardevllc.minecraft.command.params.CmdParams;
 import com.stardevllc.minecraft.plugin.ExtendedJavaPlugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
@@ -18,16 +17,6 @@ import java.util.function.Consumer;
 @SuppressWarnings("DuplicatedCode")
 public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
     
-    @FunctionalInterface
-    public interface Executor<P extends JavaPlugin> {
-        boolean execute(P plugin, CommandSender sender, String label, String[] args, FlagResult flagResults);
-    }
-    
-    @FunctionalInterface
-    public interface Completer<P extends JavaPlugin> {
-        List<String> complete(P plugin, CommandSender sender, String label, String[] args, FlagResult flagResults);
-    }
-    
     protected final T plugin;
     protected final StarColorsV2 colors;
     
@@ -40,8 +29,8 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
     
     protected String permission;
     
-    protected Executor<T> executor;
-    protected Completer<T> completer;
+    protected Executor executor;
+    protected Completer completer;
     
     protected final List<SubCommand<T>> subCommands = new ArrayList<>();
     
@@ -109,8 +98,10 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
         
         flagResults.addFrom(parentFlagResults);
         
+        ParsedArguments parsedArguments = cmdArgs.parse(args);
+        
         //If the execute command returns false, the handle the configured sub commands
-        if (execute(sender, label, args, flagResults)) {
+        if (execute(new CommandContext(plugin, sender, label, args, flagResults, parsedArguments))) {
             return;
         }
         
@@ -135,24 +126,33 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
         }
     }
     
-    public boolean execute(CommandSender sender, String label, String[] args, FlagResult flagResults) {
+    public boolean execute(CommandContext context) {
         if (this.executor != null) {
-            return this.executor.execute(this.plugin, sender, label, args, flagResults);
+            return this.executor.execute(context);
         }
         
         return false;
     }
     
-    public List<String> getCompletions(CommandSender sender, String label, String[] args, FlagResult flagResults) {
+    public List<String> getCompletions(CommandContext context) {
         if (this.completer != null) {
-            return this.completer.complete(plugin, sender, label, args, flagResults);
+            return this.completer.complete(context);
         }
         
         List<String> completions = new ArrayList<>();
         
+        String[] args = context.args();
+        
+        FlagResult flags = cmdFlags.parse(args);
+        flags.addFrom(context.flags());
+        
+        args = flags.args();
+        
+        ParsedArguments parsedArguments = this.cmdArgs.parse(args);
+        
         if (args.length == 1) {
             if (this.subCommands.isEmpty()) {
-                completions.addAll(getCompletions(sender, label, args, flagResults));
+                completions.addAll(getCompletions(context));
             } else {
                 this.subCommands.forEach(scmd -> {
                     completions.add(scmd.getName());
@@ -173,7 +173,7 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
                 
                 args = newArgs;
                 
-                completions.addAll(subCommand.getCompletions(sender, cmdLabel, args, flagResults));
+                completions.addAll(subCommand.getCompletions(new CommandContext(plugin, context.sender(), cmdLabel, args, context.flags(), parsedArguments)));
             }
         }
         
@@ -296,8 +296,8 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
         protected boolean playerOnly;
         protected boolean consoleOnly;
         protected String permission;
-        protected Executor<T> executor;
-        protected Completer<T> completer;
+        protected Executor executor;
+        protected Completer completer;
         protected List<Flag> flags = new ArrayList<>();
         protected List<Param<?>> params = new ArrayList<>();
         
@@ -349,12 +349,12 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
             return cmd;
         }
         
-        public Builder<T> completer(Completer<T> completer) {
+        public Builder<T> completer(Completer completer) {
             this.completer = completer;
             return self();
         }
         
-        public Builder<T> executor(Executor<T> executor) {
+        public Builder<T> executor(Executor executor) {
             this.executor = executor;
             return self();
         }

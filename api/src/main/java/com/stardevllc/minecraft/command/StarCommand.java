@@ -1,10 +1,9 @@
 package com.stardevllc.minecraft.command;
 
 import com.stardevllc.minecraft.command.flags.*;
-import com.stardevllc.minecraft.command.params.Param;
+import com.stardevllc.minecraft.command.params.*;
 import com.stardevllc.starlib.objects.builder.IBuilder;
 import com.stardevllc.minecraft.colors.StarColorsV2;
-import com.stardevllc.minecraft.command.params.CmdParams;
 import com.stardevllc.minecraft.plugin.ExtendedJavaPlugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.*;
@@ -17,16 +16,6 @@ import java.util.function.Consumer;
 @SuppressWarnings("DuplicatedCode")
 public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecutor {
     
-    @FunctionalInterface
-    public interface Executor<P extends JavaPlugin> {
-        boolean execute(P plugin, CommandSender sender, String label, String[] args, FlagResult flagResults);
-    }
-    
-    @FunctionalInterface
-    public interface Completer<P extends JavaPlugin> {
-        List<String> complete(P plugin, CommandSender sender, String label, String[] args, FlagResult flagResults);
-    }
-    
     protected final T plugin;
     protected final StarColorsV2 colors;
     
@@ -37,8 +26,8 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
     protected boolean consoleOnly;
     protected String permission;
     
-    protected Executor<T> executor;
-    protected Completer<T> completer;
+    protected Executor executor;
+    protected Completer completer;
     
     protected List<SubCommand<T>> subCommands = new ArrayList<>();
     
@@ -71,24 +60,26 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
         this.aliases = aliases;
     }
     
-    public boolean execute(CommandSender sender, String label, String[] args, FlagResult flagResults) {
+    public boolean execute(CommandContext context) {
         if (this.executor != null) {
-            return executor.execute(plugin, sender, label, args, flagResults);
+            return executor.execute(context);
         }
         
         return false;
     }
     
-    public List<String> getCompletions(CommandSender sender, String label, String[] args, FlagResult flagResults) {
+    public List<String> getCompletions(CommandContext context) {
         if (this.completer != null) {
-            return this.completer.complete(plugin, sender, label, args, flagResults);
+            return this.completer.complete(context);
         }
         
         List<String> completions = new ArrayList<>();
         
+        String[] args = context.args();
+        
         if (args.length == 1) {
             if (this.subCommands.isEmpty()) {
-                completions.addAll(getCompletions(sender, label, args, flagResults));
+                completions.addAll(getCompletions(context));
             } else {
                 this.subCommands.forEach(scmd -> {
                     completions.add(scmd.getName());
@@ -108,8 +99,7 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
                 System.arraycopy(args, 1, newArgs, 0, args.length - 1);
                 
                 args = newArgs;
-                
-                completions.addAll(subCommand.getCompletions(sender, cmdLabel, args, flagResults));
+                completions.addAll(subCommand.getCompletions(new CommandContext(context.plugin(), context.sender(), cmdLabel, args, context.flags(), context.parsedArgs())));
             }
         }
         
@@ -144,7 +134,9 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
         FlagResult flagResults = cmdFlags.parse(args);
         args = flagResults.args();
         
-        if (execute(sender, label, args, flagResults)) {
+        ParsedArguments parsedArguments = cmdArgs.parse(args);
+        
+        if (execute(new CommandContext(plugin, sender, label, args, flagResults, parsedArguments))) {
             return true;
         }
         
@@ -180,8 +172,10 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
         FlagResult flagResult = this.cmdFlags.parse(args);
         args = flagResult.args();
         
+        ParsedArguments parsedArguments = this.cmdArgs.parse(args);
+        
         try {
-            return getCompletions(sender, label, args, flagResult);
+            return getCompletions(new CommandContext(plugin, sender, label, args, flagResult, parsedArguments));
         } catch (Throwable t) {
             return List.of();
         }
@@ -294,8 +288,8 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
         protected boolean playerOnly;
         protected boolean consoleOnly;
         protected String permission;
-        protected Executor<T> executor;
-        protected Completer<T> completer;
+        protected Executor executor;
+        protected Completer completer;
         protected List<Flag> flags = new ArrayList<>();
         protected List<Param<?>> params = new ArrayList<>();
         
@@ -344,12 +338,12 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
             return cmd;
         }
         
-        public Builder<T> completer(Completer<T> completer) {
+        public Builder<T> completer(Completer completer) {
             this.completer = completer;
             return self();
         }
         
-        public Builder<T> executor(Executor<T> executor) {
+        public Builder<T> executor(Executor executor) {
             this.executor = executor;
             return self();
         }
