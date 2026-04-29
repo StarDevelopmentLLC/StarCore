@@ -1,5 +1,7 @@
 package com.stardevllc.minecraft.command;
 
+import com.stardevllc.minecraft.command.argument.CmdArgs;
+import com.stardevllc.minecraft.command.argument.ParsedArguments;
 import com.stardevllc.minecraft.command.flags.*;
 import com.stardevllc.minecraft.command.params.*;
 import com.stardevllc.starlib.objects.builder.IBuilder;
@@ -32,6 +34,7 @@ public class StarCommand<T extends JavaPlugin> implements ICommand<T>, TabExecut
     protected List<SubCommand<T>> subCommands = new ArrayList<>();
     
     protected final CmdFlags cmdFlags = new CmdFlags();
+    protected final CmdArgs cmdArgs = new CmdArgs();
     
     /**
      * CmdParams should be parsed on an individual command basis in the handler method. Provided as a field for convenience

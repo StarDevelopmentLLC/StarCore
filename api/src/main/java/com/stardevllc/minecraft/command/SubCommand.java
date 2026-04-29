@@ -1,5 +1,7 @@
 package com.stardevllc.minecraft.command;
 
+import com.stardevllc.minecraft.command.argument.CmdArgs;
+import com.stardevllc.minecraft.command.argument.ParsedArguments;
 import com.stardevllc.minecraft.command.flags.*;
 import com.stardevllc.minecraft.command.params.*;
 import com.stardevllc.starlib.objects.builder.IBuilder;

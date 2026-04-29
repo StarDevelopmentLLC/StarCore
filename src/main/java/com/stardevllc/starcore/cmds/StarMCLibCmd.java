@@ -74,8 +74,8 @@ public class StarMCLibCmd extends StarCommand<ExtendedJavaPlugin> {
                     sb.name("list").description("List the actors that are registered");
                     sb.noPermissionMessage(Component.text("You do not have permission to use that command.").color(NamedTextColor.RED));
                     sb.permission("starmclib.command.actors.list");
-                    sb.executor((p, sender, label, args, flagResults) -> {
-                        handlePaginator(args, actorPaginator, Actors.create(sender));
+                    sb.executor(context -> {
+                        handlePaginator(context.args(), actorPaginator, Actors.create(context.sender()));
                         return true;
                     });
                 })
@@ -83,10 +83,11 @@ public class StarMCLibCmd extends StarCommand<ExtendedJavaPlugin> {
                     sb.name("sendmessage").aliases("sendmsg", "sm").description("Send a message to an actor");
                     sb.noPermissionMessage(Component.text("You do not have permission to use that command.").color(NamedTextColor.RED));
                     sb.permission("starmclib.command.actors.sendmessage");
-                    sb.executor((p, sender, label, args, flagResults) -> {
-                        Actor senderActor = Actors.create(sender);
+                    sb.executor(context -> {
+                        Actor senderActor = Actors.create(context.sender());
+                        String[] args = context.args();
                         if (!(args.length > 1)) {
-                            senderActor.sendColoredMessage("&cUsage: /starmclib actors " + label + " <actor> <message>");
+                            senderActor.sendColoredMessage("&cUsage: /starmclib actors " + context.label() + " <actor> <message>");
                             return true;
                         }
                         
@@ -107,8 +108,9 @@ public class StarMCLibCmd extends StarCommand<ExtendedJavaPlugin> {
                         target.sendColoredMessage(sb1.toString());
                         return true;
                     });
-                    sb.completer((p, sender, label, args, flagResults) -> {
+                    sb.completer(context -> {
                         List<String> completions = new ArrayList<>();
+                        String[] args = context.args();
                         if (args.length == 1) {
                             for (Actor value : Actors.getActors().values()) {
                                 completions.add(value.getName());
@@ -132,8 +134,8 @@ public class StarMCLibCmd extends StarCommand<ExtendedJavaPlugin> {
                 .subCommand(sb -> {
                     sb.name("list").permission("starmclib.command.profiles.list").description("List the profiles");
                     sb.noPermissionMessage(Component.text("You do not have permission to use that command.").color(NamedTextColor.RED));
-                    sb.executor((p, sender, label, args, flagResults) -> {
-                        handlePaginator(args, profilePaginator, Actors.create(sender));
+                    sb.executor(context -> {
+                        handlePaginator(context.args(), profilePaginator, Actors.create(context.sender()));
                         return true;
                     });
                 })
