@@ -37,6 +37,7 @@ public class SubCommand<T extends JavaPlugin> implements ICommand<T> {
     protected final List<SubCommand<T>> subCommands = new ArrayList<>();
     
     protected final CmdFlags cmdFlags = new CmdFlags();
+    protected final CmdArgs cmdArgs = new CmdArgs();
     
     /**
      * CmdParams should be parsed on an individual command basis in the handler method. Provided as a field for convenience
