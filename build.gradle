@@ -89,7 +89,6 @@ dependencies {
     implementation project(':api')
     implementation project(':v1_8')
     implementation project(':v1_9_2')
-    implementation project(':v1_13')
     implementation project(':v1_13_2')
     implementation project(':v1_14_4')
     implementation project(':v1_16_1')

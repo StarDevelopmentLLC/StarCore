@@ -1,11 +1,5 @@
 plugins {
-    id 'java-library'
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven { url = 'https://repo.stardevllc.com/releases'}
+    id 'common'
 }
 
 dependencies {
@@ -16,13 +10,4 @@ dependencies {
 tasks.named("javadoc", Javadoc) {
     options.addBooleanOption('public', true)
     options.addBooleanOption('Xdoclint:none', true)
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-
-    withJavadocJar()
-    withSourcesJar()
 }

@@ -1,4 +1,4 @@
-package com.stardevllc.minecraft.v1_13;
+package com.stardevllc.minecraft.v1_13_2;
 
 import com.stardevllc.minecraft.itembuilder.ItemBuilder;
 import com.stardevllc.minecraft.smaterial.SMaterial;
